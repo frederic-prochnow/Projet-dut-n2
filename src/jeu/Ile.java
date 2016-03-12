@@ -15,8 +15,9 @@ public class Ile {
 		this.plateau = new Parcelle [taille][taille];
 	}
 	
-	public void initialiser (int pourcentage) {
-		int nbRochers = 0;
+	public void initialiser (double pourcentage) {
+		int nbRochers = 1;
+		double pourcentageActuel = 0;
 		for (int i=0; i<plateau.length; i++) {
 			for (int j=0; j<plateau.length; j++) {
 				plateau [i][j] = new Parcelle(-1);
@@ -40,16 +41,20 @@ public class Ile {
 			y =r.nextInt(plateau.length -3)+1;
 		} while(plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
-		plateau[x][y].compte = true;
+		plateau[x][y].estCompte = true;
 		
 		// ROCHERS
 		int xR, yR;
-		while (pourcentage < nbRochers/(plateau.length-2)*(plateau.length-2)) {
+		while (pourcentageActuel < pourcentage/100) {
 			xR=r.nextInt(plateau.length -3)+1;
 			yR =r.nextInt(plateau.length -3)+1;
-			if (accessibiliteAmorce(x,y, nbRochers)) {
-				plateau[x][y].type = 6;
+			//if (accessibiliteAmorce(x,y, nbRochers)) {
+			if (plateau[xR][yR].type == -1) {
+				plateau[xR][yR].type = 6;
+				nbRochers++;
+				pourcentageActuel = (nbRochers/((plateau.length-2)*(plateau.length-2)));
 			}
+		//}
 		}
 	}
 	
@@ -66,19 +71,20 @@ public class Ile {
 		}
 		for (int i=1; i<plateau.length-2;i++) {
 			for (int j=1; j<plateau.length-2;j++) {
-				if (plateau[x][y].compte) {
+				if (plateau[x][y].estCompte) {
 					compteur++;
 				}
 			}
 		}
-		if ( (plateau.length-2)*(plateau.length-2)-nbRochers == compteur) {
+		// -2 dans multiplication car eau des deux cotes et puis -2 car deux navires
+		if ( (plateau.length-2)*(plateau.length-2)-nbRochers-2 == compteur) {
 			return true;
 		}
 		return false;
 	}
 
 	private void verification(int i, int y) {
-		plateau[i][y].compte = true;
+		plateau[i][y].estCompte = true;
 		if (i>1 && i<plateau.length-2 && y>1 && y<plateau.length-2) {
 			verification(i-1, y);
 			verification(i+1, y);
