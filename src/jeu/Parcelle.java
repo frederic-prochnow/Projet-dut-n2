@@ -1,19 +1,9 @@
 package jeu;
-/**
- * Class Parcelle
- * @author TeamJ3
- * Projet
- */
+
 public class Parcelle {
-	/**
-	 * attribut
-	 */
 	int type;
 
-	/**
-	 * Constructeur de Parcelle
-	 * @param int type
-	 */
+	
 	Parcelle (int type) {
 		if(type>=0 && type<11) {
 			this.type = type;
@@ -22,9 +12,6 @@ public class Parcelle {
 		}
 	}
 
-	/**
-	 * Methode d'affichage toString
-	 */
 	public String toString() {
 		if(type == -1) {return " ";}
 		else if(type == 0) {return "e";}
