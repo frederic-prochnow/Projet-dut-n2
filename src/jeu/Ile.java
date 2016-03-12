@@ -45,62 +45,53 @@ public class Ile {
 		
 		// ROCHERS
 		int xR, yR;
+		int c = 0;
 		while (pourcentageActuel < pourcentage/100) {
 			xR=r.nextInt(plateau.length -3)+1;
 			yR =r.nextInt(plateau.length -3)+1;
 			
-			System.out.println("xr=" + xR + " yr=" + yR);
-			System.out.println(plateau[xR][yR].type);
-			
-			if (plateau[xR][yR].type == -1) {
+		//	System.out.println(pourcentageActuel);
+						
+			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers)) {
 				plateau[xR][yR].type = 6;
-			}
-			
-			/*
-			if (plateau[xR][yR].type == -1) {
-				plateau[xR][yR].type = 6;
+				c++;
 				nbRochers++;
-				pourcentageActuel = (nbRochers/((plateau.length-2)*(plateau.length-2)));
-				System.out.println(pourcentageActuel);
+				pourcentageActuel = ((double) nbRochers/((plateau.length-2)*(plateau.length-2)));
 			}
-			*/
 		}
 	}
 	
 	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
-		int compteur = 0;
+		int nbAccessibles = 0;
 		// on lance dans les 4 directions si le coffre se situe a partir de x>=2 x<=8 et y>=2 et y<=8
 		if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2) {
 			verification(x-1, y);
 			verification(x+1, y);
 			verification(x, y-1);
 			verification(x, y+1);
-		// cas de bord gauche a faire et les autres bords
-		} else if (x==1 && y>0 && y<plateau.length-1) {
 		}
+		
 		for (int i=1; i<plateau.length-2;i++) {
 			for (int j=1; j<plateau.length-2;j++) {
-				if (plateau[x][y].estCompte) {
-					compteur++;
+				if (plateau[x][y].estCompte && plateau[x][y].type != 6) {
+					nbAccessibles++;
 				}
 			}
 		}
 		// -2 dans multiplication car eau des deux cotes et puis -2 car deux navires
-		if ( (plateau.length-2)*(plateau.length-2)-nbRochers-2 == compteur) {
+		if ( (plateau.length-2)*(plateau.length-2)-nbRochers-2 == nbAccessibles) {
 			return true;
 		}
 		return false;
 	}
 
-	private void verification(int i, int y) {
-		plateau[i][y].estCompte = true;
-		if (i>1 && i<plateau.length-2 && y>1 && y<plateau.length-2) {
-			verification(i-1, y);
-			verification(i+1, y);
-			verification(i, y-1);
-			verification(i, y+1);
-		// cas des bords
-		} else if (i==1 && y>0 && y<plateau.length-1) {
+	private void verification(int x, int y) {
+		plateau[x][y].estCompte = true;
+		if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2 && !plateau[x][y].estCompte && plateau[x][y].type != 6) {
+			verification(x-1, y);
+			verification(x+1, y);
+			verification(x, y-1);
+			verification(x, y+1);
 		}
 	}
 
