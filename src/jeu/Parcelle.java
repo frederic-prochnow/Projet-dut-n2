@@ -8,6 +8,7 @@ public class Parcelle {
 	boolean surNavire;
 	boolean cleEquipe1 = false;
 	boolean cleEquipe2 = false;
+	boolean compte = false;
 	
 
 	

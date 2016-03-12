@@ -40,14 +40,55 @@ public class Ile {
 			y =r.nextInt(plateau.length -3)+1;
 		} while(plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
+		plateau[x][y].compte = true;
 		
 		// ROCHERS
 		int xR, yR;
-		while (nbRochers < pourcentage/(plateau.length-2)*(plateau.length-2)) {
-			
+		while (pourcentage < nbRochers/(plateau.length-2)*(plateau.length-2)) {
+			xR=r.nextInt(plateau.length -3)+1;
+			yR =r.nextInt(plateau.length -3)+1;
+			if (accessibiliteAmorce(x,y, nbRochers)) {
+				plateau[x][y].type = 6;
+			}
 		}
 	}
 	
+	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
+		int compteur = 0;
+		// on lance dans les 4 directions si le coffre se situe a partir de x>=2 x<=8 et y>=2 et y<=8
+		if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2) {
+			verification(x-1, y);
+			verification(x+1, y);
+			verification(x, y-1);
+			verification(x, y+1);
+		// cas de bord gauche a faire et les autres bords
+		} else if (x==1 && y>0 && y<plateau.length-1) {
+		}
+		for (int i=1; i<plateau.length-2;i++) {
+			for (int j=1; j<plateau.length-2;j++) {
+				if (plateau[x][y].compte) {
+					compteur++;
+				}
+			}
+		}
+		if ( (plateau.length-2)*(plateau.length-2)-nbRochers == compteur) {
+			return true;
+		}
+		return false;
+	}
+
+	private void verification(int i, int y) {
+		plateau[i][y].compte = true;
+		if (i>1 && i<plateau.length-2 && y>1 && y<plateau.length-2) {
+			verification(i-1, y);
+			verification(i+1, y);
+			verification(i, y-1);
+			verification(i, y+1);
+		// cas des bords
+		} else if (i==1 && y>0 && y<plateau.length-1) {
+		}
+	}
+
 	boolean deplacer(int x, int y, int a, int b) {
 		// cas parcelle vide
 		if (plateau[a][b].type == -1) {
