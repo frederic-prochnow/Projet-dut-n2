@@ -1,4 +1,4 @@
-package jeu;
+package Jeu;
 
 import java.util.Random;
 
@@ -32,44 +32,20 @@ public class Ile {
 		plateau[1][1].type = 2;
 		plateau[plateau.length -2][plateau.length -2].type = 5;
 		// COFFRE
-		int x, y;
-		do {
-			x=r.nextInt(plateau.length -3)+1;
-			y =r.nextInt(plateau.length -3)+1;
-		} while(plateau[x][y].type != -1);
-		plateau[x][y].type = 7;
+		int x =r.nextInt(plateau.length -2);
+		int y =r.nextInt(plateau.length -2);
+		if(plateau[x][y].type == -1) {
+			plateau[x][y].type = 7;
+		}
 		
 	}
 	public String toString() {
-		int nombre = (plateau.length*2)+1;
-		boolean ligneV = true;
-		boolean ligneH = true;
-		int ligne=0,colonne=0;
+		int nombre = plateau.length;
 		String res = "";
-		for (int i=0;i<nombre;i++) {
-			colonne=0;
-			ligneV = true;
-			for (int j=0;j<nombre;j++) {
-				if (ligneH) {
-					if (ligneV) {
-						res += "+";
-					} else {
-						res += "---";
-					}
-				} else {
-					if (ligneV) {
-						res += "|";
-					} else {
-						res += " " + plateau[ligne][colonne].toString() + " ";
-						colonne++;
-					}
-				}
-				ligneV = !ligneV;
+		for (int i=0; i<nombre; i++) {
+			for (int j=0; j<nombre; j++) {
+				res += "|" + plateau[i][j].toString();
 			}
-			if (!ligneH) {
-				ligne++;
-			}
-			ligneH = !ligneH;
 			res += "\n";
 		}
 		return res;
