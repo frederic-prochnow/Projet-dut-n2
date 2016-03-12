@@ -59,13 +59,10 @@ public class Ile {
 	
 	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
 		int nbAccessibles = 0;
-		// on lance dans les 4 directions si le coffre se situe a partir de x>=2 x<=8 et y>=2 et y<=8
-		if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2) {
-			verification(x-1, y);
-			verification(x+1, y);
-			verification(x, y-1);
-			verification(x, y+1);
-		}
+		verification(x-1, y);
+		verification(x+1, y);
+		verification(x, y-1);
+		verification(x, y+1);
 		
 		for (int i=1; i<plateau.length-2;i++) {
 			for (int j=1; j<plateau.length-2;j++) {
