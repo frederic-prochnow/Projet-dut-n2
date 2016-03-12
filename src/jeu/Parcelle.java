@@ -1,4 +1,4 @@
-package jeu;
+package Jeu;
 
 public class Parcelle {
 	int type;
