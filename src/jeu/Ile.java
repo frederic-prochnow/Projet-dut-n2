@@ -41,7 +41,17 @@ public class Ile {
 			y =r.nextInt(plateau.length -3)+1;
 		} while(plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
-		plateau[x][y].estCompte = true;
+		plateau[x][y].estCompte = true;// COFFRE
+		int xCle, yCle;
+		
+		// CLE
+		do {
+			// EX: -3= de 0  a 7, +1= 1 a 8
+			xCle=r.nextInt(plateau.length -3)+1;
+			yCle =r.nextInt(plateau.length -3)+1;
+		} while(plateau[xCle][yCle].type != -1);
+		plateau[xCle][yCle].type = 8;
+		plateau[xCle][yCle].estCompte = true;
 		
 		// ROCHERS
 		int xR, yR;
