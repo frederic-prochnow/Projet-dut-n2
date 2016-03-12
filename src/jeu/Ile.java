@@ -45,16 +45,12 @@ public class Ile {
 		
 		// ROCHERS
 		int xR, yR;
-		int c = 0;
 		while (pourcentageActuel < pourcentage/100) {
 			xR=r.nextInt(plateau.length -3)+1;
 			yR =r.nextInt(plateau.length -3)+1;
 			
-		//	System.out.println(pourcentageActuel);
-						
 			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers)) {
 				plateau[xR][yR].type = 6;
-				c++;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers/((plateau.length-2)*(plateau.length-2)));
 			}
