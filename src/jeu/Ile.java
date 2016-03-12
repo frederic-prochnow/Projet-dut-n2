@@ -73,25 +73,50 @@ public class Ile {
 		
 		for (int i=1; i<plateau.length-2;i++) {
 			for (int j=1; j<plateau.length-2;j++) {
-				if (plateau[x][y].estCompte && plateau[x][y].type != 6) {
+				if (plateau[x][y].estCompte && plateau[x][y].type == -1) {
 					nbAccessibles++;
 				}
 			}
 		}
-		// -2 dans multiplication car eau des deux cotes et puis -2 car deux navires
-		if ( (plateau.length-2)*(plateau.length-2)-nbRochers-2 == nbAccessibles) {
+		// -2 dans multiplication car eau des deux cotes et puis -3 car deux navires et coffre
+		if ( ((((plateau.length-2)*(plateau.length-2))-nbRochers)-3) == nbAccessibles) {
 			return true;
 		}
-		return false;
+		return true;
 	}
 
 	private void verification(int x, int y) {
-		plateau[x][y].estCompte = true;
-		if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2 && !plateau[x][y].estCompte && plateau[x][y].type != 6) {
-			verification(x-1, y);
-			verification(x+1, y);
-			verification(x, y-1);
-			verification(x, y+1);
+		if (plateau[x][y].type != 6) {
+			plateau[x][y].estCompte = true;
+		}
+		if (!plateau[x][y].estCompte && plateau[x][y].type != 6) {
+			// de 2 a 7 pour x et y
+			if (x>1 && x<plateau.length-2 && y>1 && y<plateau.length-2) {
+				verification(x-1, y);
+				verification(x+1, y);
+				verification(x, y-1);
+				verification(x, y+1);
+			// poour x a gauche
+			} else if (x==1 && y>1 && y<plateau.length-2) {
+				verification(x+1, y);
+				verification(x, y+1);
+				verification(x, y-1);
+			// pour x a droite
+			} else if (x==plateau.length-2 && y>1 && y<plateau.length-2) {
+				verification(x-1, y);
+				verification(x, y+1);
+				verification(x, y-1);
+			// pour y en bas
+			} else if (y==plateau.length-2 && x>1 && x<plateau.length-2) {
+				verification(x+1, y);
+				verification(x-1, y);
+				verification(x, y-1);
+			// pour y en haut
+			} else if (y==1 && x>1 && x<plateau.length-2) {
+				verification(x-1, y);
+				verification(x+1, y);
+				verification(x, y+1);
+			}
 		}
 	}
 
