@@ -48,13 +48,22 @@ public class Ile {
 		while (pourcentageActuel < pourcentage/100) {
 			xR=r.nextInt(plateau.length -3)+1;
 			yR =r.nextInt(plateau.length -3)+1;
-			//if (accessibiliteAmorce(x,y, nbRochers)) {
+			
+			System.out.println("xr=" + xR + " yr=" + yR);
+			System.out.println(plateau[xR][yR].type);
+			
+			if (plateau[xR][yR].type == -1) {
+				plateau[xR][yR].type = 6;
+			}
+			
+			/*
 			if (plateau[xR][yR].type == -1) {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = (nbRochers/((plateau.length-2)*(plateau.length-2)));
+				System.out.println(pourcentageActuel);
 			}
-		//}
+			*/
 		}
 	}
 	
