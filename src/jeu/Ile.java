@@ -15,7 +15,8 @@ public class Ile {
 		this.plateau = new Parcelle [taille][taille];
 	}
 	
-	public void initialiser () {
+	public void initialiser (int pourcentage) {
+		int nbRochers = 0;
 		for (int i=0; i<plateau.length; i++) {
 			for (int j=0; j<plateau.length; j++) {
 				plateau [i][j] = new Parcelle(-1);
@@ -23,10 +24,10 @@ public class Ile {
 		}
 		// EAU
 		for(int i=0; i<plateau.length; i++) {
-			plateau[i][0].type = 8;
-			plateau[0][i].type = 8;
-			plateau[plateau.length-1][i].type = 8;
-			plateau[i][plateau.length-1].type = 8;
+			plateau[i][0].type = 9;
+			plateau[0][i].type = 9;
+			plateau[plateau.length-1][i].type = 9;
+			plateau[i][plateau.length-1].type = 9;
 		}
 		// NAVIRE
 		plateau[1][1].type = 2;
@@ -40,12 +41,45 @@ public class Ile {
 		} while(plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
 		
+		// ROCHERS
+		int xR, yR;
+		while (nbRochers < pourcentage/(plateau.length-2)*(plateau.length-2)) {
+			
+		}
 	}
 	
-	void deplacer(int x, int y, int a, int b) {
-		if (plateau[b][a].type == -1) {
-			plateau[b][a].type = plateau[y][x].type;
-			plateau[y][x].type = -1;
+	boolean deplacer(int x, int y, int a, int b) {
+		// cas parcelle vide
+		if (plateau[a][b].type == -1) {
+			plateau[a][b].type = plateau[x][y].type;
+			plateau[x][y].type = -1;
+			changerEnergie(x,y,0);
+			return true;
+		// cas navire equipe 1 || equipe 2
+		} else if ( (plateau[y][x].equipe && plateau[b][a].equipe) || (!plateau[y][x].equipe && !plateau[b][a].equipe) ) {
+			plateau[a][b].type = plateau[x][y].type;
+			plateau[x][y].type = -1;
+			plateau[a][b].surNavire = true;
+			changerEnergie(x,y,1);
+			return true;
+		// cas rocher dessus clef || coffre
+		// A AJOUTER VERIFICATION QUE C'EST UN EXPLORATEUR
+		} else if (plateau[a][b].type == 7 || plateau[a][b].type == 8 ) {
+			changerEnergie(x,y,2);
+		}
+		return false;
+	}
+	
+	// 0 pour aller a une case vide
+	// 1 pour aller a son navire
+	// 2 pour soulever un rocher
+	void changerEnergie(int x, int y, int deplacement) {
+		if (deplacement == 0) {
+			plateau[x][y].energie -= 1;
+		} else if (deplacement == 1) {
+			plateau[x][y].energie += 10;
+		} else if (deplacement == 2) {
+			plateau[x][y].energie -= 5;
 		}
 	}
 	
@@ -69,7 +103,7 @@ public class Ile {
 					if (ligneV) {
 						res += "|";
 					} else {
-						res += " " + plateau[ligne][colonne].toString() + " ";
+						res += " " + plateau[colonne][ligne].toString() + " ";
 						colonne++;
 					}
 				}
