@@ -1,20 +1,35 @@
 package Jeu;
-
 import java.util.Random;
-
+/**
+ * Class Ile
+ * @author teamJ3
+ * Projet
+ */
 public class Ile {
-
+	/**
+	 * attribut
+	 */
 	private Parcelle [][] plateau;
 	Random r = new Random();
 	
+	/**
+	 * Constructeur de plateau
+	 */
 	Ile () {
 		this.plateau = new Parcelle [10][10];
 	}
 	
+	/**
+	 * Constructeur de plateau avec selection de taille
+	 * @param int taille
+	 */
 	Ile (int taille) {
 		this.plateau = new Parcelle [taille][taille];
 	}
 	
+	/**
+	 * Methode d'initialisation de tableau
+	 */
 	public void initialiser () {
 		for (int i=0; i<plateau.length; i++) {
 			for (int j=0; j<plateau.length; j++) {
@@ -39,6 +54,10 @@ public class Ile {
 		}
 		
 	}
+	
+	/**
+	 * Methode d'affichage toString
+	 */
 	public String toString() {
 		int nombre = plateau.length;
 		String res = "";
@@ -50,6 +69,4 @@ public class Ile {
 		}
 		return res;
 	}
-	
-
 }
