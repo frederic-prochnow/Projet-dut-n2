@@ -32,11 +32,12 @@ public class Ile {
 		plateau[1][1].type = 2;
 		plateau[plateau.length -2][plateau.length -2].type = 5;
 		// COFFRE
-		int x =r.nextInt(plateau.length -2);
-		int y =r.nextInt(plateau.length -2);
-		if(plateau[x][y].type == -1) {
-			plateau[x][y].type = 7;
-		}
+		int x, y;
+		do {
+			x=r.nextInt(plateau.length -3)+1;
+			y =r.nextInt(plateau.length -3)+1;
+		} while(plateau[x][y].type != -1);
+		plateau[x][y].type = 7;
 		
 	}
 	public String toString() {
