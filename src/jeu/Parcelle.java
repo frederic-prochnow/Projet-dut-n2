@@ -2,11 +2,16 @@ package jeu;
 
 public class Parcelle {
 	int type;
+	int energie;
+	
 
 	
 	Parcelle (int type) {
 		if(type>=0 && type<11) {
 			this.type = type;
+			if (type<=5) {
+				this.energie = 100;
+			}
 		} else {
 			this.type = -1;
 		}

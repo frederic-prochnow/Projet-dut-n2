@@ -34,12 +34,21 @@ public class Ile {
 		// COFFRE
 		int x, y;
 		do {
+			// EX: -3= de 0  a 7, +1= 1 a 8
 			x=r.nextInt(plateau.length -3)+1;
 			y =r.nextInt(plateau.length -3)+1;
 		} while(plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
 		
 	}
+	
+	void deplacer(int x, int y, int a, int b) {
+		if (plateau[b][a].type == -1) {
+			plateau[b][a].type = plateau[y][x].type;
+			plateau[y][x].type = -1;
+		}
+	}
+	
 	public String toString() {
 		int nombre = (plateau.length*2)+1;
 		boolean ligneV = true;
