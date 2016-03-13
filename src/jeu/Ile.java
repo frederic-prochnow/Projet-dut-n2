@@ -6,6 +6,10 @@ public class Ile {
 
 	private Parcelle[][] plateau;
 	Random r = new Random();
+	int cbGen = 0;
+	int reset = 0;
+	int xCle, yCle;
+	int x, y;
 
 	Ile() {
 		this.plateau = new Parcelle[10][10];
@@ -16,8 +20,6 @@ public class Ile {
 	}
 
 	public void initialiser(double pourcentage) {
-		int nbRochers = 1;
-		double pourcentageActuel = 0;
 		for (int i = 0; i < plateau.length; i++) {
 			for (int j = 0; j < plateau.length; j++) {
 				plateau[i][j] = new Parcelle(-1);
@@ -34,7 +36,6 @@ public class Ile {
 		plateau[1][1].type = 2;
 		plateau[plateau.length - 2][plateau.length - 2].type = 5;
 		// COFFRE
-		int x, y;
 		do {
 			// EX: -3= de 0 a 7, +1= 1 a 8
 			x = r.nextInt(plateau.length - 3) + 1;
@@ -42,7 +43,6 @@ public class Ile {
 		} while (plateau[x][y].type != -1);
 		plateau[x][y].type = 7;
 		plateau[x][y].estCompte = true;// COFFRE
-		int xCle, yCle;
 
 		// CLE
 		do {
@@ -54,74 +54,75 @@ public class Ile {
 		plateau[xCle][yCle].estCompte = true;
 
 		// ROCHERS
+		ajouterRochers(pourcentage);
+	}
+	
+	public void ajouterRochers(double pourcentage) {
+		int nbRochers = 1;
+		double pourcentageActuel = 0;
 		int xR, yR;
 		while (pourcentageActuel < pourcentage / 100) {
+			cbGen++;
+			/*
+			System.out.println("cbGen=" + cbGen + " et taux=" + (cbGen/nbRochers) + " et reset=" + reset + " et nbRochers=" + nbRochers);
+			if ((cbGen/nbRochers) > 500 && cbGen > 1000) {
+				cbGen = 0;
+				reset++;
+				initialiser(pourcentage);
+			}
+			*/
 			xR = r.nextInt(plateau.length - 3) + 1;
 			yR = r.nextInt(plateau.length - 3) + 1;
 
-			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers)
-					&& accessibiliteAmorce(1, 1, nbRochers) && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
-					&& accessibiliteAmorce(xCle, yCle, nbRochers)) {
+			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers, "coffre")
+					&& accessibiliteAmorce(1, 1, nbRochers, "navire gauche") && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers, "navire droite")
+					&& accessibiliteAmorce(xCle, yCle, nbRochers, "cle")) {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 			}
 		}
+		System.out.println("cbGen=" + cbGen + " et taux=" + (cbGen/nbRochers) + " et reset=" + reset + " et nbRochers=" + nbRochers);
 	}
 
-	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
+	private boolean accessibiliteAmorce(int x, int y, int nbRochers, String ou) {
 		int nbAccessibles = 0;
-		verification(x - 1, y);
-		verification(x + 1, y);
-		verification(x, y - 1);
-		verification(x, y + 1);
-
-		for (int i = 1; i < plateau.length - 2; i++) {
-			for (int j = 1; j < plateau.length - 2; j++) {
-				if (plateau[x][y].estCompte && plateau[x][y].type == -1) {
+		
+		// reinitialisation des .estCompte car il seront comptes plusieurs fois independemment
+		for (int i = 1; i <= plateau.length - 2; i++) {
+			for (int j = 1; j <= plateau.length - 2; j++) {
+				plateau[i][j].estCompte = false;
+			}
+		}
+		verification(x - 1, y,0);
+		verification(x + 1, y,0);
+		verification(x, y - 1,0);
+		verification(x, y + 1,0);
+		
+		for (int i = 1; i <= (plateau.length - 2); i++) {
+			for (int j = 1; j <= (plateau.length - 2); j++) {
+				if (plateau[i][j].estCompte && plateau[i][j].type != 6) {
 					nbAccessibles++;
 				}
 			}
 		}
-		// -2 dans multiplication car eau des deux cotes et puis -3 car deux
-		// navires et coffre
-		if (((((plateau.length - 2) * (plateau.length - 2)) - nbRochers) - 3) == nbAccessibles) {
+		// -2 dans multiplication car eau des deux cotes et puis -4 car deux navires coffre et cle
+		if (((((plateau.length - 2) * (plateau.length - 2)) - nbRochers) - 5) == nbAccessibles) {
 			return true;
 		}
-		return true;
+		return false;
 	}
 
-	private void verification(int x, int y) {
-		if (plateau[x][y].type != 6) {
+	private void verification(int x, int y, int cb) {
+		//System.out.println(cb);
+		if (!plateau[x][y].estCompte && plateau[x][y].type == -1) {
 			plateau[x][y].estCompte = true;
-		}
-		if (!plateau[x][y].estCompte && plateau[x][y].type != 6) {
-			// de 2 a 7 pour x et y
-			if (x > 1 && x < plateau.length - 2 && y > 1 && y < plateau.length - 2) {
-				verification(x - 1, y);
-				verification(x + 1, y);
-				verification(x, y - 1);
-				verification(x, y + 1);
-				// poour x a gauche
-			} else if (x == 1 && y > 1 && y < plateau.length - 2) {
-				verification(x + 1, y);
-				verification(x, y + 1);
-				verification(x, y - 1);
-				// pour x a droite
-			} else if (x == plateau.length - 2 && y > 1 && y < plateau.length - 2) {
-				verification(x - 1, y);
-				verification(x, y + 1);
-				verification(x, y - 1);
-				// pour y en bas
-			} else if (y == plateau.length - 2 && x > 1 && x < plateau.length - 2) {
-				verification(x + 1, y);
-				verification(x - 1, y);
-				verification(x, y - 1);
-				// pour y en haut
-			} else if (y == 1 && x > 1 && x < plateau.length - 2) {
-				verification(x - 1, y);
-				verification(x + 1, y);
-				verification(x, y + 1);
+			// verif de 1 a 8, meme si 0,0 est mis a estCompte, ceci ne change rien car nbAcc compte que ceux de 1 a 8
+			if ((x > 0) && (x < (plateau.length-1)) && (y > 0) && (y < (plateau.length-1))) {
+				verification(x - 1, y,cb+1);
+				verification(x + 1, y,cb+1);
+				verification(x, y - 1,cb+1);
+				verification(x, y + 1,cb+1);
 			}
 		}
 	}
