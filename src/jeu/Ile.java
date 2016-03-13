@@ -8,6 +8,7 @@ public class Ile {
 	Random r = new Random();
 	int iterationsRocher = 0;
 	int nbRochers = 0;
+	int reset = 0;
 
 	Ile() {
 		this.plateau = new Parcelle[10][10];
@@ -59,23 +60,27 @@ public class Ile {
 		// ROCHERS
 		int xR, yR;
 		while (pourcentageActuel < pourcentage / 100) {
-			// si le nombre de fois qu'on repasse dans le while pour creer un seul rocher est superieur a 25, on re-inialise
-			// si c'est le cas, ca veut dire qu'on ne peut pas ajouter de rochers dans le plateau. Il faut donc un nouveau plateau
-			if (iterationsRocher > 25) {
-				initialiser(pourcentage);
-			}
+			
+			// on ajoute un rocher random
 			xR = r.nextInt(plateau.length - 3) + 1;
 			yR = r.nextInt(plateau.length - 3) + 1;
-
-			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers)
-					&& accessibiliteAmorce(1, 1, nbRochers) && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
-					&& accessibiliteAmorce(xCle, yCle, nbRochers)) {
+			if (plateau[xR][yR].type == -1) {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
-				iterationsRocher = 0;
+				
+				// on le supprime si elle ruine l'accessibilite
+				if ( !( accessibiliteAmorce(x, y, nbRochers)
+						&& accessibiliteAmorce(1, 1, nbRochers) && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
+						&& accessibiliteAmorce(xCle, yCle, nbRochers)) ) {
+					plateau[xR][yR].type = -1;
+					nbRochers--;
+					pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
+					iterationsRocher++;
+				} else {
+					iterationsRocher = 0;
+				}
 			}
-			iterationsRocher++;
 		}
 	}
 
@@ -95,7 +100,7 @@ public class Ile {
 		
 		for (int i = 1; i <= (plateau.length - 2); i++) {
 			for (int j = 1; j <= (plateau.length - 2); j++) {
-				if (plateau[i][j].estCompte && plateau[i][j].type != 6) {
+				if (plateau[i][j].estCompte && plateau[i][j].type == -1) {
 					nbAccessibles++;
 				}
 			}
