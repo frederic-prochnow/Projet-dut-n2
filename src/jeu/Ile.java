@@ -67,9 +67,9 @@ public class Ile {
 			xR = r.nextInt(plateau.length - 3) + 1;
 			yR = r.nextInt(plateau.length - 3) + 1;
 
-			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers, "coffre")
-					&& accessibiliteAmorce(1, 1, nbRochers, "navire gauche") && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers, "navire droite")
-					&& accessibiliteAmorce(xCle, yCle, nbRochers, "cle")) {
+			if (plateau[xR][yR].type == -1 && accessibiliteAmorce(x, y, nbRochers)
+					&& accessibiliteAmorce(1, 1, nbRochers) && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
+					&& accessibiliteAmorce(xCle, yCle, nbRochers)) {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
@@ -79,7 +79,7 @@ public class Ile {
 		}
 	}
 
-	private boolean accessibiliteAmorce(int x, int y, int nbRochers, String ou) {
+	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
 		int nbAccessibles = 0;
 		
 		// reinitialisation des .estCompte car il seront comptes plusieurs fois independemment
