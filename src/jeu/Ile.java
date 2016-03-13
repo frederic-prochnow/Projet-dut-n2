@@ -6,6 +6,8 @@ public class Ile {
 
 	private Parcelle[][] plateau;
 	Random r = new Random();
+	int iterationsRocher = 0;
+	int nbRochers = 0;
 
 	Ile() {
 		this.plateau = new Parcelle[10][10];
@@ -16,8 +18,9 @@ public class Ile {
 	}
 
 	public void initialiser(double pourcentage) {
-		int nbRochers = 0;
 		double pourcentageActuel = 0;
+		nbRochers = 0;
+		iterationsRocher = 0;
 		for (int i = 0; i < plateau.length; i++) {
 			for (int j = 0; j < plateau.length; j++) {
 				plateau[i][j] = new Parcelle(-1);
@@ -56,6 +59,11 @@ public class Ile {
 		// ROCHERS
 		int xR, yR;
 		while (pourcentageActuel < pourcentage / 100) {
+			// si le nombre de fois qu'on repasse dans le while pour creer un seul rocher est superieur a 25, on re-inialise
+			// si c'est le cas, ca veut dire qu'on ne peut pas ajouter de rochers dans le plateau. Il faut donc un nouveau plateau
+			if (iterationsRocher > 25) {
+				initialiser(pourcentage);
+			}
 			xR = r.nextInt(plateau.length - 3) + 1;
 			yR = r.nextInt(plateau.length - 3) + 1;
 
@@ -65,7 +73,9 @@ public class Ile {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
+				iterationsRocher = 0;
 			}
+			iterationsRocher++;
 		}
 	}
 
