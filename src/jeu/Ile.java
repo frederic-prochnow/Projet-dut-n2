@@ -198,7 +198,12 @@ public class Ile {
 		return res;
 	}
 
-	public int[][] getPlateauInt() {
+	public int[][] getplateaugraphique() {
+		for(int i = 0; i < plateau[0].length; i++){
+			for(int j = 0; j < plateau[1].length; j++){
+				plateauGraphique[i][j] = plateau[i][j].getType();
+			}
+		}
 		return plateauGraphique;
 	}
 

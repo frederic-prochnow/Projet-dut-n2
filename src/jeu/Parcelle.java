@@ -27,7 +27,11 @@ public class Parcelle {
 			this.type = -1;
 		}
 	}
-
+	
+	public int getType(){
+		return this.type;
+	}
+	
 	public String typeToString() {
 		if(type == -1) {return " ";}
 		else if(type == 0) {return "e";}
