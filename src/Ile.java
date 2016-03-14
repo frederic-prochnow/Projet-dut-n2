@@ -1,4 +1,3 @@
-package jeu;
 
 import java.util.Random;
 
@@ -206,5 +205,9 @@ public class Ile {
 		}
 		return plateauGraphique;
 	}
-
+	
+	public int getSize(){
+		return plateau[0].length;
+	}
+	
 }
