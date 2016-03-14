@@ -5,6 +5,7 @@ import java.util.Random;
 public class Ile {
 
 	private Parcelle[][] plateau;
+	private int[][] plateauGraphique;
 	Random r = new Random();
 	int nbRochers = 0;
 
@@ -14,6 +15,7 @@ public class Ile {
 
 	Ile(int taille) {
 		this.plateau = new Parcelle[taille][taille];
+		this.plateauGraphique = new int[taille][taille];
 	}
 
 	public void initialiser(double pourcentage) {
@@ -57,7 +59,7 @@ public class Ile {
 		// ROCHERS
 		int xR, yR;
 		while (pourcentageActuel < pourcentage / 100) {
-			
+
 			// on ajoute un rocher random
 			xR = r.nextInt(plateau.length - 3) + 1;
 			yR = r.nextInt(plateau.length - 3) + 1;
@@ -65,11 +67,13 @@ public class Ile {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
-				
+
 				// on le supprime si elle ruine l'accessibilite
-				if ( !( accessibiliteAmorce(x, y, nbRochers)
-						&& accessibiliteAmorce(1, 1, nbRochers) && accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
-						&& accessibiliteAmorce(xCle, yCle, nbRochers)) ) {
+				if (!(accessibiliteAmorce(x, y, nbRochers)
+						&& accessibiliteAmorce(1, 1, nbRochers)
+						&& accessibiliteAmorce(plateau.length - 2,
+								plateau.length - 2, nbRochers) && accessibiliteAmorce(
+							xCle, yCle, nbRochers))) {
 					plateau[xR][yR].type = -1;
 					nbRochers--;
 					pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
@@ -80,8 +84,9 @@ public class Ile {
 
 	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
 		int nbAccessibles = 0;
-		
-		// reinitialisation des .estCompte car il seront comptes plusieurs fois independemment
+
+		// reinitialisation des .estCompte car il seront comptes plusieurs fois
+		// independemment
 		for (int i = 1; i <= plateau.length - 2; i++) {
 			for (int j = 1; j <= plateau.length - 2; j++) {
 				plateau[i][j].estCompte = false;
@@ -91,7 +96,7 @@ public class Ile {
 		verification(x + 1, y);
 		verification(x, y - 1);
 		verification(x, y + 1);
-		
+
 		for (int i = 1; i <= (plateau.length - 2); i++) {
 			for (int j = 1; j <= (plateau.length - 2); j++) {
 				if (plateau[i][j].estCompte && plateau[i][j].type == -1) {
@@ -99,7 +104,8 @@ public class Ile {
 				}
 			}
 		}
-		// -2 dans multiplication car eau des deux cotes et puis -4 car deux navires coffre et cle
+		// -2 dans multiplication car eau des deux cotes et puis -4 car deux
+		// navires coffre et cle
 		if (((((plateau.length - 2) * (plateau.length - 2)) - nbRochers) - 4) == nbAccessibles) {
 			return true;
 		}
@@ -109,8 +115,10 @@ public class Ile {
 	private void verification(int x, int y) {
 		if (!plateau[x][y].estCompte && plateau[x][y].type == -1) {
 			plateau[x][y].estCompte = true;
-			// verif de 1 a 8, meme si 0,0 est mis a estCompte, ceci ne change rien car nbAcc compte que ceux de 1 a 8
-			if ((x > 0) && (x < (plateau.length-1)) && (y > 0) && (y < (plateau.length-1))) {
+			// verif de 1 a 8, meme si 0,0 est mis a estCompte, ceci ne change
+			// rien car nbAcc compte que ceux de 1 a 8
+			if ((x > 0) && (x < (plateau.length - 1)) && (y > 0)
+					&& (y < (plateau.length - 1))) {
 				verification(x - 1, y);
 				verification(x + 1, y);
 				verification(x, y - 1);
@@ -127,7 +135,8 @@ public class Ile {
 			changerEnergie(x, y, 0);
 			return true;
 			// cas navire equipe 1 || equipe 2
-		} else if ((plateau[y][x].equipe && plateau[b][a].equipe) || (!plateau[y][x].equipe && !plateau[b][a].equipe)) {
+		} else if ((plateau[y][x].equipe && plateau[b][a].equipe)
+				|| (!plateau[y][x].equipe && !plateau[b][a].equipe)) {
 			plateau[a][b].type = plateau[x][y].type;
 			plateau[x][y].type = -1;
 			plateau[a][b].surNavire = true;
@@ -187,6 +196,10 @@ public class Ile {
 			res += "\n";
 		}
 		return res;
+	}
+
+	public int[][] getPlateauInt() {
+		return plateauGraphique;
 	}
 
 }
