@@ -1,6 +1,8 @@
 import tps.Plateau;
 public class Map {
 	public static void main(String [] args) {
+		
+		/* DECLARATION DES VARIABLES */		
 		String[] img = {"images/sable.png",
 				"images/1.explorateur.png",
 				"images/1.piegeur.png",
@@ -14,9 +16,12 @@ public class Map {
 				"images/mer.png"};
 		Ile plateau = new Ile();
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
-		plateau.initialiser(20);
+		
+		/* ACTIONS */				
+		plateau.initialiser(50);
 		plateauGraph.setJeu(plateau.getplateaugraphique());
 		
+		/* AFFICHAGE */
 		plateauGraph.affichage(); // Affichage graphique
 		System.out.println(plateau.toString()); // Affichage textuel
 	}

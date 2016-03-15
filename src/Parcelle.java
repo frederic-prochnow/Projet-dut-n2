@@ -31,6 +31,7 @@ public class Parcelle {
 		return this.type;
 	}
 	
+	/* LIE A L'AFFICHAGE TEXTUEL */
 	public String typeToString() {
 		if(type == -1) {return " ";}
 		else if(type == 0) {return "e";}
@@ -46,6 +47,7 @@ public class Parcelle {
 		else  { return "";}
 	} 
 	
+	/* AFFICHAGE TEXTUEL */
 	public String toString() {
 		if (this.surNavire && this.equipe){
 			return typeToString() + "n";
