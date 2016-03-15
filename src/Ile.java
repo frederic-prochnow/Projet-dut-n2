@@ -10,6 +10,7 @@ public class Ile {
 
 	Ile() {
 		this.plateau = new Parcelle[10][10];
+		this.plateauGraphique = new int[10][10];
 	}
 
 	Ile(int taille) {
@@ -200,7 +201,7 @@ public class Ile {
 	public int[][] getplateaugraphique() {
 		for(int i = 0; i < plateau[0].length; i++){
 			for(int j = 0; j < plateau[1].length; j++){
-				plateauGraphique[i][j] = plateau[i][j].getType();
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img à 0 et non -1
 			}
 		}
 		return plateauGraphique;
