@@ -1,3 +1,4 @@
+import tps.Plateau;
 public class Map {
 	public static void main(String [] args) {
 		String[] img = {"images/sable.png",
