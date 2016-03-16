@@ -18,7 +18,7 @@ public class Map {
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
 		
 		/* ACTIONS */				
-		plateau.initialiser(50);
+		plateau.initialiser(10);
 		plateauGraph.setJeu(plateau.getplateaugraphique());
 		
 		/* AFFICHAGE */

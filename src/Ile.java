@@ -8,16 +8,6 @@ public class Ile {
 	private int[][] plateauGraphique;
 	Random r = new Random();
 	int nbRochers = 0;
-
-	/*Ile() {
-		this.plateau = new Parcelle[10][10];
-		this.plateauGraphique = new int[10][10];
-	}
-
-	Ile(int taille) {
-		this.plateau = new Parcelle[taille][taille];
-		this.plateauGraphique = new int[taille][taille];
-	}*/
 	
 	Ile() {
 		int tailleI = 0;
@@ -30,6 +20,7 @@ public class Ile {
 			tailleI = Integer.valueOf(taille);
 		}
 		this.plateau = new Parcelle[tailleI][tailleI];
+		this.plateauGraphique = new int[tailleI][tailleI];
 	}
 
 	public void initialiser(double pourcentage) {
