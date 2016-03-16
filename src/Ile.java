@@ -1,5 +1,7 @@
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class Ile {
 
 	private Parcelle[][] plateau;
@@ -7,7 +9,7 @@ public class Ile {
 	Random r = new Random();
 	int nbRochers = 0;
 
-	Ile() {
+	/*Ile() {
 		this.plateau = new Parcelle[10][10];
 		this.plateauGraphique = new int[10][10];
 	}
@@ -15,6 +17,19 @@ public class Ile {
 	Ile(int taille) {
 		this.plateau = new Parcelle[taille][taille];
 		this.plateauGraphique = new int[taille][taille];
+	}*/
+	
+	Ile() {
+		int tailleI = 0;
+		String taille = JOptionPane.showInputDialog(null, "taille de l'ile? ");
+		tailleI = Integer.valueOf(taille);
+		while (tailleI < 10 || tailleI > 25) {
+			JOptionPane.showMessageDialog(null,
+					"Cette valeur n'est pas autorisee");
+			taille = JOptionPane.showInputDialog(null, "taille de l'ile? ");
+			tailleI = Integer.valueOf(taille);
+		}
+		this.plateau = new Parcelle[tailleI][tailleI];
 	}
 
 	public void initialiser(double pourcentage) {
