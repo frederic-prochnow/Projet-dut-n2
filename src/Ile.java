@@ -6,8 +6,8 @@ public class Ile {
 
 	private Parcelle[][] plateau;
 	private int[][] plateauGraphique;
-	Random r = new Random();
-	int nbRochers = 0;
+	private Random r = new Random();
+	private int nbRochers = 0;
 	
 	Ile() {
 		int tailleI = 0;
