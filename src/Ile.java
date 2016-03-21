@@ -11,16 +11,30 @@ public class Ile {
 	
 	Ile() {
 		int tailleI = 0;
-		String taille = JOptionPane.showInputDialog(null, "taille de l'ile? ");
+		int percentR = 10;
+		
+		String taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
 		tailleI = Integer.valueOf(taille);
 		while (tailleI < 10 || tailleI > 25) {
 			JOptionPane.showMessageDialog(null,
 					"Cette valeur n'est pas autorisee");
-			taille = JOptionPane.showInputDialog(null, "taille de l'ile? ");
+			taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
 			tailleI = Integer.valueOf(taille);
 		}
+		
+		String percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
+		percentR = Integer.valueOf(percent);
+		while (percentR < 0 || percentR > 51) {
+			JOptionPane.showMessageDialog(null,
+					"Cette valeur n'est pas autorisee");
+			percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
+			percentR = Integer.valueOf(percent);
+		}
+		
 		this.plateau = new Parcelle[tailleI][tailleI];
 		this.plateauGraphique = new int[tailleI][tailleI];
+		
+		initialiser(percentR);
 	}
 
 	public void initialiser(double pourcentage) {
@@ -206,7 +220,7 @@ public class Ile {
 	public int[][] getplateaugraphique() {
 		for(int i = 0; i < plateau[0].length; i++){
 			for(int j = 0; j < plateau[1].length; j++){
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img à 0 et non -1
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img ï¿½ 0 et non -1
 			}
 		}
 		return plateauGraphique;
