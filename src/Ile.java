@@ -47,23 +47,33 @@ public class Ile {
 		}
 		// EAU
 		for (int i = 0; i < plateau.length; i++) {
-			plateau[i][0].type = 9;
-			plateau[0][i].type = 9;
-			plateau[plateau.length - 1][i].type = 9;
-			plateau[i][plateau.length - 1].type = 9;
+			plateau[i][0].setType(9);
+			plateau[0][i].setType(9);
+			plateau[plateau.length - 1][i].setType(9);
+			plateau[i][plateau.length - 1].setType(9);
 		}
 		// NAVIRE
-		plateau[1][1].type = 2;
-		plateau[plateau.length - 2][plateau.length - 2].type = 5;
+		int cote = r.nextInt(5);
+		int xN = r.nextInt(plateau.length-2) +1;
+		int yN = r.nextInt(plateau.length-2) +1;
+		if (cote==0) {
+			plateau[xN][1].setType(2);
+		} else if (cote==1) {
+			plateau[plateau.length-2][yN].setType(2);
+		} else if (cote==3) {
+			plateau[xN][plateau.length-2].setType(2);
+		} else if (cote==4) {
+			plateau[1][yN].setType(2);
+		}
 		// COFFRE
 		int x, y;
 		do {
 			// EX: -3= de 0 a 7, +1= 1 a 8
 			x = r.nextInt(plateau.length - 3) + 1;
 			y = r.nextInt(plateau.length - 3) + 1;
-		} while (plateau[x][y].type != -1);
-		plateau[x][y].type = 7;
-		plateau[x][y].estCompte = true;// COFFRE
+		} while (plateau[x][y].getType() != -1);
+		plateau[x][y].setType(7);
+		plateau[x][y].setEstCompte(true);// COFFRE
 		int xCle, yCle;
 
 		// CLE
@@ -71,9 +81,9 @@ public class Ile {
 			// EX: -3= de 0 a 7, +1= 1 a 8
 			xCle = r.nextInt(plateau.length - 3) + 1;
 			yCle = r.nextInt(plateau.length - 3) + 1;
-		} while (plateau[xCle][yCle].type != -1);
-		plateau[xCle][yCle].type = 8;
-		plateau[xCle][yCle].estCompte = true;
+		} while (plateau[xCle][yCle].getType() != -1);
+		plateau[xCle][yCle].setType(8);
+		plateau[xCle][yCle].setEstCompte(true);
 
 		// ROCHERS
 		int xR, yR;
@@ -82,8 +92,8 @@ public class Ile {
 			// on ajoute un rocher random
 			xR = r.nextInt(plateau.length - 2) + 1;
 			yR = r.nextInt(plateau.length - 2) + 1;
-			if (plateau[xR][yR].type == -1) {
-				plateau[xR][yR].type = 6;
+			if (plateau[xR][yR].getType() == -1) {
+				plateau[xR][yR].setType(6);
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 
@@ -94,7 +104,7 @@ public class Ile {
 						&& accessibiliteAmorce(xCle, yCle, nbRochers))
 						|| rocherEntoure(xR-1, yR) || rocherEntoure(xR+1, yR) || rocherEntoure(xR, yR-1)
 						|| rocherEntoure(xR, yR+1) )  {
-					plateau[xR][yR].type = -1;
+					plateau[xR][yR].setType(-1);
 					nbRochers--;
 					pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 				}
@@ -114,19 +124,19 @@ public class Ile {
 		// dans ces autres cas, le rocher des base est a une case de distance de l'eau
 		// pour que son voisin qui le separe avec l'eau soit entoure, on ne doit alors que regarder dans 3 directions
 		else if (x==1) {
-			return ( (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+			return ( (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (x==(plateau.length-2)) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (y==1) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y + 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (y==(plateau.length-2)) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1));
 		}
 		// sinon, on peut regarder dans les 4 directions
-		return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+		return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 
 	}
 
@@ -137,7 +147,7 @@ public class Ile {
 		// independemment
 		for (int i = 1; i <= plateau.length - 2; i++) {
 			for (int j = 1; j <= plateau.length - 2; j++) {
-				plateau[i][j].estCompte = false;
+				plateau[i][j].setEstCompte(false);
 			}
 		}
 		verification(x - 1, y);
@@ -147,7 +157,7 @@ public class Ile {
 
 		for (int i = 1; i <= (plateau.length - 2); i++) {
 			for (int j = 1; j <= (plateau.length - 2); j++) {
-				if (plateau[i][j].estCompte && plateau[i][j].type == -1) {
+				if (plateau[i][j].getEstCompte() && plateau[i][j].getType() == -1) {
 					nbAccessibles++;
 				}
 			}
@@ -161,8 +171,8 @@ public class Ile {
 	}
 
 	private void verification(int x, int y) {
-		if (!plateau[x][y].estCompte && plateau[x][y].type == -1) {
-			plateau[x][y].estCompte = true;
+		if (!plateau[x][y].getEstCompte() && plateau[x][y].getType() == -1) {
+			plateau[x][y].setEstCompte(true);
 			// verif de 1 a 8, meme si 0,0 est mis a estCompte, ceci ne change
 			// rien car nbAcc compte que ceux de 1 a 8
 			if ((x > 0) && (x < (plateau.length - 1)) && (y > 0)
