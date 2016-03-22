@@ -1,5 +1,14 @@
-
+/**
+ * Class Parcelle
+ * Gestion de parcelle de l'Ile
+ * 
+ * @author TeamJ3
+ *
+ */
 public class Parcelle {
+	/**
+	 * attributs de la classe
+	 */
 	int type;
 	int energie = 0;
 	int objetDetenu = -1;
@@ -10,7 +19,12 @@ public class Parcelle {
 	boolean estCompte = false;
 	
 
-	
+	/**
+	 * Constructeur avec paramétre de Parcelle
+	 * Ce paramétre permet de créer une parcelle type choisit
+	 *
+	 * @param type
+	 */
 	Parcelle (int type) {
 		if(type>=0 && type<11) {
 			this.type = type;
@@ -27,11 +41,28 @@ public class Parcelle {
 		}
 	}
 	
+	/**
+	 * Fonction permettant de récupérer le type de la pareclle concernée
+	 * @return int
+	 */
 	public int getType(){
 		return this.type;
 	}
 	
-	/* LIE A L'AFFICHAGE TEXTUEL */
+	/**
+	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
+	 * <br>0 pour explorateur équipe 1
+	 * <br>1 pour voleur équipe 1
+	 * <br>2 pour navire équipe 1
+	 * <br>3 pour explorateur équipe 2
+	 * <br>4 pour voleur équipe 2
+	 * <br>5 pour navire équipe 2
+	 * <br>6 pour rocher
+	 * <br>7 pour coffre
+	 * <br>8 pour clé
+	 * <br>9 pour eau
+	 * @return String
+	 */
 	public String typeToString() {
 		if(type == -1) {return " ";}
 		else if(type == 0) {return "e";}
@@ -47,7 +78,9 @@ public class Parcelle {
 		else  { return "";}
 	} 
 	
-	/* AFFICHAGE TEXTUEL */
+	/**
+	 * Fonction d'affichage TEXTUEL de la parcelle
+	 */
 	public String toString() {
 		if (this.surNavire && this.equipe){
 			return typeToString() + "n";
