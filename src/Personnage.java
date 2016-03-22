@@ -1,17 +1,19 @@
 public class Personnage {
 	protected String nom;
 	protected char symboleNom;
+	protected int type; // Même que dans parcelle
 	protected int equipe;
 	protected int energie;
 	protected Position pos;
 	protected boolean surNavire;
 
 	
-	Personnage(String nom, int equipe, int energie, Position p){
+	Personnage(String nom, int equipe, int energie, Position p, int type){
 		this.nom = nom;
 		this.energie = energie;
 		this.equipe = equipe;
-		this.surNavire = false;
+		this.surNavire = true;
+		this.type = type;
 		this.pos = p;
 		
 		if(equipe == 1){
@@ -19,6 +21,10 @@ public class Personnage {
 		}else{
 			this.symboleNom = (nom.toUpperCase()).charAt(0);
 		}
+	}
+	
+	public int getType(){
+		return this.type;
 	}
 	
 	public void perdEnergie(int energie){
@@ -47,6 +53,14 @@ public class Personnage {
 	
 	public int getEnergie(){
 		return energie;
+	}
+	
+	public boolean getSurnavire(){
+		return this.surNavire;
+	}
+	
+	public void setSurnavire(boolean b){
+		this.surNavire = b;
 	}
 	
 	public String toString(){

@@ -343,4 +343,99 @@ public class Ile {
 		return null;
 	}
 	
+	/**
+	 *  Fonction qui permet de deplacer un personnage dans une direction
+	 * @param perso
+	 * @param x
+	 * 
+	 * Si x vaut 1 => GAUCHE
+	 * Si x vaut 2 => HAUT
+	 * Si x vaut 3 => DROITE
+	 * Si x vaut 4 => BAS
+	 * 
+	 */
+	public void deplacer(Personnage perso, int x){
+		if(x == 1){
+			Position pos = new Position(perso.getPos().x - 1,perso.getPos().y);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher a gauche");
+			}else{
+				System.out.println("Ne peut pas se deplacer a gauche");
+			}
+		}else if(x == 2){
+			Position pos = new Position(perso.getPos().x,perso.getPos().y - 1);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher en haut");
+			}else{
+				System.out.println("Ne peut pas se deplacer en haut");
+			}
+		}else if(x == 3){
+			Position pos = new Position(perso.getPos().x + 1,perso.getPos().y);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(new Position(perso.getPos().x + 1,perso.getPos().y))){
+				System.out.println("Peut soulever le rocher a droite");
+			}else{
+				System.out.println("Ne peut pas se deplacer a droite");
+			}
+		}else{
+			Position pos = new Position(perso.getPos().x,perso.getPos().y + 1);
+			
+			if(estVide(pos)){			
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}			
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(new Position(perso.getPos().x,perso.getPos().y + 1))){
+				System.out.println("Peut soulever le rocher en dessous");
+			}else{
+				System.out.println("Ne peut pas se deplacer en dessous");
+			}
+		}
+	}
+	
+	public boolean estVide(Position p){
+		return (plateau[p.x][p.y].getType() == -1);
+	}
+	
+	public boolean estRocher(Position p){
+		return (plateau[p.x][p.y].getType() == 6);
+	}
+	
 }

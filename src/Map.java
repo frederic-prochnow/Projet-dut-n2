@@ -27,13 +27,28 @@ public class Map {
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
 		
 		/* PERSONNAGES */
-		Explorateur explo1 = new Explorateur("explorateur",2,100,plateau.getPos(2));
+		Explorateur explo1 = new Explorateur("explorateur",2,100,plateau.getPos(2),0);
 		
-		/* ACTIONS */				
+		/* INITIALISATIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
-		//System.out.println(explo1.getPos().toString()); // <- permet d'afficher la position du perso
 		
-		/* AFFICHAGE */
+		/* ACTIONS */	
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 4);
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 3);
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 1);
+		refresh(plateau,plateauGraph);
+		plateau.deplacer(explo1, 2);
+		refresh(plateau,plateauGraph);
+	
+	}
+	
+	/* permet de rafraichir l'affichage apres chaque action */
+	public static void refresh(Ile plateau, Plateau plateauGraph){
+		try{Thread.sleep(1000);}catch(Exception ie){}
+		plateauGraph.setJeu(plateau.getplateaugraphique());
 		plateauGraph.affichage(); // Affichage graphique
 		//System.out.println(plateau.toString()); // Affichage textuel
 	}
