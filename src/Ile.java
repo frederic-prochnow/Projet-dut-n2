@@ -262,4 +262,15 @@ public class Ile {
 		return plateau[0].length;
 	}
 	
+	public Position getPos(int type){
+		for(int i = 0; i < plateau[0].length; i++){
+			for(int j = 0; j < plateau[1].length; j++){
+				if(plateau[i][j].getType() == type){ 
+					return new Position(i,j);
+				}
+			}
+		}
+		return null;
+	}
+	
 }

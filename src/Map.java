@@ -18,11 +18,10 @@ public class Map {
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
 		
 		/* PERSONNAGES */
-		Explorateur explo1 = new Explorateur("explorateur",2,100);
+		Explorateur explo1 = new Explorateur("explorateur",2,100,plateau.getPos(2));
 		
 		/* ACTIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
-		
 		
 		/* AFFICHAGE */
 		plateauGraph.affichage(); // Affichage graphique
