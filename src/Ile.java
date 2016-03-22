@@ -1,14 +1,29 @@
 import java.util.Random;
 
 import javax.swing.JOptionPane;
-
+/**
+ * Classe Ile
+ * Cette classe permet la création d'une île
+ * @author Team J3
+ *
+ */
 public class Ile {
 
+	/**
+	 * attributs de la classe
+	 */
 	private Parcelle[][] plateau;
 	private int[][] plateauGraphique;
-	private Random r = new Random();
-	private int nbRochers = 0;
+	Random r = new Random();
+	int nbRochers = 0;
 	
+	/**
+	 * Constructeur de la classe sans paramétres
+	 * 
+	 * Ce constructeur crée un plateau terminal et graphique de taille dégini 
+	 * par l'interface graphique java
+	 * 
+	 */
 	Ile() {
 		int tailleI = 0;
 		int percentR = 10;
@@ -37,6 +52,12 @@ public class Ile {
 		initialiser(percentR);
 	}
 
+	/**
+	 * Fonction qui initialise le plateau avec les différents éléments requis
+	 * Eau, navire, coffre, clés, rochers ...
+	 * 
+	 * @param pourcentage
+	 */
 	public void initialiser(double pourcentage) {
 		int xn=0, yn=0, xN=0, yN=0;
 		double pourcentageActuel = 0;
@@ -134,18 +155,32 @@ public class Ile {
 		}
 	}
 	
+	/**
+	 * Fonction rocherEntoure
+	 * si le rocher est en fait de l'eau, on dira qu'elle EST accessible.
+	 * <br>dans cette situation, le rocher de base se situe sur une cote
+	 * elle ne peut ruiner l'access que de 3 rochers  car une case est l'eau
+	 * on le retirer si elle ruine l'access A UN SEUL de ces 3(i.e. ces 3 sont entoures apres avoir ajoute ce dernier)
+	 * il faut donc dire que la case EAU est entoure pour qu'elle ne soit pas retiree
+	 * <br>
+	 * <br>dans ces autres cas, le rocher des base est a une case de distance de l'eau
+ 	 * pour que son voisin qui le separe avec l'eau soit entoure, on ne doit alors que regarder dans 3 directions
+ 	 * <br>
+ 	 * <br>sinon, on peut regarder dans les 4 directions
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	private boolean rocherEntoure(int x, int y) {
-		
 		// si le rocher est en fait de l'eau, on dira qu'elle EST accessible.
 		// dans cette situation, le rocher de base se situe sur une cote
 		// elle ne peut ruiner l'access que de 3 rochers  car une case est l'eau
 		// on le retirer si elle ruine l'access A UN SEUL de ces 3(i.e. ces 3 sont entoures apres avoir ajoute ce dernier)
 		// il faut donc dire que la case EAU est entoure pour qu'elle ne soit pas retiree
+
 		if (x==0 || y==0 || (x==(plateau.length-1)) || (y==(plateau.length-1))) {
 			return false;
 		}
-		// dans ces autres cas, le rocher des base est a une case de distance de l'eau
-		// pour que son voisin qui le separe avec l'eau soit entoure, on ne doit alors que regarder dans 3 directions
 		else if (x==1) {
 			return ( (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
@@ -158,11 +193,20 @@ public class Ile {
 		else if (y==(plateau.length-2)) {
 			return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1));
 		}
+
 		// sinon, on peut regarder dans les 4 directions
 		return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 
+
 	}
 
+	/**
+	 * Fonction accessibiliteAmorce qui vérifie l'acessibilité des éléments
+	 * @param x
+	 * @param y
+	 * @param nbRochers
+	 * @return
+	 */
 	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
 		int nbAccessibles = 0;
 
@@ -193,6 +237,11 @@ public class Ile {
 		return false;
 	}
 
+	/**
+	 * Fonction de vérification des différents éléments placés
+	 * @param x
+	 * @param y
+	 */
 	private void verification(int x, int y) {
 		if (!plateau[x][y].getEstCompte() && plateau[x][y].getType() == -1) {
 			plateau[x][y].setEstCompte(true);
@@ -208,14 +257,21 @@ public class Ile {
 		}
 	}
 
+	/**
+	 * Fonction de déplacements de certain éléments, ici les exploraters
+	 * @param x
+	 * @param y
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	boolean deplacer(int x, int y, int a, int b) {
 		return false;
 	}
 
-	// 0 pour aller a une case vide
-	// 1 pour aller a son navire
-	// 2 pour soulever un rocher
-
+	/**
+	 * Fonction d'affichage du plateau
+	 */
 	public String toString() {
 		int nombre = (plateau.length * 2) + 1;
 		boolean ligneV = true;
@@ -251,15 +307,23 @@ public class Ile {
 		return res;
 	}
 
+	/**
+	 * Fonction de récupération du plateau graphique
+	 * @return int[][]
+	 */
 	public int[][] getplateaugraphique() {
 		for(int i = 0; i < plateau[0].length; i++){
 			for(int j = 0; j < plateau[1].length; j++){
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img ï¿½ 0 et non -1
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img à 0 et non -1
 			}
 		}
 		return plateauGraphique;
 	}
 	
+	/**
+	 * Fonction de récupération de la taille du plateau
+	 * @return int
+	 */
 	public int getSize(){
 		return plateau[0].length;
 	}

@@ -1,5 +1,14 @@
 import tps.Plateau;
+/**
+ * Class Map
+ * Class de test et application des classes Ile et Parcelle
+ * @author TeamJ3
+ *
+ */
 public class Map {
+	/**
+	 * Main de test et applications des classes Ile et Parcelle
+	 */
 	public static void main(String [] args) {
 		
 		/* DECLARATION DES VARIABLES */		
