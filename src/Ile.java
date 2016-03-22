@@ -328,6 +328,10 @@ public class Ile {
 		return plateau[0].length;
 	}
 	
+	/**
+	 * Fonction de récupération de la position d'une entité voulu sur la carte( ATTENTION ! ne pas mettre de type susceptible d'être trouvé plusieurs fois)
+	 * @return Position
+	 */
 	public Position getPos(int type){
 		for(int i = 0; i < plateau[0].length; i++){
 			for(int j = 0; j < plateau[1].length; j++){

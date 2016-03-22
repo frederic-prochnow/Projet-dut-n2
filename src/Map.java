@@ -31,7 +31,7 @@ public class Map {
 		
 		/* ACTIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
-		System.out.println(explo1.getPos().toString());
+		//System.out.println(explo1.getPos().toString()); // <- permet d'afficher la position du perso
 		
 		/* AFFICHAGE */
 		plateauGraph.affichage(); // Affichage graphique

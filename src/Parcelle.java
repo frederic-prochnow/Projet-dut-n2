@@ -6,24 +6,11 @@
  *
  */
 public class Parcelle {
-<<<<<<< HEAD
+
 	private int type;
 	//private boolean cleEquipe1 = false;
 	//private boolean cleEquipe2 = false;
 	private boolean estCompte = false;
-=======
-	/**
-	 * attributs de la classe
-	 */
-	int type;
-	int energie = 0;
-	int objetDetenu = -1;
-	boolean equipe;
-	boolean surNavire;
-	boolean cleEquipe1 = false;
-	boolean cleEquipe2 = false;
-	boolean estCompte = false;
->>>>>>> 31d3eef69688432df043c743110a895a9b0dd954
 	
 
 	/**
@@ -48,7 +35,6 @@ public class Parcelle {
 		return this.type;
 	}
 	
-<<<<<<< HEAD
 	public void setType(int x){
 		this.type = x;
 	}
@@ -61,9 +47,6 @@ public class Parcelle {
 		this.estCompte = b;
 	}
 	
-	/* LIE A L'AFFICHAGE TEXTUEL */
-	public String toString() {
-=======
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
 	 * <br>0 pour explorateur équipe 1
@@ -79,7 +62,6 @@ public class Parcelle {
 	 * @return String
 	 */
 	public String typeToString() {
->>>>>>> 31d3eef69688432df043c743110a895a9b0dd954
 		if(type == -1) {return " ";}
 		else if(type == 0) {return "e";}
 		else if(type == 1) {return "v";}
@@ -94,19 +76,4 @@ public class Parcelle {
 		else  { return "";}
 	} 
 	
-<<<<<<< HEAD
-	
-=======
-	/**
-	 * Fonction d'affichage TEXTUEL de la parcelle
-	 */
-	public String toString() {
-		if (this.surNavire && this.equipe){
-			return typeToString() + "n";
-		} else if (this.surNavire && !this.equipe){
-			return typeToString() + "N";
-		}
-		return typeToString();
-	}
->>>>>>> 31d3eef69688432df043c743110a895a9b0dd954
 }
