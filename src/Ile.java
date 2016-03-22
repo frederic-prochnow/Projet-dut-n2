@@ -24,7 +24,7 @@ public class Ile {
 		
 		String percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
 		percentR = Integer.valueOf(percent);
-		while (percentR < 0 || percentR > 51) {
+		while (percentR < 0 || percentR > 40) {
 			JOptionPane.showMessageDialog(null,
 					"Cette valeur n'est pas autorisee");
 			percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
@@ -80,25 +80,54 @@ public class Ile {
 		while (pourcentageActuel < pourcentage / 100) {
 
 			// on ajoute un rocher random
-			xR = r.nextInt(plateau.length - 3) + 1;
-			yR = r.nextInt(plateau.length - 3) + 1;
+			xR = r.nextInt(plateau.length - 2) + 1;
+			yR = r.nextInt(plateau.length - 2) + 1;
 			if (plateau[xR][yR].type == -1) {
 				plateau[xR][yR].type = 6;
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 
 				// on le supprime si elle ruine l'accessibilite
-				if (!(accessibiliteAmorce(x, y, nbRochers)
-						&& accessibiliteAmorce(1, 1, nbRochers)
-						&& accessibiliteAmorce(plateau.length - 2,
-								plateau.length - 2, nbRochers) && accessibiliteAmorce(
-							xCle, yCle, nbRochers))) {
+				// ou si les 4 rochers qui l'entourent ne sont pas accessibles
+				if (!(accessibiliteAmorce(x, y, nbRochers) && accessibiliteAmorce(1, 1, nbRochers)
+						&& accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
+						&& accessibiliteAmorce(xCle, yCle, nbRochers))
+						|| rocherEntoure(xR-1, yR) || rocherEntoure(xR+1, yR) || rocherEntoure(xR, yR-1)
+						|| rocherEntoure(xR, yR+1) )  {
 					plateau[xR][yR].type = -1;
 					nbRochers--;
 					pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 				}
 			}
 		}
+	}
+	
+	private boolean rocherEntoure(int x, int y) {
+		// si le rocher est en fait de l'eau, on dira qu'elle EST accessible.
+		// dans cette situation, le rocher de base se situe sur une cote
+		// elle ne peut ruiner l'access que de 3 rochers  car une case est l'eau
+		// on le retirer si elle ruine l'access A UN SEUL de ces 3(i.e. ces 3 sont entoures apres avoir ajoute ce dernier)
+		// il faut donc dire que la case EAU est entoure pour qu'elle ne soit pas retiree
+		if (x==0 || y==0 || (x==(plateau.length-1)) || (y==(plateau.length-1))) {
+			return false;
+		}
+		// dans ces autres cas, le rocher des base est a une case de distance de l'eau
+		// pour que son voisin qui le separe avec l'eau soit entoure, on ne doit alors que regarder dans 3 directions
+		else if (x==1) {
+			return ( (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+		}
+		else if (x==(plateau.length-2)) {
+			return ((plateau[x - 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+		}
+		else if (y==1) {
+			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y + 1].type != -1));
+		}
+		else if (y==(plateau.length-2)) {
+			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1));
+		}
+		// sinon, on peut regarder dans les 4 directions
+		return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+
 	}
 
 	private boolean accessibiliteAmorce(int x, int y, int nbRochers) {
