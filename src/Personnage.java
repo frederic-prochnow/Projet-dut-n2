@@ -3,6 +3,7 @@ public class Personnage {
 	protected char symboleNom;
 	protected int equipe;
 	protected int energie;
+	protected Position pos;
 	
 	Personnage(String nom, int equipe, int energie){
 		this.nom = nom;
