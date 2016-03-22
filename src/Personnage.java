@@ -7,11 +7,12 @@ public class Personnage {
 	protected boolean surNavire;
 
 	
-	Personnage(String nom, int equipe, int energie){
+	Personnage(String nom, int equipe, int energie, Position p){
 		this.nom = nom;
 		this.energie = energie;
 		this.equipe = equipe;
 		this.surNavire = false;
+		this.pos = p;
 		
 		if(equipe == 1){
 			this.symboleNom = nom.charAt(0);
@@ -22,6 +23,14 @@ public class Personnage {
 	
 	public void perdEnergie(int energie){
 		this.energie -= energie;
+	}
+	
+	public Position getPos(){
+		return this.pos;
+	}
+	
+	public void setPos(Position p){
+		this.pos = p;
 	}
 	
 	public String getNom(){
