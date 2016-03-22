@@ -38,6 +38,7 @@ public class Ile {
 	}
 
 	public void initialiser(double pourcentage) {
+		int xn=0, yn=0, xN=0, yN=0;
 		double pourcentageActuel = 0;
 		nbRochers = 0;
 		for (int i = 0; i < plateau.length; i++) {
@@ -54,17 +55,37 @@ public class Ile {
 		}
 		// NAVIRE
 		int cote = r.nextInt(5);
-		int xN = r.nextInt(plateau.length-2) +1;
-		int yN = r.nextInt(plateau.length-2) +1;
+		int rxn = r.nextInt(plateau.length-2) +1;
+		int ryn = r.nextInt(plateau.length-2) +1;
+		
+		int rXN = r.nextInt(plateau.length-2) +1;
+		int rYN = r.nextInt(plateau.length-2) +1;
+		
 		if (cote==0) {
-			plateau[xN][1].setType(2);
+			xn = rxn;
+			yn = 1;
+			xN=rXN;
+			yN=plateau.length-2;
 		} else if (cote==1) {
-			plateau[plateau.length-2][yN].setType(2);
+			xn = plateau.length-2;
+			yn = ryn;
+			xN=1;
+			yN=rYN;
 		} else if (cote==3) {
-			plateau[xN][plateau.length-2].setType(2);
+			xn = rxn;
+			yn = plateau.length-2;
+			xN=rXN;
+			yN=1;
 		} else if (cote==4) {
-			plateau[1][yN].setType(2);
+			xn = 1;
+			yn = ryn;
+			xN=plateau.length-2;
+			yN=rYN;
 		}
+
+		plateau[xn][yn].setType(2);
+		plateau[xN][yN].setType(5);
+		
 		// COFFRE
 		int x, y;
 		do {
@@ -99,8 +120,8 @@ public class Ile {
 
 				// on le supprime si elle ruine l'accessibilite
 				// ou si les 4 rochers qui l'entourent ne sont pas accessibles
-				if (!(accessibiliteAmorce(x, y, nbRochers) && accessibiliteAmorce(1, 1, nbRochers)
-						&& accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
+				if (!(accessibiliteAmorce(x, y, nbRochers) && accessibiliteAmorce(xn, yn, nbRochers)
+						&& accessibiliteAmorce(xN, yN, nbRochers)
 						&& accessibiliteAmorce(xCle, yCle, nbRochers))
 						|| rocherEntoure(xR-1, yR) || rocherEntoure(xR+1, yR) || rocherEntoure(xR, yR-1)
 						|| rocherEntoure(xR, yR+1) )  {
