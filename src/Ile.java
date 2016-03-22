@@ -54,7 +54,7 @@ public class Ile {
 			plateau[i][plateau.length - 1].setType(9);
 		}
 		// NAVIRE
-		int cote = r.nextInt(5);
+		int cote = r.nextInt(4);
 		int rxn = r.nextInt(plateau.length-2) +1;
 		int ryn = r.nextInt(plateau.length-2) +1;
 		
@@ -71,12 +71,12 @@ public class Ile {
 			yn = ryn;
 			xN=1;
 			yN=rYN;
-		} else if (cote==3) {
+		} else if (cote==2) {
 			xn = rxn;
 			yn = plateau.length-2;
 			xN=rXN;
 			yN=1;
-		} else if (cote==4) {
+		} else if (cote==3) {
 			xn = 1;
 			yn = ryn;
 			xN=plateau.length-2;
@@ -85,6 +85,7 @@ public class Ile {
 
 		plateau[xn][yn].setType(2);
 		plateau[xN][yN].setType(5);
+		
 		
 		// COFFRE
 		int x, y;
@@ -134,6 +135,7 @@ public class Ile {
 	}
 	
 	private boolean rocherEntoure(int x, int y) {
+		
 		// si le rocher est en fait de l'eau, on dira qu'elle EST accessible.
 		// dans cette situation, le rocher de base se situe sur une cote
 		// elle ne peut ruiner l'access que de 3 rochers  car une case est l'eau
