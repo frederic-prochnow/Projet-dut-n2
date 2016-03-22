@@ -1,10 +1,9 @@
 
 public class Parcelle {
 	private int type;
-	private boolean cleEquipe1 = false;
-	private boolean cleEquipe2 = false;
+	//private boolean cleEquipe1 = false;
+	//private boolean cleEquipe2 = false;
 	private boolean estCompte = false;
-	private Position pos;
 	
 
 	
@@ -22,14 +21,6 @@ public class Parcelle {
 	
 	public void setType(int x){
 		this.type = x;
-	}
-	
-	public Position getPos(){
-		return this.pos;
-	}
-	
-	public void setPos(Position p){
-		this.pos = p;
 	}
 	
 	public boolean getEstCompte(){

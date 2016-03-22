@@ -22,6 +22,7 @@ public class Map {
 		
 		/* ACTIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
+		System.out.println(explo1.getPos().toString());
 		
 		/* AFFICHAGE */
 		plateauGraph.affichage(); // Affichage graphique
