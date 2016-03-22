@@ -1,10 +1,9 @@
 
 public class Parcelle {
-	int type;
-	boolean surNavire;
-	boolean cleEquipe1 = false;
-	boolean cleEquipe2 = false;
-	boolean estCompte = false;
+	private int type;
+	private boolean cleEquipe1 = false;
+	private boolean cleEquipe2 = false;
+	private boolean estCompte = false;
 	
 
 	
@@ -18,6 +17,18 @@ public class Parcelle {
 	
 	public int getType(){
 		return this.type;
+	}
+	
+	public void setType(int x){
+		this.type = x;
+	}
+	
+	public boolean getEstCompte(){
+		return estCompte;
+	}
+	
+	public void setEstCompte(boolean b){
+		this.estCompte = b;
 	}
 	
 	/* LIE A L'AFFICHAGE TEXTUEL */

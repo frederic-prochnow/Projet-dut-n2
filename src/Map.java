@@ -16,11 +16,13 @@ public class Map {
 				"images/mer.png"};
 		Ile plateau = new Ile();
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
+		
+		/* PERSONNAGES */
 		Explorateur explo1 = new Explorateur("explorateur",2,100);
 		
 		/* ACTIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
-		System.out.println(explo1.getDetientClef());
+		
 		
 		/* AFFICHAGE */
 		plateauGraph.affichage(); // Affichage graphique

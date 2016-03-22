@@ -11,6 +11,7 @@ public class Personnage {
 		this.nom = nom;
 		this.energie = energie;
 		this.equipe = equipe;
+		this.surNavire = false;
 		
 		if(equipe == 1){
 			this.symboleNom = nom.charAt(0);
