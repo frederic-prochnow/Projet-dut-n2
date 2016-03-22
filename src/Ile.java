@@ -176,40 +176,12 @@ public class Ile {
 	}
 
 	boolean deplacer(int x, int y, int a, int b) {
-		// cas parcelle vide
-		if (plateau[a][b].type == -1) {
-			plateau[a][b].type = plateau[x][y].type;
-			plateau[x][y].type = -1;
-			changerEnergie(x, y, 0);
-			return true;
-			// cas navire equipe 1 || equipe 2
-		} else if ((plateau[y][x].equipe && plateau[b][a].equipe)
-				|| (!plateau[y][x].equipe && !plateau[b][a].equipe)) {
-			plateau[a][b].type = plateau[x][y].type;
-			plateau[x][y].type = -1;
-			plateau[a][b].surNavire = true;
-			changerEnergie(x, y, 1);
-			return true;
-			// cas rocher dessus clef || coffre
-			// A AJOUTER VERIFICATION QUE C'EST UN EXPLORATEUR
-		} else if (plateau[a][b].type == 7 || plateau[a][b].type == 8) {
-			changerEnergie(x, y, 2);
-		}
 		return false;
 	}
 
 	// 0 pour aller a une case vide
 	// 1 pour aller a son navire
 	// 2 pour soulever un rocher
-	void changerEnergie(int x, int y, int deplacement) {
-		if (deplacement == 0) {
-			plateau[x][y].energie -= 1;
-		} else if (deplacement == 1) {
-			plateau[x][y].energie += 10;
-		} else if (deplacement == 2) {
-			plateau[x][y].energie -= 5;
-		}
-	}
 
 	public String toString() {
 		int nombre = (plateau.length * 2) + 1;

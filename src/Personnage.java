@@ -4,6 +4,8 @@ public class Personnage {
 	protected int equipe;
 	protected int energie;
 	protected Position pos;
+	protected boolean surNavire;
+
 	
 	Personnage(String nom, int equipe, int energie){
 		this.nom = nom;
