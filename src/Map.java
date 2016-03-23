@@ -27,7 +27,7 @@ public class Map {
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
 		
 		/* PERSONNAGES */
-		Explorateur explo1 = new Explorateur("explorateur",2,100,plateau.getPos(2),0);
+		Explorateur explo1 = new Explorateur("explorateur",1,100,plateau.getPos(2),0);
 		
 		/* INITIALISATIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
