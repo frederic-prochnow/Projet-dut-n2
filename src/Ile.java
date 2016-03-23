@@ -14,8 +14,10 @@ public class Ile {
 	 */
 	private Parcelle[][] plateau;
 	private int[][] plateauGraphique;
-	Random r = new Random();
-	int nbRochers = 0;
+	private Random r = new Random();
+	private int nbRochers = 0;
+	private Coffre coffre;
+	private Clef clef;
 	
 	/**
 	 * Constructeur de la classe sans paramétres
@@ -115,7 +117,8 @@ public class Ile {
 			x = r.nextInt(plateau.length - 3) + 1;
 			y = r.nextInt(plateau.length - 3) + 1;
 		} while (plateau[x][y].getType() != -1);
-		plateau[x][y].setType(7);
+		coffre = new Coffre(new Position(x,y));
+		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
 		int xCle, yCle;
 
@@ -125,7 +128,8 @@ public class Ile {
 			xCle = r.nextInt(plateau.length - 3) + 1;
 			yCle = r.nextInt(plateau.length - 3) + 1;
 		} while (plateau[xCle][yCle].getType() != -1);
-		plateau[xCle][yCle].setType(8);
+		clef = new Clef(new Position(xCle,yCle));
+		plateau[xCle][yCle].setType(6);
 		plateau[xCle][yCle].setEstCompte(true);
 
 		// ROCHERS
