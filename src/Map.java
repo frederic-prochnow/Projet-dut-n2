@@ -26,11 +26,30 @@ public class Map {
 		Ile plateau = new Ile();
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
 		
-		/* ACTIONS */		
+		/* PERSONNAGES */
+		Explorateur explo1 = new Explorateur("explorateur",1,100,plateau.getPos(2),0);
+		
+		/* INITIALISATIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
 		
-		/* AFFICHAGE */
+		/* ACTIONS */	
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 4);
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 3);
+		refresh(plateau,plateauGraph);	
+		plateau.deplacer(explo1, 1);
+		refresh(plateau,plateauGraph);
+		plateau.deplacer(explo1, 2);
+		refresh(plateau,plateauGraph);
+	
+	}
+	
+	/* permet de rafraichir l'affichage apres chaque action */
+	public static void refresh(Ile plateau, Plateau plateauGraph){
+		try{Thread.sleep(1000);}catch(Exception ie){}
+		plateauGraph.setJeu(plateau.getplateaugraphique());
 		plateauGraph.affichage(); // Affichage graphique
-		System.out.println(plateau.toString()); // Affichage textuel
+		//System.out.println(plateau.toString()); // Affichage textuel
 	}
 }

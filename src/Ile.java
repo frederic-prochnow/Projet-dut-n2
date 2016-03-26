@@ -14,8 +14,10 @@ public class Ile {
 	 */
 	private Parcelle[][] plateau;
 	private int[][] plateauGraphique;
-	Random r = new Random();
-	int nbRochers = 0;
+	private Random r = new Random();
+	private int nbRochers = 0;
+	private Coffre coffre;
+	private Clef clef;
 	
 	/**
 	 * Constructeur de la classe sans paramétres
@@ -59,6 +61,7 @@ public class Ile {
 	 * @param pourcentage
 	 */
 	public void initialiser(double pourcentage) {
+		int xn=0, yn=0, xN=0, yN=0;
 		double pourcentageActuel = 0;
 		nbRochers = 0;
 		for (int i = 0; i < plateau.length; i++) {
@@ -68,23 +71,55 @@ public class Ile {
 		}
 		// EAU
 		for (int i = 0; i < plateau.length; i++) {
-			plateau[i][0].type = 9;
-			plateau[0][i].type = 9;
-			plateau[plateau.length - 1][i].type = 9;
-			plateau[i][plateau.length - 1].type = 9;
+			plateau[i][0].setType(9);
+			plateau[0][i].setType(9);
+			plateau[plateau.length - 1][i].setType(9);
+			plateau[i][plateau.length - 1].setType(9);
 		}
 		// NAVIRE
-		plateau[1][1].type = 2;
-		plateau[plateau.length - 2][plateau.length - 2].type = 5;
+		int cote = r.nextInt(4);
+		int rxn = r.nextInt(plateau.length-2) +1;
+		int ryn = r.nextInt(plateau.length-2) +1;
+		
+		int rXN = r.nextInt(plateau.length-2) +1;
+		int rYN = r.nextInt(plateau.length-2) +1;
+		
+		if (cote==0) {
+			xn = rxn;
+			yn = 1;
+			xN=rXN;
+			yN=plateau.length-2;
+		} else if (cote==1) {
+			xn = plateau.length-2;
+			yn = ryn;
+			xN=1;
+			yN=rYN;
+		} else if (cote==2) {
+			xn = rxn;
+			yn = plateau.length-2;
+			xN=rXN;
+			yN=1;
+		} else if (cote==3) {
+			xn = 1;
+			yn = ryn;
+			xN=plateau.length-2;
+			yN=rYN;
+		}
+
+		plateau[xn][yn].setType(2);
+		plateau[xN][yN].setType(5);
+		
+		
 		// COFFRE
 		int x, y;
 		do {
 			// EX: -3= de 0 a 7, +1= 1 a 8
 			x = r.nextInt(plateau.length - 3) + 1;
 			y = r.nextInt(plateau.length - 3) + 1;
-		} while (plateau[x][y].type != -1);
-		plateau[x][y].type = 7;
-		plateau[x][y].estCompte = true;// COFFRE
+		} while (plateau[x][y].getType() != -1);
+		coffre = new Coffre(new Position(x,y));
+		plateau[x][y].setType(6);
+		plateau[x][y].setEstCompte(true);// COFFRE
 		int xCle, yCle;
 
 		// CLE
@@ -92,9 +127,10 @@ public class Ile {
 			// EX: -3= de 0 a 7, +1= 1 a 8
 			xCle = r.nextInt(plateau.length - 3) + 1;
 			yCle = r.nextInt(plateau.length - 3) + 1;
-		} while (plateau[xCle][yCle].type != -1);
-		plateau[xCle][yCle].type = 8;
-		plateau[xCle][yCle].estCompte = true;
+		} while (plateau[xCle][yCle].getType() != -1);
+		clef = new Clef(new Position(xCle,yCle));
+		plateau[xCle][yCle].setType(6);
+		plateau[xCle][yCle].setEstCompte(true);
 
 		// ROCHERS
 		int xR, yR;
@@ -103,18 +139,19 @@ public class Ile {
 			// on ajoute un rocher random
 			xR = r.nextInt(plateau.length - 2) + 1;
 			yR = r.nextInt(plateau.length - 2) + 1;
-			if (plateau[xR][yR].type == -1) {
-				plateau[xR][yR].type = 6;
+			if (plateau[xR][yR].getType() == -1) {
+				plateau[xR][yR].setType(6);
 				nbRochers++;
 				pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 
 				// on le supprime si elle ruine l'accessibilite
-				if (!(accessibiliteAmorce(x, y, nbRochers) && accessibiliteAmorce(1, 1, nbRochers)
-						&& accessibiliteAmorce(plateau.length - 2, plateau.length - 2, nbRochers)
+				// ou si les 4 rochers qui l'entourent ne sont pas accessibles
+				if (!(accessibiliteAmorce(x, y, nbRochers) && accessibiliteAmorce(xn, yn, nbRochers)
+						&& accessibiliteAmorce(xN, yN, nbRochers)
 						&& accessibiliteAmorce(xCle, yCle, nbRochers))
 						|| rocherEntoure(xR-1, yR) || rocherEntoure(xR+1, yR) || rocherEntoure(xR, yR-1)
 						|| rocherEntoure(xR, yR+1) )  {
-					plateau[xR][yR].type = -1;
+					plateau[xR][yR].setType(-1);
 					nbRochers--;
 					pourcentageActuel = ((double) nbRochers / ((plateau.length - 2) * (plateau.length - 2)));
 				}
@@ -139,22 +176,31 @@ public class Ile {
 	 * @return
 	 */
 	private boolean rocherEntoure(int x, int y) {
+		// si le rocher est en fait de l'eau, on dira qu'elle EST accessible.
+		// dans cette situation, le rocher de base se situe sur une cote
+		// elle ne peut ruiner l'access que de 3 rochers  car une case est l'eau
+		// on le retirer si elle ruine l'access A UN SEUL de ces 3(i.e. ces 3 sont entoures apres avoir ajoute ce dernier)
+		// il faut donc dire que la case EAU est entoure pour qu'elle ne soit pas retiree
+
 		if (x==0 || y==0 || (x==(plateau.length-1)) || (y==(plateau.length-1))) {
 			return false;
 		}
 		else if (x==1) {
-			return ( (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+			return ( (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (x==(plateau.length-2)) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (y==1) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y + 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y + 1].getType() != -1));
 		}
 		else if (y==(plateau.length-2)) {
-			return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1));
+			return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1));
 		}
-		return ((plateau[x - 1][y].type != -1) && (plateau[x + 1][y].type != -1) && (plateau[x][y - 1].type != -1) && (plateau[x][y + 1].type != -1));
+
+		// sinon, on peut regarder dans les 4 directions
+		return ((plateau[x - 1][y].getType() != -1) && (plateau[x + 1][y].getType() != -1) && (plateau[x][y - 1].getType() != -1) && (plateau[x][y + 1].getType() != -1));
+
 
 	}
 
@@ -172,7 +218,7 @@ public class Ile {
 		// independemment
 		for (int i = 1; i <= plateau.length - 2; i++) {
 			for (int j = 1; j <= plateau.length - 2; j++) {
-				plateau[i][j].estCompte = false;
+				plateau[i][j].setEstCompte(false);
 			}
 		}
 		verification(x - 1, y);
@@ -182,7 +228,7 @@ public class Ile {
 
 		for (int i = 1; i <= (plateau.length - 2); i++) {
 			for (int j = 1; j <= (plateau.length - 2); j++) {
-				if (plateau[i][j].estCompte && plateau[i][j].type == -1) {
+				if (plateau[i][j].getEstCompte() && plateau[i][j].getType() == -1) {
 					nbAccessibles++;
 				}
 			}
@@ -201,8 +247,8 @@ public class Ile {
 	 * @param y
 	 */
 	private void verification(int x, int y) {
-		if (!plateau[x][y].estCompte && plateau[x][y].type == -1) {
-			plateau[x][y].estCompte = true;
+		if (!plateau[x][y].getEstCompte() && plateau[x][y].getType() == -1) {
+			plateau[x][y].setEstCompte(true);
 			// verif de 1 a 8, meme si 0,0 est mis a estCompte, ceci ne change
 			// rien car nbAcc compte que ceux de 1 a 8
 			if ((x > 0) && (x < (plateau.length - 1)) && (y > 0)
@@ -224,45 +270,7 @@ public class Ile {
 	 * @return
 	 */
 	boolean deplacer(int x, int y, int a, int b) {
-		// cas parcelle vide
-		if (plateau[a][b].type == -1) {
-			plateau[a][b].type = plateau[x][y].type;
-			plateau[x][y].type = -1;
-			changerEnergie(x, y, 0);
-			return true;
-			// cas navire equipe 1 || equipe 2
-		} else if ((plateau[y][x].equipe && plateau[b][a].equipe)
-				|| (!plateau[y][x].equipe && !plateau[b][a].equipe)) {
-			plateau[a][b].type = plateau[x][y].type;
-			plateau[x][y].type = -1;
-			plateau[a][b].surNavire = true;
-			changerEnergie(x, y, 1);
-			return true;
-			// cas rocher dessus clef || coffre
-			// A AJOUTER VERIFICATION QUE C'EST UN EXPLORATEUR
-		} else if (plateau[a][b].type == 7 || plateau[a][b].type == 8) {
-			changerEnergie(x, y, 2);
-		}
 		return false;
-	}
-
-	/**
-	 * Fonction permettant la gestion de l'énergie d'un utilisateur
-	 * 0 pour aller a une case vide
-	 * 1 pour aller a son navire
-	 * 2 pour soulever un rocher
-	 * @param x
-	 * @param y
-	 * @param deplacement
-	 */
-	void changerEnergie(int x, int y, int deplacement) {
-		if (deplacement == 0) {
-			plateau[x][y].energie -= 1;
-		} else if (deplacement == 1) {
-			plateau[x][y].energie += 10;
-		} else if (deplacement == 2) {
-			plateau[x][y].energie -= 5;
-		}
 	}
 
 	/**
@@ -322,6 +330,164 @@ public class Ile {
 	 */
 	public int getSize(){
 		return plateau[0].length;
+	}
+	
+	/**
+	 * Fonction de récupération de la position d'une entité voulu sur la carte( ATTENTION ! ne pas mettre de type susceptible d'être trouvé plusieurs fois)
+	 * @return Position
+	 */
+	public Position getPos(int type){
+		for(int i = 0; i < plateau[0].length; i++){
+			for(int j = 0; j < plateau[1].length; j++){
+				if(plateau[i][j].getType() == type){ 
+					return new Position(i,j);
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 *  Fonction qui permet de deplacer un personnage dans une direction
+	 * @param perso
+	 * @param x
+	 * 
+	 * Si x vaut 1 => GAUCHE
+	 * Si x vaut 2 => HAUT
+	 * Si x vaut 3 => DROITE
+	 * Si x vaut 4 => BAS
+	 * 
+	 */
+	public void deplacer(Personnage perso, int x){
+		if(x == 1){
+			Position pos = new Position(perso.getPos().x - 1,perso.getPos().y);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher a gauche");
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				perso.setSurnavire(true);
+			}else{
+				System.out.println("Ne peut pas se deplacer a gauche");
+			}
+		}else if(x == 2){
+			Position pos = new Position(perso.getPos().x,perso.getPos().y - 1);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher en haut");
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+					if(perso.getSurnavire()){ // Est sur navire
+						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						perso.setSurnavire(false);
+					}else{ // Sur sol
+						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+					}
+					perso.setPos(pos);
+					perso.perdEnergie(-1);
+					perso.setSurnavire(true);
+			}else{
+				System.out.println("Ne peut pas se deplacer en haut");
+			}
+		}else if(x == 3){
+			Position pos = new Position(perso.getPos().x + 1,perso.getPos().y);
+			
+			if(estVide(pos)){
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher a droite");
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				perso.setSurnavire(true);
+			}else{
+				System.out.println("Ne peut pas se deplacer a droite");
+			}
+		}else{
+			Position pos = new Position(perso.getPos().x,perso.getPos().y + 1);
+			
+			if(estVide(pos)){			
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}			
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			}else if(estRocher(pos)){
+				System.out.println("Peut soulever le rocher en dessous");
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+				if(perso.getSurnavire()){ // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					perso.setSurnavire(false);
+				}else{ // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setPos(pos);
+				perso.perdEnergie(-1);
+				perso.setSurnavire(true);
+			}else{
+				System.out.println("Ne peut pas se deplacer en dessous");
+			}
+		}
+	}
+	
+	public boolean estVide(Position p){
+		return (plateau[p.x][p.y].getType() == -1);
+	}
+	
+	public boolean estNavire(Position p , int equipe){
+		if(equipe == 1){
+			return (plateau[p.x][p.y].getType() == 2);
+		}else{
+			return (plateau[p.x][p.y].getType() == 5);
+		}	
+	}
+	
+	public boolean estRocher(Position p){
+		return (plateau[p.x][p.y].getType() == 6);
 	}
 	
 }
