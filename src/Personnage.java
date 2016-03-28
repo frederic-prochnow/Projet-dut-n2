@@ -6,6 +6,8 @@ public class Personnage {
 	protected int energie;
 	protected Position pos;
 	protected boolean surNavire;
+	private boolean detientClef;
+	private boolean detientCoffre;
 
 	
 	Personnage(String nom, int equipe, int energie, Position p, int type){
@@ -63,6 +65,21 @@ public class Personnage {
 		this.surNavire = b;
 	}
 	
+	public boolean getDetientClef(){
+		return this.detientClef;
+	}
+	
+	public void setDetientClef(boolean set) {
+		this.detientClef = set;
+	}
+	
+	public boolean getDetientCoffre(){
+		return this.detientCoffre;
+	}
+	
+	public void setDetientCoffre(boolean set){
+		this.detientCoffre = set;
+	}
 	public String toString(){
 		return nom+" de l'équipe "+equipe+" possede "+energie+" points d'energie.";
 	}

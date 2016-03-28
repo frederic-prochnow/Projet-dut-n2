@@ -370,11 +370,43 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			}else if(estRocher(pos)){
-				System.out.println("Peut soulever le rocher a gauche");
-			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+				if (perso instanceof Explorateur) {
+					if (estCoffre(pos)) {
+						System.out.println("Peut soulever le rocher a gauche et il y a le coffre en dessous");
+						plateau[pos.x][pos.y].setType(7); // on revele le coffre
+						if (perso.getDetientClef()) {
+							coffre.setEstOuvert(true); // on ouvre le coffre
+							System.out.println("Il a la cle donc il a pris le tresor");
+							perso.setDetientCoffre(true);
+							coffre.setEstVide(true);
+						}
+					} else if (estCle(pos)) {
+						System.out.println("Peut soulever le rocher a gauche et il y a la cle en dessous");
+						plateau[pos.x][pos.y].setType(8);
+						perso.setDetientClef(true);
+					} else {
+						System.out.println("Souleve le rocher a gauche et il n'a rien");
+					}
+					perso.perdEnergie(5);
+				} else {
+					System.out.println("Que les explorateurs peuvent soulever les rochers");
+				}
+			} else if (estCoffre(pos) && coffre.getEstOuvert()) {
+				if (perso instanceof Explorateur) {
+					if (perso.getDetientClef()) {
+						System.out.println("Il a la cle donc il a pris le tresor");
+						perso.setDetientCoffre(true);
+						coffre.setEstVide(true);
+					} else {
+						System.out.println("Peut pas prendre le tresor car n'a pas la cle");
+					}
+				} else {
+					System.out.println("Que les explorateurs peuvent prendre le tresor");
+				}
+			} else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -382,7 +414,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				perso.setSurnavire(true);
 			}else{
 				System.out.println("Ne peut pas se deplacer a gauche");
@@ -398,10 +430,42 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			}else if(estRocher(pos)){
-				System.out.println("Peut soulever le rocher en haut");
+				if (perso instanceof Explorateur) {
+					if (estCoffre(pos)) {
+						System.out.println("Peut soulever le rocher en haut et il y a le coffre en dessous");
+						plateau[pos.x][pos.y].setType(7); // on revele le coffre
+						if (perso.getDetientClef()) {
+							coffre.setEstOuvert(true); // on ouvre le coffre
+							System.out.println("Il a la cle donc il a pris le tresor");
+							perso.setDetientCoffre(true);
+							coffre.setEstVide(true);
+						}
+					} else if (estCle(pos)) {
+						System.out.println("Peut soulever le rocher en haut et il y a la cle en dessous");
+						plateau[pos.x][pos.y].setType(8);
+						perso.setDetientClef(true);
+					} else {
+						System.out.println("Souleve le rocher en haut et il n'a rien");
+					}
+					perso.perdEnergie(5);
+				} else {
+					System.out.println("Que les explorateurs peuvent soulever les rochers");
+				}
+			} else if (estCoffre(pos) && coffre.getEstOuvert()) {
+				if (perso instanceof Explorateur) {
+					if (perso.getDetientClef()) {
+						System.out.println("Il a la cle donc il a pris le tresor");
+						perso.setDetientCoffre(true);
+						coffre.setEstVide(true);
+					} else {
+						System.out.println("Peut pas prendre le tresor car n'a pas la cle");
+					}
+				} else {
+					System.out.println("Que les explorateurs peuvent prendre le tresor");
+				}
 			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
 					if(perso.getSurnavire()){ // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
@@ -410,7 +474,7 @@ public class Ile {
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 					}
 					perso.setPos(pos);
-					perso.perdEnergie(-1);
+					perso.perdEnergie(1);
 					perso.setSurnavire(true);
 			}else{
 				System.out.println("Ne peut pas se deplacer en haut");
@@ -426,10 +490,42 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			}else if(estRocher(pos)){
-				System.out.println("Peut soulever le rocher a droite");
+				if (perso instanceof Explorateur) {
+					if (estCoffre(pos)) {
+						System.out.println("Peut soulever le rocher a droite et il y a le coffre en dessous");
+						plateau[pos.x][pos.y].setType(7); // on revele le coffre
+						if (perso.getDetientClef()) {
+							coffre.setEstOuvert(true); // on ouvre le coffre
+							System.out.println("Il a la cle donc il a pris le tresor");
+							perso.setDetientCoffre(true);
+							coffre.setEstVide(true);
+						}
+					} else if (estCle(pos)) {
+						System.out.println("Peut soulever le rocher a droite et il y a la cle en dessous");
+						plateau[pos.x][pos.y].setType(8);
+						perso.setDetientClef(true);
+					} else {
+						System.out.println("Souleve le rocher a droite et il n'a rien");
+					}
+					perso.perdEnergie(5);
+				} else {
+					System.out.println("Que les explorateurs peuvent soulever les rochers");
+				}
+			} else if (estCoffre(pos) && coffre.getEstOuvert()) {
+				if (perso instanceof Explorateur) {
+					if (perso.getDetientClef()) {
+						System.out.println("Il a la cle donc il a pris le tresor");
+						perso.setDetientCoffre(true);
+						coffre.setEstVide(true);
+					} else {
+						System.out.println("Peut pas prendre le tresor car n'a pas la cle");
+					}
+				} else {
+					System.out.println("Que les explorateurs peuvent prendre le tresor");
+				}
 			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
@@ -438,7 +534,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				perso.setSurnavire(true);
 			}else{
 				System.out.println("Ne peut pas se deplacer a droite");
@@ -454,10 +550,42 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}			
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			}else if(estRocher(pos)){
-				System.out.println("Peut soulever le rocher en dessous");
+				if (perso instanceof Explorateur) {
+					if (estCoffre(pos)) {
+						System.out.println("Peut soulever le rocher en bas et il y a le coffre en dessous");
+						plateau[pos.x][pos.y].setType(7); // on revele le coffre
+						if (perso.getDetientClef()) {
+							coffre.setEstOuvert(true); // on ouvre le coffre
+							System.out.println("Il a la cle donc il a pris le tresor");
+							perso.setDetientCoffre(true);
+							coffre.setEstVide(true);
+						}
+					} else if (estCle(pos)) {
+						System.out.println("Peut soulever le rocher en base et il y a la cle en dessous");
+						plateau[pos.x][pos.y].setType(8);
+						perso.setDetientClef(true);
+					} else {
+						System.out.println("Souleve le rocher en bas et il n'a rien");
+					}
+					perso.perdEnergie(5);
+				} else {
+					System.out.println("Que les explorateurs peuvent soulever les rochers");
+				}
+			} else if (estCoffre(pos) && coffre.getEstOuvert()) {
+				if (perso instanceof Explorateur) {
+					if (perso.getDetientClef()) {
+						System.out.println("Il a la cle donc il a pris le tresor");
+						perso.setDetientCoffre(true);
+						coffre.setEstVide(true);
+					} else {
+						System.out.println("Peut pas prendre le tresor car n'a pas la cle");
+					}
+				} else {
+					System.out.println("Que les explorateurs peuvent prendre le tresor");
+				}
 			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
@@ -466,7 +594,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
-				perso.perdEnergie(-1);
+				perso.perdEnergie(1);
 				perso.setSurnavire(true);
 			}else{
 				System.out.println("Ne peut pas se deplacer en dessous");
@@ -488,6 +616,14 @@ public class Ile {
 	
 	public boolean estRocher(Position p){
 		return (plateau[p.x][p.y].getType() == 6);
+	}
+	
+	public boolean estCoffre(Position p){
+		return (plateau[p.x][p.y].getType() == 7);
+	}
+	
+	public boolean estCle(Position p){
+		return (plateau[p.x][p.y].getType() == 8);
 	}
 	
 }
