@@ -1,7 +1,9 @@
+import javax.swing.JOptionPane;
+
 public class Personnage {
 	protected String nom;
 	protected char symboleNom;
-	protected int type; // Même que dans parcelle
+	protected int type; // Mï¿½me que dans parcelle
 	protected int equipe;
 	protected int energie;
 	protected Position pos;
@@ -82,5 +84,37 @@ public class Personnage {
 	}
 	public String toString(){
 		return nom+" de l'Ã©quipe "+equipe+" possede "+energie+" points d'energie.";
+	}
+	
+	Object[] actionsSimples = { "haut", "bas", "gauche", "droite" };
+	Object[] actionsMulti = { "haut", "bas", "gauche", "droite", "haut gauche", "haut droite", "bas gauche",
+	"bas droite" };
+	
+	public int choixDeplacement(int typeDeplacement){
+		String deplacement;
+		if (typeDeplacement==1){
+			deplacement= JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsSimples, actionsSimples[0]).toString();
+		} else {
+			deplacement= JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsMulti, actionsMulti[0]).toString();
+		}
+			
+		if(deplacement.equals("haut")){
+			return 2;
+		} else if (deplacement.equals("gauche")){
+			return 1;
+		} else if (deplacement.equals("droite")){
+			return 3;
+		} else if (deplacement.equals("bas")){
+			return 4;
+		} else if (deplacement.equals("haut gauche")){
+			return 5;
+		} else if (deplacement.equals("haut droite")){
+			return 6;
+		} else if (deplacement.equals("bas gauche")){
+			return 7;
+		} else if (deplacement.equals("bas droite")){
+			return 8;
+		}
+		return -1;
 	}
 }

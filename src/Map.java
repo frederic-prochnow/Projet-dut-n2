@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 import tps.Plateau;
 /**
  * Class Map
@@ -28,20 +30,29 @@ public class Map {
 		
 		/* PERSONNAGES */
 		Explorateur explo1 = new Explorateur("explorateur",1,100,plateau.getPos(2),0);
+		Personnage voleur1 = new Voleur("voleur", 1, 100, plateau.getPos(2), 1);
+		Object[] persos = { "explorateur", "voleur", "guerrier", "piegeur" };
 		
 		/* INITIALISATIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
 		
-		/* ACTIONS */	
-		refresh(plateau,plateauGraph);	
-		plateau.deplacer(explo1, 4);
-		refresh(plateau,plateauGraph);	
-		plateau.deplacer(explo1, 3);
-		refresh(plateau,plateauGraph);	
-		plateau.deplacer(explo1, 1);
-		refresh(plateau,plateauGraph);
-		plateau.deplacer(explo1, 2);
-		refresh(plateau,plateauGraph);
+		/* ACTIONS */			
+		int nb=0;
+		while (nb != 5) {// boucle tant que personne n'a gagn�
+			refresh(plateau, plateauGraph);
+			String persoSelection = JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?",
+					"choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages").toString();
+			if (persoSelection
+					.equals("explorateur") /* +la condidtion de l'equipe */) {
+				plateau.deplacer(explo1, explo1.choixDeplacement(1));
+				refresh(plateau, plateauGraph);
+			} else if (persoSelection.equals("voleur")) {
+				plateau.deplacer(voleur1, voleur1.choixDeplacement(2));
+				refresh(plateau, plateauGraph);
+			} // creer les else if avec les autres persos quand ils seront actifs
+		nb++;
+		}
+		
 	
 	}
 	
