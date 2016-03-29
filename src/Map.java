@@ -42,8 +42,7 @@ public class Map {
 			refresh(plateau, plateauGraph);
 			String persoSelection = JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?",
 					"choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages").toString();
-			if (persoSelection
-					.equals("explorateur") /* +la condidtion de l'equipe */) {
+			if (persoSelection.equals("explorateur") /* +la condidtion de l'equipe */) {
 				plateau.deplacer(explo1, explo1.choixDeplacement(1));
 				refresh(plateau, plateauGraph);
 			} else if (persoSelection.equals("voleur")) {
