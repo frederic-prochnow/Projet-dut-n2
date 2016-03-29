@@ -93,27 +93,29 @@ public class Personnage {
 	public int choixDeplacement(int typeDeplacement){
 		String deplacement;
 		if (typeDeplacement==1){
-			deplacement= JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsSimples, actionsSimples[0]).toString();
+			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsSimples, actionsSimples[0]);
 		} else {
-			deplacement= JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsMulti, actionsMulti[0]).toString();
+			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsMulti, actionsMulti[0]);
 		}
-			
-		if(deplacement.equals("haut")){
-			return 2;
-		} else if (deplacement.equals("gauche")){
-			return 1;
-		} else if (deplacement.equals("droite")){
-			return 3;
-		} else if (deplacement.equals("bas")){
-			return 4;
-		} else if (deplacement.equals("haut gauche")){
-			return 5;
-		} else if (deplacement.equals("haut droite")){
-			return 6;
-		} else if (deplacement.equals("bas gauche")){
-			return 7;
-		} else if (deplacement.equals("bas droite")){
-			return 8;
+		
+		if (deplacement != null) {
+			if(deplacement.equals("haut")){
+				return 2;
+			} else if (deplacement.equals("gauche")){
+				return 1;
+			} else if (deplacement.equals("droite")){
+				return 3;
+			} else if (deplacement.equals("bas")){
+				return 4;
+			} else if (deplacement.equals("haut gauche")){
+				return 5;
+			} else if (deplacement.equals("haut droite")){
+				return 6;
+			} else if (deplacement.equals("bas gauche")){
+				return 7;
+			} else if (deplacement.equals("bas droite")){
+				return 8;
+			}
 		}
 		return -1;
 	}

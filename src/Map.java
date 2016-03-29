@@ -38,21 +38,21 @@ public class Map {
 		
 		/* ACTIONS */			
 		int nb=0;
-		while (nb != 40) {// boucle tant que personne n'a gagn�
+		String persoSelection;
+		while (nb != 40) {// boucle tant que personne n'a gagne
 			refresh(plateau, plateauGraph);
-			String persoSelection = JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?",
-					"choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages").toString();
-			if (persoSelection.equals("explorateur") /* +la condidtion de l'equipe */) {
-				plateau.deplacer(explo1, explo1.choixDeplacement(1));
-				refresh(plateau, plateauGraph);
-			} else if (persoSelection.equals("voleur")) {
-				plateau.deplacer(voleur1, voleur1.choixDeplacement(2));
-				refresh(plateau, plateauGraph);
-			} // creer les else if avec les autres persos quand ils seront actifs
-		nb++;
+			persoSelection = (String) JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?", "choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages");
+			if (persoSelection != null) {
+				nb++;
+				if (persoSelection.equals("explorateur") ) { // +la condidtion de l'equipe
+					plateau.deplacer(explo1, explo1.choixDeplacement(1));
+					refresh(plateau, plateauGraph);
+				} else if (persoSelection.equals("voleur")) {
+					plateau.deplacer(voleur1, voleur1.choixDeplacement(2));
+					refresh(plateau, plateauGraph);
+				} // creer les else if avec les autres persos quand ils seront actifs
+			}
 		}
-		
-	
 	}
 	
 	/* permet de rafraichir l'affichage apres chaque action */
