@@ -3,7 +3,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 /**
  * Classe Ile
- * Cette classe permet la création d'une île
+ * Cette classe permet la crï¿½ation d'une ï¿½le
  * @author Team J3
  *
  */
@@ -20,9 +20,9 @@ public class Ile {
 	private Clef clef;
 	
 	/**
-	 * Constructeur de la classe sans paramétres
+	 * Constructeur de la classe sans paramï¿½tres
 	 * 
-	 * Ce constructeur crée un plateau terminal et graphique de taille dégini 
+	 * Ce constructeur crï¿½e un plateau terminal et graphique de taille dï¿½gini 
 	 * par l'interface graphique java
 	 * 
 	 */
@@ -55,8 +55,8 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction qui initialise le plateau avec les différents éléments requis
-	 * Eau, navire, coffre, clés, rochers ...
+	 * Fonction qui initialise le plateau avec les diffï¿½rents ï¿½lï¿½ments requis
+	 * Eau, navire, coffre, clï¿½s, rochers ...
 	 * 
 	 * @param pourcentage
 	 */
@@ -205,7 +205,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction accessibiliteAmorce qui vérifie l'acessibilité des éléments
+	 * Fonction accessibiliteAmorce qui vï¿½rifie l'acessibilitï¿½ des ï¿½lï¿½ments
 	 * @param x
 	 * @param y
 	 * @param nbRochers
@@ -242,7 +242,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de vérification des différents éléments placés
+	 * Fonction de vï¿½rification des diffï¿½rents ï¿½lï¿½ments placï¿½s
 	 * @param x
 	 * @param y
 	 */
@@ -262,7 +262,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de déplacements de certain éléments, ici les exploraters
+	 * Fonction de dï¿½placements de certain ï¿½lï¿½ments, ici les exploraters
 	 * @param x
 	 * @param y
 	 * @param a
@@ -312,20 +312,20 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de récupération du plateau graphique
+	 * Fonction de rï¿½cupï¿½ration du plateau graphique
 	 * @return int[][]
 	 */
 	public int[][] getplateaugraphique() {
 		for(int i = 0; i < plateau[0].length; i++){
 			for(int j = 0; j < plateau[1].length; j++){
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img à 0 et non -1
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img ï¿½ 0 et non -1
 			}
 		}
 		return plateauGraphique;
 	}
 	
 	/**
-	 * Fonction de récupération de la taille du plateau
+	 * Fonction de rï¿½cupï¿½ration de la taille du plateau
 	 * @return int
 	 */
 	public int getSize(){
@@ -333,7 +333,7 @@ public class Ile {
 	}
 	
 	/**
-	 * Fonction de récupération de la position d'une entité voulu sur la carte( ATTENTION ! ne pas mettre de type susceptible d'être trouvé plusieurs fois)
+	 * Fonction de rï¿½cupï¿½ration de la position d'une entitï¿½ voulu sur la carte( ATTENTION ! ne pas mettre de type susceptible d'ï¿½tre trouvï¿½ plusieurs fois)
 	 * @return Position
 	 */
 	public Position getPos(int type){
@@ -406,7 +406,7 @@ public class Ile {
 				} else {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			} else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+			} else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire alliï¿½
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -466,7 +466,7 @@ public class Ile {
 				} else {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire alliï¿½
 					if(perso.getSurnavire()){ // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -526,7 +526,7 @@ public class Ile {
 				} else {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire alliï¿½
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -586,7 +586,7 @@ public class Ile {
 				} else {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire allié
+			}else if(estNavire(pos,perso.getEquipe())){ // Verifie si c'est le navire alliï¿½
 				if(perso.getSurnavire()){ // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
