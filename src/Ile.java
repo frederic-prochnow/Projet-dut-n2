@@ -123,8 +123,6 @@ public class Ile {
 		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
 		int xCle, yCle;
-		System.out.println("coffre x=" + x + " y=" + y);
-		System.out.println(coffre.getPos().x + " " + coffre.getPos().y);
 
 		// CLE
 		do {
@@ -136,8 +134,6 @@ public class Ile {
 		clef = new Clef(new Position(xCle, yCle));
 		plateau[xCle][yCle].setType(6);
 		plateau[xCle][yCle].setEstCompte(true);
-		System.out.println("cle x=" + xCle + " y=" + yCle);
-		System.out.println(clef.getPos().x);
 
 		// ROCHERS
 		int xR, yR;
@@ -443,8 +439,7 @@ public class Ile {
 				} else {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
+			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -513,8 +508,7 @@ public class Ile {
 					System.out
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
+			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -583,8 +577,7 @@ public class Ile {
 					System.out
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
+			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -653,8 +646,7 @@ public class Ile {
 					System.out
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
+			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -686,10 +678,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(perso
 							.getType());
 
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est
-																// le navire
-																// allie
+				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -719,10 +708,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(perso
 							.getType());
 
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est
-																// le navire
-																// allie
+				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
