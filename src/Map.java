@@ -38,7 +38,7 @@ public class Map {
 		
 		/* ACTIONS */			
 		int nb=0;
-		while (nb != 5) {// boucle tant que personne n'a gagn�
+		while (nb != 40) {// boucle tant que personne n'a gagn�
 			refresh(plateau, plateauGraph);
 			String persoSelection = JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?",
 					"choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages").toString();

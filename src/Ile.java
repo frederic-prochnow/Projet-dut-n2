@@ -3,7 +3,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
- * Classe Ile Cette classe permet la cr�ation d'une �le
+ * Classe Ile Cette classe permet la creation d'une ele
  * 
  * @author Team J3
  * 
@@ -21,9 +21,9 @@ public class Ile {
 	private Clef clef;
 
 	/**
-	 * Constructeur de la classe sans param�tres
+	 * Constructeur de la classe sans parametres
 	 * 
-	 * Ce constructeur cr�e un plateau terminal et graphique de taille d�gini
+	 * Ce constructeur cree un plateau terminal et graphique de taille degini
 	 * par l'interface graphique java
 	 * 
 	 */
@@ -58,8 +58,8 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction qui initialise le plateau avec les diff�rents �l�ments requis
-	 * Eau, navire, coffre, cl�s, rochers ...
+	 * Fonction qui initialise le plateau avec les differents elements requis
+	 * Eau, navire, coffre, cles, rochers ...
 	 * 
 	 * @param pourcentage
 	 */
@@ -123,6 +123,8 @@ public class Ile {
 		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
 		int xCle, yCle;
+		System.out.println("coffre x=" + x + " y=" + y);
+		System.out.println(coffre.getPos().x + " " + coffre.getPos().y);
 
 		// CLE
 		do {
@@ -130,9 +132,12 @@ public class Ile {
 			xCle = r.nextInt(plateau.length - 3) + 1;
 			yCle = r.nextInt(plateau.length - 3) + 1;
 		} while (plateau[xCle][yCle].getType() != -1);
+		
 		clef = new Clef(new Position(xCle, yCle));
 		plateau[xCle][yCle].setType(6);
 		plateau[xCle][yCle].setEstCompte(true);
+		System.out.println("cle x=" + xCle + " y=" + yCle);
+		System.out.println(clef.getPos().x);
 
 		// ROCHERS
 		int xR, yR;
@@ -222,7 +227,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction accessibiliteAmorce qui v�rifie l'acessibilit� des �l�ments
+	 * Fonction accessibiliteAmorce qui verifie l'acessibilite des elements
 	 * 
 	 * @param x
 	 * @param y
@@ -261,7 +266,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de v�rification des diff�rents �l�ments plac�s
+	 * Fonction de verification des differents elements places
 	 * 
 	 * @param x
 	 * @param y
@@ -282,7 +287,7 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de d�placements de certain �l�ments, ici les exploraters
+	 * Fonction de deplacements de certain elements, ici les exploraters
 	 * 
 	 * @param x
 	 * @param y
@@ -333,31 +338,21 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de r�cup�ration du plateau graphique
+	 * Fonction de recuperation du plateau graphique
 	 * 
 	 * @return int[][]
 	 */
 	public int[][] getplateaugraphique() {
 		for (int i = 0; i < plateau[0].length; i++) {
 			for (int j = 0; j < plateau[1].length; j++) {
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2
-																		// nescessaire
-																		// pour
-																		// demarer
-																		// le
-																		// tableau
-																		// d'img
-																		// � 0
-																		// et
-																		// non
-																		// -1
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2 nescessaire pour demarer le tableau d'img a 0  et  non  -1
 			}
 		}
 		return plateauGraphique;
 	}
 
 	/**
-	 * Fonction de r�cup�ration de la taille du plateau
+	 * Fonction de recuperation de la taille du plateau
 	 * 
 	 * @return int
 	 */
@@ -366,8 +361,8 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de r�cup�ration de la position d'une entit� voulu sur la carte(
-	 * ATTENTION ! ne pas mettre de type susceptible d'�tre trouv� plusieurs
+	 * Fonction de recuperation de la position d'une entite voulu sur la carte(
+	 * ATTENTION ! ne pas mettre de type susceptible d'etre trouve plusieurs
 	 * fois)
 	 * 
 	 * @return Position
@@ -449,7 +444,7 @@ public class Ile {
 					System.out.println("Que les explorateurs peuvent prendre le tresor");
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire alli�
+															// le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -519,7 +514,7 @@ public class Ile {
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire alli�
+															// le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -589,7 +584,7 @@ public class Ile {
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire alli�
+															// le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -659,7 +654,7 @@ public class Ile {
 							.println("Que les explorateurs peuvent prendre le tresor");
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire alli�
+															// le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
 					plateau[perso.getPos().x][perso.getPos().y].setType(2);
 					perso.setSurnavire(false);
@@ -694,7 +689,7 @@ public class Ile {
 				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
 																// c'est
 																// le navire
-																// alli�
+																// allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -727,7 +722,7 @@ public class Ile {
 				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
 																// c'est
 																// le navire
-																// alli�
+																// allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -756,10 +751,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(perso
 							.getType());
 
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est
-																// le navire
-																// alli�
+				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -789,10 +781,7 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(perso
 							.getType());
 
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est
-																// le navire
-																// alli�
+				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
 						plateau[perso.getPos().x][perso.getPos().y].setType(2);
 						perso.setSurnavire(false);
@@ -821,11 +810,11 @@ public class Ile {
 	}
 
 	public boolean estCoffre(Position p) {
-		return (plateau[p.x][p.y].getType() == 7);
+		return p.equals(coffre.getPos());
 	}
 
 	public boolean estCle(Position p) {
-		return (plateau[p.x][p.y].getType() == 8);
+		return p.equals(clef.getPos());
 	}
 
 }
