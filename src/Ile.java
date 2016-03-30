@@ -390,15 +390,14 @@ public class Ile {
 
 			if (estVide(pos)) {
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 				}
 				perso.setPos(pos);
 				perso.perdEnergie(1);
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso
-						.getType());
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			} else if (estRocher(pos)) {
 				if (perso instanceof Explorateur) {
 					if (estCoffre(pos)) {
@@ -457,7 +456,7 @@ public class Ile {
 
 			if (estVide(pos)) {
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -510,7 +509,7 @@ public class Ile {
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -579,7 +578,7 @@ public class Ile {
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -595,7 +594,7 @@ public class Ile {
 
 			if (estVide(pos)) {
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -648,7 +647,7 @@ public class Ile {
 				}
 			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 					perso.setSurnavire(false);
 				} else { // Sur sol
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -668,7 +667,7 @@ public class Ile {
 
 				if (estVide(pos)) {
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -698,7 +697,7 @@ public class Ile {
 
 				if (estVide(pos)) {
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -710,7 +709,7 @@ public class Ile {
 
 				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -727,7 +726,7 @@ public class Ile {
 
 				if (estVide(pos)) {
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -739,7 +738,7 @@ public class Ile {
 
 				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -757,7 +756,7 @@ public class Ile {
 
 				if (estVide(pos)) {
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
@@ -769,7 +768,7 @@ public class Ile {
 
 				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est le navire allie
 					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
+						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
 						perso.setSurnavire(false);
 					} else { // Sur sol
 						System.out.println("Ne peut pas se deplacer a droite");

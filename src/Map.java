@@ -27,30 +27,51 @@ public class Map {
 				"images/mer.png"};
 		Ile plateau = new Ile();
 		Plateau plateauGraph = new Plateau(img,plateau.getSize());
+		GestionJeu jeu = new GestionJeu(true);
+		Object[] persos = { "explorateur", "voleur", "guerrier", "piegeur" };
 		
 		/* PERSONNAGES */
 		Explorateur explo1 = new Explorateur("explorateur",1,100,plateau.getPos(2),0);
 		Personnage voleur1 = new Voleur("voleur", 1, 100, plateau.getPos(2), 1);
-		Object[] persos = { "explorateur", "voleur", "guerrier", "piegeur" };
+		
+		Explorateur explo2 = new Explorateur("explorateur",2,100,plateau.getPos(5),3);
+		Personnage voleur2 = new Voleur("voleur", 2, 100, plateau.getPos(5), 4);
 		
 		/* INITIALISATIONS */				
 		plateauGraph.setJeu(plateau.getplateaugraphique());
 		
 		/* ACTIONS */			
-		int nb=0;
 		String persoSelection;
-		while (nb != 40) {// boucle tant que personne n'a gagne
+		int choixDeplacement = -1;
+		while (jeu.getEstFini() == false) {// boucle tant que personne n'a gagne
 			refresh(plateau, plateauGraph);
 			persoSelection = (String) JOptionPane.showInputDialog(null, "Quel personnage voulez-vous deplacer?", "choix perso", JOptionPane.INFORMATION_MESSAGE, null, persos, "liste des personnages");
 			if (persoSelection != null) {
-				nb++;
-				if (persoSelection.equals("explorateur") ) { // +la condidtion de l'equipe
-					plateau.deplacer(explo1, explo1.choixDeplacement(1));
-					refresh(plateau, plateauGraph);
-				} else if (persoSelection.equals("voleur")) {
-					plateau.deplacer(voleur1, voleur1.choixDeplacement(2));
-					refresh(plateau, plateauGraph);
-				} // creer les else if avec les autres persos quand ils seront actifs
+					if(jeu.getTourEquipe()){ // equipe 1
+						if (persoSelection.equals("explorateur") ) { // +la condidtion de l'equipe
+							choixDeplacement = explo1.choixDeplacement();
+							plateau.deplacer(explo1, choixDeplacement);
+						} else if (persoSelection.equals("voleur")) {
+							choixDeplacement = voleur1.choixDeplacement();
+							plateau.deplacer(voleur1, choixDeplacement);
+						} // creer les else if avec les autres persos quand ils seront actifs
+					}else{
+						if (persoSelection.equals("explorateur") ) { // +la condidtion de l'equipe
+							choixDeplacement = explo2.choixDeplacement();
+							plateau.deplacer(explo2, choixDeplacement);
+						} else if (persoSelection.equals("voleur")) {
+							choixDeplacement = voleur2.choixDeplacement();
+							plateau.deplacer(voleur2, choixDeplacement);
+						} // creer les else if avec les autres persos quand ils seront actifs
+					}
+					
+					if(choixDeplacement == -1){ // Si on clique sur annuler a la selection de deplacement
+						persoSelection = null;
+					}else{ // Sinon le tour c'est bien passé on continue
+						jeu.nextRound();
+						refresh(plateau, plateauGraph);
+						System.out.println(jeu.toString());
+					}
 			}
 		}
 	}

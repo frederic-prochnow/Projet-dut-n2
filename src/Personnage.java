@@ -47,6 +47,14 @@ public class Personnage {
 		return nom;
 	}
 	
+	public int getNavireType(){
+		if(equipe == 1){
+			return 2;
+		}else{
+			return 5;
+		}
+	}
+	
 	public char getSymbole(){
 		return symboleNom;
 	}
@@ -90,11 +98,11 @@ public class Personnage {
 	Object[] actionsMulti = { "haut", "bas", "gauche", "droite", "haut gauche", "haut droite", "bas gauche",
 	"bas droite" };
 	
-	public int choixDeplacement(int typeDeplacement){
+	public int choixDeplacement(){
 		String deplacement;
-		if (typeDeplacement==1){
+		if (this.nom != "voleur"){ // deplacement normal
 			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsSimples, actionsSimples[0]);
-		} else {
+		} else { // 8 direction => voleur
 			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsMulti, actionsMulti[0]);
 		}
 		
