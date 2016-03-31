@@ -9,7 +9,7 @@ public class Personnage {
 	protected Position pos;
 	protected boolean surNavire;
 	private boolean detientClef;
-	private boolean detientCoffre;
+	private boolean detientTresor;
 
 	
 	Personnage(String nom, int equipe, int energie, Position p, int type){
@@ -47,6 +47,7 @@ public class Personnage {
 		return nom;
 	}
 	
+	// retourne le type du navire selon le personnage
 	public int getNavireType(){
 		if(equipe == 1){
 			return 2;
@@ -83,12 +84,12 @@ public class Personnage {
 		this.detientClef = set;
 	}
 	
-	public boolean getDetientCoffre(){
-		return this.detientCoffre;
+	public boolean getDetientTresor(){
+		return this.detientTresor;
 	}
 	
-	public void setDetientCoffre(boolean set){
-		this.detientCoffre = set;
+	public void setDetientTresor(boolean set){
+		this.detientTresor = set;
 	}
 	public String toString(){
 		return nom+" de l'équipe "+equipe+" possede "+energie+" points d'energie.";

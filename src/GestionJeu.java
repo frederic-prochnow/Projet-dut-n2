@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.List;
+
 public class GestionJeu {
 	private boolean tourEquipe1; // True = equipe 1 , false = equipe2
 	private boolean fini;
@@ -19,8 +22,13 @@ public class GestionJeu {
 		return this.tourEquipe1;
 	}
 	
-	public boolean getEstFini(){
-		return this.fini;
+	public boolean getEstFini(List<Personnage> equipe){
+		for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
+			if (itr.next().getDetientTresor() && itr.next().getSurnavire()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void setEstFini(boolean f){
@@ -33,7 +41,7 @@ public class GestionJeu {
 	
 	public String toString(){
 		if(this.fini){
-			return "Le vainqueur est l'équipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
+			return "Le vainqueur est l'ï¿½quipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
 		}else{
 			return "Tour actuel : "+this.round;
 		}
