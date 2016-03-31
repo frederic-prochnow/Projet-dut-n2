@@ -81,13 +81,12 @@ public class Map {
 			}
 			
 		}
-		System.out.println("le jeu est fini");
 	}
 
 	/* permet de rafraichir l'affichage apres chaque action */
 	public static void refresh(Ile plateau, Plateau plateauGraph) {
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(250);
 		} catch (Exception ie) {
 		}
 		plateauGraph.setJeu(plateau.getplateaugraphique());

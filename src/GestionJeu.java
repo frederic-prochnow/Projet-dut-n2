@@ -23,8 +23,10 @@ public class GestionJeu {
 	}
 	
 	public boolean getEstFini(List<Personnage> equipe){
+		Personnage temp;
 		for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
-			if (itr.next().getDetientTresor() && itr.next().getSurnavire()) {
+			temp = itr.next();
+			if (temp.getDetientTresor() && temp.getSurnavire()) {
 				return true;
 			}
 		}
