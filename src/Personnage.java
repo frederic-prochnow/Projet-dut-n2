@@ -1,4 +1,4 @@
-import javax.swing.JOptionPane;
+import java.awt.Point;
 
 public class Personnage {
 	protected String nom;
@@ -6,7 +6,7 @@ public class Personnage {
 	protected int type; // M�me que dans parcelle
 	protected int equipe;
 	protected int energie;
-	protected Position pos;
+	protected Point pos;
 	protected boolean surNavire;
 	private boolean detientClef;
 	private boolean detientTresor;
@@ -35,12 +35,12 @@ public class Personnage {
 		this.energie -= energie;
 	}
 	
-	public Position getPos(){
-		return this.pos;
+	public Point getPos(){
+		return pos;
 	}
 	
-	public void setPos(Position p){
-		this.pos = p;
+	public void setPos(Point point){
+		pos = point;
 	}
 	
 	public String getNom(){
@@ -100,32 +100,36 @@ public class Personnage {
 	"bas droite" };
 	
 	public int choixDeplacement(){
-		String deplacement;
-		if (this.nom != "voleur"){ // deplacement normal
-			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsSimples, actionsSimples[0]);
-		} else { // 8 direction => voleur
-			deplacement= (String) JOptionPane.showInputDialog(null, "Dans quel sens?", "choix deplacement",JOptionPane.INFORMATION_MESSAGE, null, actionsMulti, actionsMulti[0]);
+		return -1;
+	}
+
+	public boolean deplacementInvalide(Point destination) {
+		if ((destination.x == (pos.x+1)) && (destination.y == pos.y)) {
+			return false;
 		}
-		
-		if (deplacement != null) {
-			if(deplacement.equals("haut")){
-				return 2;
-			} else if (deplacement.equals("gauche")){
-				return 1;
-			} else if (deplacement.equals("droite")){
-				return 3;
-			} else if (deplacement.equals("bas")){
-				return 4;
-			} else if (deplacement.equals("haut gauche")){
-				return 5;
-			} else if (deplacement.equals("haut droite")){
-				return 6;
-			} else if (deplacement.equals("bas gauche")){
-				return 7;
-			} else if (deplacement.equals("bas droite")){
-				return 8;
+		else if ((destination.x == (pos.x-1)) && (destination.y == pos.y)) {
+			return false;
+		}
+		else if ((destination.y == (pos.y+1)) && (destination.x == pos.x)) {
+			return false;
+		}
+		else if ((destination.y == (pos.y-1)) && (destination.x == pos.x)) {
+			return false;
+		}
+		if (this instanceof Voleur) {
+			if ((destination.x == (pos.x+1)) && (destination.y == pos.y+1)) {
+				return false;
+			}
+			else if ((destination.x == (pos.x-1)) && (destination.y == pos.y+1)) {
+				return false;
+			}
+			else if ((destination.y == (pos.x+1)) && (destination.y == pos.y-1)) {
+				return false;
+			}
+			else if ((destination.y == (pos.x-1)) && (destination.y == pos.y-1)) {
+				return false;
 			}
 		}
-		return -1;
+		return true;
 	}
 }

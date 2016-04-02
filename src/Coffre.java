@@ -1,3 +1,4 @@
+
 public class Coffre {
 	private Position pos;
 	private boolean estOuvert;

@@ -19,7 +19,7 @@ public class GestionJeu {
 	}
 	
 	public boolean getTourEquipe(){
-		return this.tourEquipe1;
+		return tourEquipe1;
 	}
 	
 	public boolean getEstFini(List<Personnage> equipe){
@@ -43,7 +43,7 @@ public class GestionJeu {
 	
 	public String toString(){
 		if(this.fini){
-			return "Le vainqueur est l'�quipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
+			return "Le vainqueur est l'équipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
 		}else{
 			return "Tour actuel : "+this.round;
 		}

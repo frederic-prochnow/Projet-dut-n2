@@ -1,4 +1,4 @@
-package tps;
+
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -12,7 +12,7 @@ class ConsolePane extends JScrollPane {
 		textArea = new JTextArea() ;
 		textArea.setEditable(false) ;
 		textArea.setFocusable(false) ;
-		textArea.setText("Console:\n") ;
+	//	textArea.setText("Console:\n") ;
 		this.setViewportView(textArea) ;
 	}
 	public void println(String message) {
@@ -20,5 +20,13 @@ class ConsolePane extends JScrollPane {
 		// Positionne la scrollPane à son extrémité inférieure.
 		JScrollBar vertical = this.getVerticalScrollBar() ;
 		vertical.setValue(vertical.getMaximum()) ;
+	}
+	
+	public void clear(boolean equipe) {
+		if (equipe) {
+			textArea.setText("C'est au tour de l'equipe 1\n");
+		} else {
+			textArea.setText("C'est au tour de l'equipe 2\n");
+		}
 	}
 }

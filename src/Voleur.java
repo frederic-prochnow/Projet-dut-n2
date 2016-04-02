@@ -1,4 +1,3 @@
-
 public class Voleur extends Personnage{
 
 	boolean cleVolee;

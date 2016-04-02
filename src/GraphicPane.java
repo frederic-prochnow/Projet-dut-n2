@@ -1,4 +1,4 @@
-package tps;
+
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -108,10 +108,10 @@ class GraphicPane extends JPanel {
 		}
 	}
 	public int getX(MouseEvent event) {
-		return ((event.getY() - 2) / dimImage) ;
+		return ((event.getX() - 2) / dimImage) ;
 	}
 	public int getY(MouseEvent event) {
-		return ((event.getX() - 1) / dimImage) ;
+		return ((event.getY() - 1) / dimImage) ;
 	}
 	/**
 	 * Retourne le tableau d'entiers représentant le plateau

@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -119,7 +120,7 @@ public class Ile {
 		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
 		System.out.println(x + " " + y);
-		
+
 		// CLE
 		int xCle, yCle;
 		do {
@@ -268,19 +269,6 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de deplacements de certain elements, ici les exploraters
-	 * 
-	 * @param x
-	 * @param y
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	boolean deplacer(int x, int y, int a, int b) {
-		return false;
-	}
-
-	/**
 	 * Fonction d'affichage du plateau
 	 */
 	public String toString() {
@@ -326,18 +314,9 @@ public class Ile {
 	public int[][] getplateaugraphique() {
 		for (int i = 0; i < plateau[0].length; i++) {
 			for (int j = 0; j < plateau[1].length; j++) {
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2; // +2
-																		// nescessaire
-																		// pour
-																		// demarer
-																		// le
-																		// tableau
-																		// d'img
-																		// a 0
-																		// et
-																		// non
-																		// -1
-			}
+				plateauGraphique[i][j] = plateau[i][j].getType() + 2;
+				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
+				}
 		}
 		return plateauGraphique;
 	}
@@ -379,378 +358,108 @@ public class Ile {
 	 *            DROITE Si x vaut 4 => BAS
 	 * 
 	 */
-	public void deplacer(Personnage perso, int x) {
-		if (x == 1) {
-			Position pos = new Position(perso.getPos().x - 1, perso.getPos().y);
 
-			if (estVide(pos)) {
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-			} else if (estRocher(pos)) {
-				if (perso instanceof Explorateur) {
-					if (estCoffre(pos)) {
-						System.out.println("Peut soulever le rocher a gauche et il y a le coffre en dessous");
-						plateau[pos.x][pos.y].setType(7); // on revele le coffre
-						if (perso.getDetientClef()) {
-							coffre.setEstOuvert(true); // on ouvre le coffre
-							System.out.println("Il a la cle donc il a pris le tresor");
-							perso.setDetientTresor(true);
-							coffre.setEstVide(true);
-						}
-					} else if (estCle(pos)) {
-						System.out.println("Peut soulever le rocher a gauche et il y a la cle en dessous");
-						plateau[pos.x][pos.y].setType(8);
-						perso.setDetientClef(true);
-					} else {
-						System.out.println("Souleve le rocher a gauche et il n'a rien");
-					}
-					perso.perdEnergie(5);
-				} else {
-					System.out.println("Que les explorateurs peuvent soulever les rochers");
-				}
-			} else if (plateau[pos.x][pos.y].getType() == 7) {
-				if (coffre.getEstOuvert()) {
-					perso.setDetientTresor(true);
-					coffre.setEstVide(true);
-				} else { // pas ouvert
-					if (perso.getDetientClef()) {
-						coffre.setEstOuvert(true); // on ouvre le coffre
-						System.out.println("Il a la cle donc il a pris le tresor");
-						perso.setDetientTresor(true);
-						coffre.setEstVide(true);
-					} else { // pas ouvert, detient pas cle
-						System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					}
-				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				perso.setSurnavire(true);
-			} else {
-				System.out.println("Ne peut pas se deplacer a gauche");
-			}
-		} else if (x == 2) {
-			Position pos = new Position(perso.getPos().x, perso.getPos().y - 1);
-
-			if (estVide(pos)) {
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-			} else if (estRocher(pos)) {
-				if (perso instanceof Explorateur) {
-					if (estCoffre(pos)) {
-						System.out.println("Peut soulever le rocher en haut et il y a le coffre en dessous");
-						plateau[pos.x][pos.y].setType(7); // on revele le coffre
-						if (perso.getDetientClef()) {
-							coffre.setEstOuvert(true); // on ouvre le coffre
-							System.out.println("Il a la cle donc il a pris le tresor");
-							perso.setDetientTresor(true);
-							coffre.setEstVide(true);
-						}
-					} else if (estCle(pos)) {
-						System.out.println("Peut soulever le rocher en haut et il y a la cle en dessous");
-						plateau[pos.x][pos.y].setType(8);
-						perso.setDetientClef(true);
-					} else {
-						System.out.println("Souleve le rocher en haut et il n'a rien");
-					}
-					perso.perdEnergie(5);
-				} else {
-					System.out.println("Que les explorateurs peuvent soulever les rochers");
-				}
-			} else if (plateau[pos.x][pos.y].getType() == 7) {
-				if (coffre.getEstOuvert()) {
-					perso.setDetientTresor(true);
-					coffre.setEstVide(true);
-				} else { // pas ouvert
-					if (perso.getDetientClef()) {
-						coffre.setEstOuvert(true); // on ouvre le coffre
-						System.out.println("Il a la cle donc il a pris le tresor");
-						perso.setDetientTresor(true);
-						coffre.setEstVide(true);
-					} else { // pas ouvert, detient pas cle
-						System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					}
-				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				perso.setSurnavire(true);
-			} else {
-				System.out.println("Ne peut pas se deplacer en haut");
-			}
-		} else if (x == 3) {
-			Position pos = new Position(perso.getPos().x + 1, perso.getPos().y);
-
-			if (estVide(pos)) {
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(2);
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-			} else if (estRocher(pos)) {
-				if (perso instanceof Explorateur) {
-					if (estCoffre(pos)) {
-						System.out.println("Peut soulever le rocher a droite et il y a le coffre en dessous");
-						plateau[pos.x][pos.y].setType(7); // on revele le coffre
-						if (perso.getDetientClef()) {
-							coffre.setEstOuvert(true); // on ouvre le coffre
-							System.out.println("Il a la cle donc il a pris le tresor");
-							perso.setDetientTresor(true);
-							coffre.setEstVide(true);
-						}
-					} else if (estCle(pos)) {
-						System.out.println("Peut soulever le rocher a droite et il y a la cle en dessous");
-						plateau[pos.x][pos.y].setType(8);
-						perso.setDetientClef(true);
-					} else {
-						System.out.println("Souleve le rocher a droite et il n'a rien");
-					}
-					perso.perdEnergie(5);
-				} else {
-					System.out.println("Que les explorateurs peuvent soulever les rochers");
-				}
-			} else if (plateau[pos.x][pos.y].getType() == 7) {
-				if (coffre.getEstOuvert()) {
-					perso.setDetientTresor(true);
-					coffre.setEstVide(true);
-				} else { // pas ouvert
-					if (perso.getDetientClef()) {
-						coffre.setEstOuvert(true); // on ouvre le coffre
-						System.out.println("Il a la cle donc il a pris le tresor");
-						perso.setDetientTresor(true);
-						coffre.setEstVide(true);
-					} else { // pas ouvert, detient pas cle
-						System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					}
-				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				perso.setSurnavire(true);
-			} else {
-				System.out.println("Ne peut pas se deplacer a droite");
-			}
-		} else if (x == 4) {
-			Position pos = new Position(perso.getPos().x, perso.getPos().y + 1);
-
-			if (estVide(pos)) {
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-			} else if (estRocher(pos)) {
-				if (perso instanceof Explorateur) {
-					if (estCoffre(pos)) {
-						System.out.println("Peut soulever le rocher en bas et il y a le coffre en dessous");
-						plateau[pos.x][pos.y].setType(7); // on revele le coffre
-						if (perso.getDetientClef()) {
-							coffre.setEstOuvert(true); // on ouvre le coffre
-							System.out.println("Il a la cle donc il a pris le tresor");
-							perso.setDetientTresor(true);
-							coffre.setEstVide(true);
-						}
-					} else if (estCle(pos)) {
-						System.out.println("Peut soulever le rocher en base et il y a la cle en dessous");
-						plateau[pos.x][pos.y].setType(8);
-						perso.setDetientClef(true);
-					} else {
-						System.out.println("Souleve le rocher en bas et il n'a rien");
-					}
-					perso.perdEnergie(5);
-				} else {
-					System.out.println("Que les explorateurs peuvent soulever les rochers");
-				}
-			} else if (plateau[pos.x][pos.y].getType() == 7) {
-				if (coffre.getEstOuvert()) {
-					perso.setDetientTresor(true);
-					coffre.setEstVide(true);
-				} else { // pas ouvert
-					if (perso.getDetientClef()) {
-						coffre.setEstOuvert(true); // on ouvre le coffre
-						System.out.println("Il a la cle donc il a pris le tresor");
-						perso.setDetientTresor(true);
-						coffre.setEstVide(true);
-					} else { // pas ouvert, detient pas cle
-						System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					}
-				}
-			} else if (estNavire(pos, perso.getEquipe())) { // Verifie si c'est
-															// le navire allie
-				if (perso.getSurnavire()) { // Est sur navire
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-					perso.setSurnavire(false);
-				} else { // Sur sol
-					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				}
-				perso.setPos(pos);
-				perso.perdEnergie(1);
-				perso.setSurnavire(true);
-			} else {
-				System.out.println("Ne peut pas se deplacer en dessous");
-			}
+	
+	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso) {
+		// Cas thoeriquement valides
+		if (destination.x == posActuel.x+1 && destination.y == posActuel.y) {
+			return deplacerV2(destination, posActuel, perso);
+		}
+		else if (destination.x == posActuel.x-1 && destination.y == posActuel.y) {
+			return deplacerV2(destination, posActuel, perso);
+		}
+		else if (destination.y == posActuel.y+1 && destination.x == posActuel.x) {
+			return deplacerV2(destination, posActuel, perso);
+		}
+		else if (destination.y == posActuel.y-1 && destination.x == posActuel.x) {
+			return deplacerV2(destination, posActuel, perso);
 		}
 		if (perso instanceof Voleur) {
-			if (x == 5) {
-
-				Position pos = new Position(perso.getPos().x - 1, perso.getPos().y - 1);
-
-				if (estVide(pos)) {
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est le
-																// navire allie
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(2);
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					perso.setSurnavire(true);
-				} else {
-					System.out.println("Ne peut pas se deplacer en dessous");
-				}
-
-			} else if (x == 6) {
-				Position pos = new Position(perso.getPos().x + 1, perso.getPos().y - 1);
-
-				if (estVide(pos)) {
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est le
-																// navire allie
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					perso.setSurnavire(true);
-				} else {
-					System.out.println("Ne peut pas se deplacer en dessous");
-				}
-			} else if (x == 7) {
-				Position pos = new Position(perso.getPos().x - 1, perso.getPos().y + 1);
-
-				if (estVide(pos)) {
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est le
-																// navire allie
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					perso.setSurnavire(true);
-				} else {
-					System.out.println("Ne peut pas se deplacer en dessous");
-				}
-
-			} else if (x == 8) {
-				Position pos = new Position(perso.getPos().x + 1, perso.getPos().y + 1);
-
-				if (estVide(pos)) {
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					}
-					perso.setPos(pos);
-					perso.perdEnergie(-1);
-					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-
-				} else if (estNavire(pos, perso.getEquipe())) { // Verifie si
-																// c'est le
-																// navire allie
-					if (perso.getSurnavire()) { // Est sur navire
-						plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-						perso.setSurnavire(false);
-					} else { // Sur sol
-						System.out.println("Ne peut pas se deplacer a droite");
-					}
-				}
+			if (destination.x == posActuel.x+1 && destination.y == posActuel.y+1) {
+				return deplacerV2(destination, posActuel, perso);
+			}
+			else if (destination.x == posActuel.x-1 && destination.y == posActuel.y+1) {
+				return deplacerV2(destination, posActuel, perso);
+			}
+			else if (destination.y == posActuel.x+1 && destination.y == posActuel.y-1) {
+				return deplacerV2(destination, posActuel, perso);
+			}
+			else if (destination.y == posActuel.x-1 && destination.y == posActuel.y-1) {
+				return deplacerV2(destination, posActuel, perso);
 			}
 		}
+		return false;
 	}
+	
+	
+	
+	public boolean deplacerV2(Position destination, Point posActuel, Personnage perso) {
+						
+		if (estVide(destination)) {
+			if (perso.getSurnavire()) { // Est sur navire
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
+				perso.setSurnavire(false);
+			} else { // Sur sol
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+			}
+			perso.setPos(destination.getLocation());
+			perso.perdEnergie(1);
+			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+		} else if (estRocher(destination)) {
+			if (perso instanceof Explorateur) {
+				if (estCoffre(destination)) {
+					System.out.println("Peut soulever le rocher a gauche et il y a le coffre en dessous");
+					plateau[destination.x][destination.y].setType(7); // on revele le coffre
+					if (perso.getDetientClef()) {
+						coffre.setEstOuvert(true); // on ouvre le coffre
+						System.out.println("Il a la cle donc il a pris le tresor");
+						perso.setDetientTresor(true);
+						coffre.setEstVide(true);
+					}
+				} else if (estCle(destination)) {
+					System.out.println("Peut soulever le rocher a gauche et il y a la cle en dessous");
+					plateau[destination.x][destination.y].setType(8);
+					perso.setDetientClef(true);
+				} else {
+					System.out.println("Souleve le rocher a gauche et il n'a rien");
+				}
+				perso.perdEnergie(5);
+			} else {
+				System.out.println("Que les explorateurs peuvent soulever les rochers");
+			}
+		// le coffre est deja revele par une autre joueur
+		} else if (plateau[destination.x][destination.y].getType() == 7) {
+			if (coffre.getEstOuvert()) {
+				perso.setDetientTresor(true);
+				coffre.setEstVide(true);
+			} else { // pas ouvert
+				if (perso.getDetientClef()) {
+					coffre.setEstOuvert(true); // on ouvre le coffre
+					System.out.println("Il a la cle donc il a pris le tresor");
+					perso.setDetientTresor(true);
+					coffre.setEstVide(true);
+				} else { // pas ouvert, detient pas cle
+					System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
+				}
+			}
+		// Verifie si c'est le navire allie
+		} else if (estNavire(destination, perso.getEquipe())) {
+			if (perso.getSurnavire()) { // Est sur navire
+				plateau[perso.getPos().x][perso.getPos().y].setType(2);
+				perso.setSurnavire(false);
+			} else { // Sur sol
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+			}
+			perso.setPos(destination.getLocation());
+			perso.perdEnergie(1);
+			perso.setSurnavire(true);
+		} else {
+			System.out.println("Ne peut pas se deplacer ici");
+			return false;
+		}
+		return true;
+	}
+	
 
 	public boolean estVide(Position p) {
 		return (plateau[p.x][p.y].getType() == -1);
@@ -774,6 +483,14 @@ public class Ile {
 
 	public boolean estCle(Position p) {
 		return p.equals(clef.getPos());
+	}
+
+	// permet de connaitre a quel equipe appartient le navire
+	public boolean getEquipe1(Position pos) {
+		if (plateau[pos.x][pos.y].getType() == 2) {
+			return true;
+		}
+		return false;
 	}
 
 }
