@@ -1,12 +1,12 @@
 /**
  * Class Parcelle
  * Gestion de parcelle de l'Ile
- * 
  * @author TeamJ3
- *
  */
 public class Parcelle {
-
+	/**
+	 *  attribut
+	 */
 	private int type;
 	//private boolean cleEquipe1 = false;
 	//private boolean cleEquipe2 = false;
@@ -14,9 +14,8 @@ public class Parcelle {
 	
 
 	/**
-	 * Constructeur avec paramétre de Parcelle
-	 * Ce paramétre permet de créer une parcelle type choisit
-	 *
+	 * Constructeur avec paramÃ©tre de Parcelle
+	 * Ce paramÃ©tre permet de crÃ©er une parcelle type choisit
 	 * @param type
 	 */
 	Parcelle (int type) {
@@ -28,36 +27,48 @@ public class Parcelle {
 	}
 	
 	/**
-	 * Fonction permettant de récupérer le type de la pareclle concernée
+	 * Fonction permettant de rÃ©cupÃ©rer le type de la pareclle concernÃ©e
 	 * @return int
 	 */
 	public int getType(){
 		return this.type;
 	}
 	
+	/**
+	 * MÃ©thode d'application du type de parcelle
+	 * @params int type
+	 */
 	public void setType(int x){
 		this.type = x;
 	}
 	
+	/**
+	 * MÃ©thode qui retourne le boolean estCompte
+	 * @params boolean estCompte
+	 */
 	public boolean getEstCompte(){
 		return estCompte;
 	}
 	
+	/**
+	 * MÃ©thode d'application sur le boolean estCompte
+	 * @params boolean estCompte
+	 */
 	public void setEstCompte(boolean b){
 		this.estCompte = b;
 	}
 	
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
-	 * <br>0 pour explorateur équipe 1
-	 * <br>1 pour voleur équipe 1
-	 * <br>2 pour navire équipe 1
-	 * <br>3 pour explorateur équipe 2
-	 * <br>4 pour voleur équipe 2
-	 * <br>5 pour navire équipe 2
+	 * <br>0 pour explorateur Ã©quipe 1
+	 * <br>1 pour voleur Ã©quipe 1
+	 * <br>2 pour navire Ã©quipe 1
+	 * <br>3 pour explorateur Ã©quipe 2
+	 * <br>4 pour voleur Ã©quipe 2
+	 * <br>5 pour navire Ã©quipe 2
 	 * <br>6 pour rocher
 	 * <br>7 pour coffre
-	 * <br>8 pour clé
+	 * <br>8 pour clÃ©
 	 * <br>9 pour eau
 	 * @return String
 	 */
