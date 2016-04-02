@@ -21,7 +21,7 @@ public class GestionJeu {
 	/**
 	 * Constructeur de la class
 	 * Crée un interface de gestion du jeu
-	 * @params boolean equipeDemarre
+	 * @param boolean equipeDemarre
 	 */
 	GestionJeu(boolean equipeDemarre){
 		tourEquipe1 = equipeDemarre;
@@ -63,7 +63,7 @@ public class GestionJeu {
 	
 	/**
 	 * Méthode d'application sur le boolean que la partie est fini ou pas
-	 * @params boolean f
+	 * @param boolean f
 	 */
 	public void setEstFini(boolean f){
 		this.fini = f;

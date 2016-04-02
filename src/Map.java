@@ -83,8 +83,8 @@ public class Map {
 
 	/**
 	 * permet de rafraichir l'affichage apres chaque action
-	 * @params Ile Plateau
-	 * @params Plateau plateauGraph
+	 * @param Ile Plateau
+	 * @param Plateau plateauGraph
 	 */
 	public static void refresh(Ile plateau, Plateau plateauGraph) {
 		try {

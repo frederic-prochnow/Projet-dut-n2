@@ -12,7 +12,7 @@ public class Clef {
 	
 	/**
 	 * Constructeur de la classe Position
-	 * @params Position p
+	 * @param Position p
 	 */
 	Clef(Position p){
 		this.pos = p;

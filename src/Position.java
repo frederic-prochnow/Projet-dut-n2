@@ -13,7 +13,7 @@ public class Position {
 	/**
 	 * Constructeur de la class
 	 * Crée une position
-	 * @params int longitude,int latitude
+	 * @param int longitude,int latitude
 	 */
 	Position(int x,int y){
 		this.x = x;

@@ -14,7 +14,7 @@ public class Coffre {
 	
 	/**
 	 * Constructeur de la classe Coffre
-	 * @params Position p
+	 * @param Position p
 	 */
 	Coffre(Position p){
 		this.pos = p;
@@ -40,7 +40,7 @@ public class Coffre {
 	
 	/**
 	 * Méthode d'application sur le boolean gérant l'ouverture ou non du coffre
-	 * @params boolean set
+	 * @param boolean set
 	 */
 	public void setEstOuvert(boolean set) {
 		this.estOuvert = set;
@@ -56,7 +56,7 @@ public class Coffre {
 	
 	/**
 	 * Méthode d'application sur le boolean qui gérant le contenu du coffre (vide ou pas)
-	 * @params boolean set
+	 * @param boolean set
 	 */
 	public void setEstVide(boolean set) {
 		this.estVide = set;

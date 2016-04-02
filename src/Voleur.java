@@ -11,7 +11,7 @@
 	/**
 	 * Constructeur de la calsss Voleur
 	 * Crée un voleur
-	 * @params String nom,int equipe,int energie, Position p,int type
+	 * @param String nom,int equipe,int energie, Position p,int type
 	 */
 	Voleur(String nom, int equipe, int energie, Position p, int type){
 		super(nom,equipe,energie,p,type);

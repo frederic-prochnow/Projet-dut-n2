@@ -50,7 +50,7 @@ public class Personnage {
 	
 	/**
 	 * Méthode qui retire le nb d'énregie souhaiter
-	 * @params int energie
+	 * @param int energie
 	 */
 	public void perdEnergie(int energie){
 		this.energie -= energie;
@@ -66,7 +66,7 @@ public class Personnage {
 	
 	/**
 	 * Méthode d'application de la position du personnage
-	 * @params Position p
+	 * @param Position p
 	 */
 	public void setPos(Position p){
 		this.pos = p;
@@ -126,7 +126,7 @@ public class Personnage {
 	
 	/**
 	 * Méthode d'application sur le boolean gérant la position du personnage sur le navire
-	 * @params boolean
+	 * @param boolean
 	 */
 	public void setSurnavire(boolean b){
 		this.surNavire = b;
@@ -142,7 +142,7 @@ public class Personnage {
 	
 	/**
 	 * Méthode d'application sur le bollean gérant l'aquisation de la clef par le personnage
-	 * @params boolean
+	 * @param boolean
 	 */
 	public void setDetientClef(boolean set) {
 		this.detientClef = set;
@@ -158,7 +158,7 @@ public class Personnage {
 	
 	/**
 	 * Méthode d'application sur le boolean qui gére l'aquisition du trésor par le personnage
-	 * @params boolean
+	 * @param boolean
 	 */
 	public void setDetientTresor(boolean set){
 		this.detientTresor = set;

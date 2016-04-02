@@ -36,7 +36,7 @@ public class Parcelle {
 	
 	/**
 	 * Méthode d'application du type de parcelle
-	 * @params int type
+	 * @param int type
 	 */
 	public void setType(int x){
 		this.type = x;
@@ -44,7 +44,7 @@ public class Parcelle {
 	
 	/**
 	 * Méthode qui retourne le boolean estCompte
-	 * @params boolean estCompte
+	 * @param boolean estCompte
 	 */
 	public boolean getEstCompte(){
 		return estCompte;
@@ -52,7 +52,7 @@ public class Parcelle {
 	
 	/**
 	 * Méthode d'application sur le boolean estCompte
-	 * @params boolean estCompte
+	 * @param boolean estCompte
 	 */
 	public void setEstCompte(boolean b){
 		this.estCompte = b;

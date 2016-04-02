@@ -336,7 +336,6 @@ public class Ile {
 
 	/**
 	 * Fonction de recuperation de la taille du plateau
-	 * 
 	 * @return int
 	 */
 	public int getSize() {
@@ -347,7 +346,6 @@ public class Ile {
 	 * Fonction de recuperation de la position d'une entite voulu sur la carte(
 	 * ATTENTION ! ne pas mettre de type susceptible d'etre trouve plusieurs
 	 * fois)
-	 * 
 	 * @return Position
 	 */
 	public Position getPos(int type) {
@@ -742,7 +740,7 @@ public class Ile {
 
 	/**
 	 * Méthode permantant de savoir si la parcelle à la position donnée est vide ou pas
-	 * @params Position p
+	 * @param Position p
 	 * @return boolean estVide
 	 */
 	public boolean estVide(Position p) {
@@ -751,8 +749,8 @@ public class Ile {
 
 	/**
 	 * Méthode de vérification si l'élément est un navire
-	 * @params Position p
-	 * @params int equipe
+	 * @param Position p
+	 * @param int equipe
 	 * @return boolean resultat
 	 */
 	public boolean estNavire(Position p, int equipe) {
@@ -765,7 +763,7 @@ public class Ile {
 
 	/**
 	 * Méthode de vérification si l'élément est un rocher
-	 * @params Position p
+	 * @param Position p
 	 * @return boolean resultat
 	 */
 	public boolean estRocher(Position p) {
@@ -774,7 +772,7 @@ public class Ile {
 	
 	/**
 	 * Méthode de vérification si l'élément est un coffre
-	 * @params Position p
+	 * @param Position p
 	 * @return boolean resultat
 	 */
 	public boolean estCoffre(Position p) {
@@ -783,7 +781,7 @@ public class Ile {
 
 	/**
 	 * Méthode de vérification si l'élément est une clef
-	 * @params Position p
+	 * @param Position p
 	 * @return boolean resultat
 	 */
 	public boolean estCle(Position p) {
