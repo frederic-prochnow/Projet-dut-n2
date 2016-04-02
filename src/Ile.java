@@ -1,12 +1,11 @@
+/**
+* Importation de class 
+*/
 import java.util.Random;
-
 import javax.swing.JOptionPane;
-
 /**
  * Classe Ile Cette classe permet la creation d'une ele
- * 
  * @author Team J3
- * 
  */
 public class Ile {
 
@@ -22,10 +21,7 @@ public class Ile {
 
 	/**
 	 * Constructeur de la classe sans parametres
-	 * 
-	 * Ce constructeur cree un plateau terminal et graphique de taille degini
-	 * par l'interface graphique java
-	 * 
+	 * Ce constructeur cree un plateau terminal et graphique de taille degini par l'interface graphique java
 	 */
 	Ile() {
 		int tailleI = 0;
@@ -56,7 +52,6 @@ public class Ile {
 	/**
 	 * Fonction qui initialise le plateau avec les differents elements requis
 	 * Eau, navire, coffre, cles, rochers ...
-	 * 
 	 * @param pourcentage
 	 */
 	public void initialiser(double pourcentage) {
@@ -160,7 +155,8 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction rocherEntoure si le rocher est en fait de l'eau, on dira qu'elle
+	 * Fonction rocherEntoure
+	 * si le rocher est en fait de l'eau, on dira qu'elle
 	 * EST accessible. <br>
 	 * dans cette situation, le rocher de base se situe sur une cote elle ne
 	 * peut ruiner l'access que de 3 rochers car une case est l'eau on le
@@ -173,7 +169,6 @@ public class Ile {
 	 * doit alors que regarder dans 3 directions <br>
 	 * <br>
 	 * sinon, on peut regarder dans les 4 directions
-	 * 
 	 * @param x
 	 * @param y
 	 * @return
@@ -211,7 +206,6 @@ public class Ile {
 
 	/**
 	 * Fonction accessibiliteAmorce qui verifie l'acessibilite des elements
-	 * 
 	 * @param x
 	 * @param y
 	 * @param nbRochers
@@ -249,7 +243,6 @@ public class Ile {
 
 	/**
 	 * Fonction de verification des differents elements places
-	 * 
 	 * @param x
 	 * @param y
 	 */
@@ -269,7 +262,6 @@ public class Ile {
 
 	/**
 	 * Fonction de deplacements de certain elements, ici les exploraters
-	 * 
 	 * @param x
 	 * @param y
 	 * @param a
@@ -282,6 +274,7 @@ public class Ile {
 
 	/**
 	 * Fonction d'affichage du plateau
+	 * @return String resultat
 	 */
 	public String toString() {
 		int nombre = (plateau.length * 2) + 1;
@@ -320,7 +313,6 @@ public class Ile {
 
 	/**
 	 * Fonction de recuperation du plateau graphique
-	 * 
 	 * @return int[][]
 	 */
 	public int[][] getplateaugraphique() {
@@ -371,13 +363,9 @@ public class Ile {
 
 	/**
 	 * Fonction qui permet de deplacer un personnage dans une direction
-	 * 
 	 * @param perso
 	 * @param x
-	 * 
-	 *            Si x vaut 1 => GAUCHE Si x vaut 2 => HAUT Si x vaut 3 =>
-	 *            DROITE Si x vaut 4 => BAS
-	 * 
+	 * Si x vaut 1 => GAUCHE Si x vaut 2 => HAUT Si x vaut 3 => DROITE Si x vaut 4 => BAS
 	 */
 	public void deplacer(Personnage perso, int x) {
 		if (x == 1) {
@@ -752,10 +740,21 @@ public class Ile {
 		}
 	}
 
+	/**
+	 * Méthode permantant de savoir si la parcelle à la position donnée est vide ou pas
+	 * @params Position p
+	 * @return boolean estVide
+	 */
 	public boolean estVide(Position p) {
 		return (plateau[p.x][p.y].getType() == -1);
 	}
 
+	/**
+	 * Méthode de vérification si l'élément est un navire
+	 * @params Position p
+	 * @params int equipe
+	 * @return boolean resultat
+	 */
 	public boolean estNavire(Position p, int equipe) {
 		if (equipe == 1) {
 			return (plateau[p.x][p.y].getType() == 2);
@@ -764,14 +763,29 @@ public class Ile {
 		}
 	}
 
+	/**
+	 * Méthode de vérification si l'élément est un rocher
+	 * @params Position p
+	 * @return boolean resultat
+	 */
 	public boolean estRocher(Position p) {
 		return (plateau[p.x][p.y].getType() == 6);
 	}
-
+	
+	/**
+	 * Méthode de vérification si l'élément est un coffre
+	 * @params Position p
+	 * @return boolean resultat
+	 */
 	public boolean estCoffre(Position p) {
 		return p.equals(coffre.getPos());
 	}
 
+	/**
+	 * Méthode de vérification si l'élément est une clef
+	 * @params Position p
+	 * @return boolean resultat
+	 */
 	public boolean estCle(Position p) {
 		return p.equals(clef.getPos());
 	}
