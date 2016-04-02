@@ -29,7 +29,7 @@ public class Position {
 	}
 	
 	/**
-	 * Méthode de cacul d'égalité sur position
+	 * Méthode de calcul d'égalité sur position
 	 * @return boolean
 	 */
 	public boolean equals(Position p){
