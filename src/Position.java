@@ -26,6 +26,7 @@ public class Position extends Point{
 		return false;
 	}
 	
+	// retourne une liste des personnages de l'equipe courante sur cette position
 	public List<Personnage> getPersosSurPosition(List<Personnage> equipe) {
 		Personnage temp;
 		persosPresents.clear();
@@ -36,10 +37,6 @@ public class Position extends Point{
 			}
 		}
 		return persosPresents;
-	}
-	
-	public List<Personnage> getPersosPresents() {
-		return this.persosPresents;
 	}
 	
 }

@@ -164,7 +164,7 @@ public class Plateau {
 		return graphic.getJeu() ;	// Délégué au composant graphic.
 	}
 	/**
-	 * Demande l'affichage du plateau de jeu. 
+	 * Demande l'affichage de la fenetre entiere. 
 	 * Si la fenêtre était cachée, elle redevient visible.
 	 */
 	public void affichage(){ 
@@ -175,10 +175,10 @@ public class Plateau {
 	 * prépare l'attente d'événements Swing (clavier ou souris).
 	 * Appelé par waitEvent() et waitEvent(int). 
 	 */
-	private void prepareWaitEvent(boolean pane) {
+	private void prepareWaitEvent(boolean paneSelectionPrecis) {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
-		if (pane) {
+		if (paneSelectionPrecis) {
 			PersoPane.requestFocusInWindow() ;
 		} else {
 			window.requestFocusInWindow() ;
@@ -194,9 +194,9 @@ public class Plateau {
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html">java.awt.event.MouseEvent</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html">java.awt.event.KeyEvent</a>
 	 */
-	public InputEvent waitEvent(int timeout, boolean pane) {
+	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis) {
 		int time = 0 ;
-		prepareWaitEvent(pane) ;
+		prepareWaitEvent(paneSelectionPrecis) ;
 		while ((currentEvent == null) && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
@@ -321,5 +321,9 @@ public class Plateau {
 	
 	public void clearConsole(boolean equipe) {
 		console.clear(equipe);
+	}
+	
+	public void clearConsole(String message) {
+		console.clear(message);
 	}
 }

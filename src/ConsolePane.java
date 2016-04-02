@@ -29,4 +29,8 @@ class ConsolePane extends JScrollPane {
 			textArea.setText("C'est au tour de l'equipe 2\n");
 		}
 	}
+	
+	public void clear(String message) {
+		textArea.setText(message + "\n");
+	}
 }

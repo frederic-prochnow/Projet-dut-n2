@@ -15,7 +15,7 @@ public class Ile {
 	 * attributs de la classe
 	 */
 	private Parcelle[][] plateau;
-	private int[][] plateauGraphique;
+	private int[][] tabIconesGraphique;
 	private Random r = new Random();
 	private int nbRochers = 0;
 	private Coffre coffre;
@@ -24,8 +24,8 @@ public class Ile {
 	/**
 	 * Constructeur de la classe sans parametres
 	 * 
-	 * Ce constructeur cree un plateau terminal et graphique de taille degini
-	 * par l'interface graphique java
+	 * Ce constructeur cree un plateau qui nous sert de base a toutes modifications (Parcellle[][]) 
+	 * Ensuite, ceci est traduit vers un int[][] (geIcones) dont chaque int correspond a une image
 	 * 
 	 */
 	Ile() {
@@ -49,7 +49,7 @@ public class Ile {
 		}
 
 		this.plateau = new Parcelle[tailleI][tailleI];
-		this.plateauGraphique = new int[tailleI][tailleI];
+		this.tabIconesGraphique = new int[tailleI][tailleI];
 
 		initialiser(percentR);
 	}
@@ -307,18 +307,19 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction de recuperation du plateau graphique
+	 * Traduit les types de Parcelle[][] vers un int[][].
+	 * Ces int correspondent a des images dans setJeu(int[][] jeu) de la classe Plateau
 	 * 
 	 * @return int[][]
 	 */
-	public int[][] getplateaugraphique() {
+	public int[][] getImagesCorrespondants() {
 		for (int i = 0; i < plateau[0].length; i++) {
 			for (int j = 0; j < plateau[1].length; j++) {
-				plateauGraphique[i][j] = plateau[i][j].getType() + 2;
+				tabIconesGraphique[i][j] = plateau[i][j].getType() + 2;
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 				}
 		}
-		return plateauGraphique;
+		return tabIconesGraphique;
 	}
 
 	/**
@@ -375,19 +376,25 @@ public class Ile {
 			return deplacerV2(destination, posActuel, perso);
 		}
 		if (perso instanceof Voleur) {
-			if (destination.x == posActuel.x+1 && destination.y == posActuel.y+1) {
+			if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y+1))) {
 				return deplacerV2(destination, posActuel, perso);
 			}
-			else if (destination.x == posActuel.x-1 && destination.y == posActuel.y+1) {
+			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y+1))) {
 				return deplacerV2(destination, posActuel, perso);
 			}
-			else if (destination.y == posActuel.x+1 && destination.y == posActuel.y-1) {
+			else if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y-1))) {
+				System.out.println("voleur se deplace haut a droite");
 				return deplacerV2(destination, posActuel, perso);
 			}
-			else if (destination.y == posActuel.x-1 && destination.y == posActuel.y-1) {
+			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y-1))) {
 				return deplacerV2(destination, posActuel, perso);
 			}
 		}
+		/*
+		System.out.println("Le perso " + perso.nom + " est actuellement a   " + perso.getPos());
+		System.out.println("Le perso " + perso.nom + " veut se deplacer a  " + destination.getLocation());
+		System.out.println("C'est un deplacement invalide");
+		*/
 		return false;
 	}
 	
@@ -426,6 +433,7 @@ public class Ile {
 				perso.perdEnergie(5);
 			} else {
 				System.out.println("Que les explorateurs peuvent soulever les rochers");
+				return false;
 			}
 		// le coffre est deja revele par une autre joueur
 		} else if (plateau[destination.x][destination.y].getType() == 7) {

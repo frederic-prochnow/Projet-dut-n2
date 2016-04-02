@@ -41,7 +41,7 @@ public class Map {
 		
 
 		/* INITIALISATIONS */
-		plateauGraph.setJeu(plateau.getplateaugraphique());
+		plateauGraph.setJeu(plateau.getImagesCorrespondants());
 
 		/* ACTIONS */
 		
@@ -50,13 +50,22 @@ public class Map {
 		Position choixDeplacementPosition = new Position(-1, -1);
 		List<Personnage> presentsEquipe = new ArrayList<>();
 		Personnage personnnageSelectionne;
+		Position confirmationFinTour = new Position(-1, -1);
 		
 		boolean bonneSelectionEquipe = true; 
-		boolean deplacementInvalide = true;
+		boolean deplacementInvalide = false;
 		
 		
 		while (!jeu.getEstFini(equipe1) && !jeu.getEstFini(equipe2)) {// boucle tant que personne n'a gagne
-						
+			
+			refresh(plateau, plateauGraph);
+			
+			if (!jeu.getDebutJeu()) {
+				plateauGraph.println("A l'equipe suivante");
+				System.out.println("A l'equipe suivante");
+			}
+			jeu.setDebutJeu(false);
+			
 			personnnageSelectionne = null;
 			plateauGraph.clearConsole(jeu.getTourEquipe());
 			persoSelectionPosition.setLocation(-1, -1);
@@ -64,13 +73,13 @@ public class Map {
 			selectionPrecisPosition.setLocation(-1, -1);
 			presentsEquipe.clear();
 			plateauGraph.ajouterSelectionPersos(new ArrayList<Personnage>());
-			deplacementInvalide = true;
+			deplacementInvalide = false;
 				
 			// ici on clique sur une case d'un de notre personnage
 			// tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide (voir methode), la boucle continue a tourner
 			while (persoSelectionPosition.getLocation().equals(new Point(-1, -1)) || !bonneSelectionEquipe) {
+				plateauGraph.clearConsole(jeu.getTourEquipe());
 				if (!bonneSelectionEquipe) {
-					plateauGraph.clearConsole(jeu.getTourEquipe());
 					plateauGraph.println("Vous n'avez pas selectionnee une case ou vous disposez de personnage");
 				}
 				plateauGraph.println("Cliquez sur le personnage que vous voulez deplacer");
@@ -79,11 +88,11 @@ public class Map {
 				persoSelectionPosition.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 		//		System.out.println("selection perso " +persoSelectionPosition.getLocation());
 				
-				// verifie si le joueur a bien selectionne un perso de son equipe	
-				if (jeu.getTourEquipe()) {
+				// verifie si le joueur a bien selectionne un perso de son equipe seulment si il a clique
+				if (jeu.getTourEquipe() && !persoSelectionPosition.getLocation().equals(new Point(-1, -1))) {
 					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe1);
 					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe1);
-				} else {
+				} else if (!jeu.getTourEquipe()){
 					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2);
 					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
 				}
@@ -105,12 +114,10 @@ public class Map {
 					selectionPrecisPosition.setLocation(-1,plateauGraph.getPerso(plateauGraph.getCurrentEvent()));
 				}
 				
-				if (selectionPrecisPosition.equals(new Position(-1, 0)) && presentsEquipe.size() > 1) {
+				if (selectionPrecisPosition.equals(new Position(-1, 0))) {
 					personnnageSelectionne = presentsEquipe.get(0);
-				} else  if (selectionPrecisPosition.equals(new Position(-1, 0)) && presentsEquipe.size() > 1) {
+				} else  if (selectionPrecisPosition.equals(new Position(-1, 1))) {
 					personnnageSelectionne = presentsEquipe.get(1);
-				} else if (selectionPrecisPosition.equals(new Position(-1, 0)) && presentsEquipe.size() <= 1) {
-					personnnageSelectionne = presentsEquipe.get(0);
 				}
 				presentsEquipe.clear();
 				presentsEquipe.add(personnnageSelectionne);
@@ -121,44 +128,53 @@ public class Map {
 
 			plateauGraph.clearConsole(jeu.getTourEquipe());
 			while (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) {
+				plateauGraph.clearConsole(jeu.getTourEquipe());
 				plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
+				if (deplacementInvalide) {plateauGraph.println("Ce deplacement n'est pas valide, veuillez reessayer");
+				}
 				plateauGraph.println("Cliquez sur la case ou vous voulez qu'il aille");
 				plateauGraph.waitEvent(5000,false);
 				choixDeplacementPosition.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 				
+				
 				if (plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne.getPos(), personnnageSelectionne)) {
+					System.out.println("Le perso " + personnnageSelectionne.nom + " s'est deplace a " + choixDeplacementPosition.getLocation());
 					deplacementInvalide = false;
 				} else {
-					plateauGraph.clearConsole(jeu.getTourEquipe());
-					plateauGraph.println("Cliquez sur la case ou vous voulez qu'il aille");
-					plateauGraph.println("Ce deplacement n'est pas valide, veuillez reessayer");
+					deplacementInvalide = true;
 				}
-		//		System.out.println("le deplacement est invalide " + deplacementInvalide);
-				
 			}
 			
-			
 			refresh(plateau, plateauGraph);
-			
-			plateauGraph.println("A l'equipe suivante");
-			
-			refresh(plateau, plateauGraph);
+						
+			while (confirmationFinTour.equals(new Position(-1, -1))) {
+				plateauGraph.clearConsole("L'équipe 1 a fini son tour");
+				plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
+				plateauGraph.waitEvent(5000, false);
+				confirmationFinTour.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
+			}
+
 			jeu.nextRound();
 			
 	//		System.out.println("Le perso " + personnnageSelectionne.nom + " s'est deplace a " + choixDeplacementPosition.getLocation());
 	//		System.out.println("verification de sa position actuelle " + personnnageSelectionne.getPos());
-			
+		
 		}
+		plateauGraph.clearConsole("");
+		plateauGraph.println(jeu.toString());
 	}
 
 	/* permet de rafraichir l'affichage apres chaque action */
-	public static void refresh(Ile plateau, Plateau plateauGraph) {
-		plateauGraph.setJeu(plateau.getplateaugraphique());
-		plateauGraph.affichage(); // Affichage graphique
+	public static void refresh(Ile plateau, Plateau plateauGraph, int waitTime) {
+		refresh(plateau, plateauGraph);
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(waitTime);
 		} catch (Exception ie) {
 		}
-		// System.out.println(plateau.toString()); // Affichage textuel
+	}
+	
+	public static void refresh(Ile plateau, Plateau plateauGraph) {
+		plateauGraph.setJeu(plateau.getImagesCorrespondants());
+		plateauGraph.affichage(); // Affichage graphique
 	}
 }

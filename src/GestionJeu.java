@@ -6,12 +6,14 @@ public class GestionJeu {
 	private boolean fini;
 	private int round;
 	private int equipeVainqueur;
+	private boolean debutJeu;
 	
 	GestionJeu(boolean equipeDemarre){
 		tourEquipe1 = equipeDemarre;
 		fini = false;
 		equipeVainqueur = -1;
 		round = 1;
+		debutJeu = true;
 	}
 	
 	public int getEquipeVainqueur(){
@@ -27,18 +29,32 @@ public class GestionJeu {
 		for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
 			temp = itr.next();
 			if (temp.getDetientTresor() && temp.getSurnavire()) {
+				this.fini = true;
+				if (this.round % 2 == 0 ) {
+					this.equipeVainqueur = 1;
+				} else {
+					this.equipeVainqueur = 2;
+				}
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public void setEstFini(boolean f){
-		this.fini = f;
+	public boolean getEstFini(){
+		return this.fini;
 	}
 	
 	public int getRound(){
 		return this.round;
+	}
+	
+	public boolean getDebutJeu() {
+		return this.debutJeu;
+	}
+	
+	public void setDebutJeu(boolean set) {
+		this.debutJeu = set;
 	}
 	
 	public String toString(){

@@ -14,8 +14,8 @@ public class Parcelle {
 	
 
 	/**
-	 * Constructeur avec paramétre de Parcelle
-	 * Ce paramétre permet de créer une parcelle type choisit
+	 * Constructeur avec paramï¿½tre de Parcelle
+	 * Ce paramï¿½tre permet de crï¿½er une parcelle type choisit
 	 *
 	 * @param type
 	 */
@@ -28,7 +28,7 @@ public class Parcelle {
 	}
 	
 	/**
-	 * Fonction permettant de récupérer le type de la pareclle concernée
+	 * Fonction permettant de rï¿½cupï¿½rer le type de la pareclle concernï¿½e
 	 * @return int
 	 */
 	public int getType(){
@@ -49,15 +49,15 @@ public class Parcelle {
 	
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
-	 * <br>0 pour explorateur équipe 1
-	 * <br>1 pour voleur équipe 1
-	 * <br>2 pour navire équipe 1
-	 * <br>3 pour explorateur équipe 2
-	 * <br>4 pour voleur équipe 2
-	 * <br>5 pour navire équipe 2
+	 * <br>0 pour explorateur Ã©quipe 1
+	 * <br>1 pour voleur Ã©quipe 1
+	 * <br>2 pour navire Ã©quipe 1
+	 * <br>3 pour explorateur Ã©quipe 2
+	 * <br>4 pour voleur Ã©quipe 2
+	 * <br>5 pour navire Ã©quipe 2
 	 * <br>6 pour rocher
 	 * <br>7 pour coffre
-	 * <br>8 pour clé
+	 * <br>8 pour clÃ©
 	 * <br>9 pour eau
 	 * @return String
 	 */
