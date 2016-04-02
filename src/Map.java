@@ -1,15 +1,13 @@
+/**
+* Importation de class
+*/
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import tps.Plateau;
-
 /**
  * Class Map Class de test et application des classes Ile et Parcelle
- * 
  * @author TeamJ3
- *
  */
 public class Map {
 	/**
@@ -83,7 +81,11 @@ public class Map {
 		}
 	}
 
-	/* permet de rafraichir l'affichage apres chaque action */
+	/**
+	 * permet de rafraichir l'affichage apres chaque action
+	 * @params Ile Plateau
+	 * @params Plateau plateauGraph
+	 */
 	public static void refresh(Ile plateau, Plateau plateauGraph) {
 		try {
 			Thread.sleep(250);
