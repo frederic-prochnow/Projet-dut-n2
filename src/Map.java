@@ -99,8 +99,7 @@ public class Map {
 				
 			}
 			personnnageSelectionne = presentsEquipe.get(0);
-			
-			
+						
 			// CAS : il y a plusieurs persos sur une case : le debut du jeu
 			if ( presentsEquipe.size() > 1) {
 				plateauGraph.clearConsole(jeu.getTourEquipe());
@@ -109,7 +108,8 @@ public class Map {
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 				refresh(plateau, plateauGraph);
 				
-				// si la selection n'est pas vide ou que la selection s'est faite a L'EXTERIEURE de PersoPane = on  boucle
+				// si la selection est pas vide = on  boucle
+				// a savoir que getPerso() return -1 (selection vide) si la souris est appuyé en dehors de PersoPane
 				while (selectionPrecisPosition.getLocation().equals(new Position(-1, -1))) {
 					plateauGraph.waitEvent(5000,true);
 					selectionPrecisPosition.setLocation(-1,plateauGraph.getPerso(plateauGraph.getCurrentEvent()));

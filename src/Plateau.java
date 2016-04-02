@@ -303,7 +303,6 @@ public class Plateau {
 	 */
 	@SuppressWarnings("unused")
 	public int getPerso(MouseEvent event) {
-		System.out.println(event.getComponent().equals(PersoPane));
 		if (event != null) {
 			if (!event.getComponent().equals(PersoPane)) {
 				return -1;
