@@ -295,13 +295,26 @@ public class Plateau {
 		return mouse; // mouse car currentEvent mauvais type et bricolage sans trop savoir comment ca marche
 	}
 	
-	// CAS : plusieurs persos sur une case
-	// return le y, donc quel personnage on veut selectionner
+	/**
+	 * CAS : plusieurs persos sur une case
+	 * 
+	 * @param event L'évenement souris capturé.
+	 * @return int, le y du perso selectionne dans PersoPane
+	 */
+	@SuppressWarnings("unused")
 	public int getPerso(MouseEvent event) {
+		System.out.println(event.getComponent().equals(PersoPane));
 		if (event != null) {
+			if (!event.getComponent().equals(PersoPane)) {
+				return -1;
+			}
 			return (event.getY()+25) / 100; // divise par 100 (total = 200) pour l'instant car deux icones qui prennent 100y
 		}
 		return -1;
+	}
+	
+	public JPanel getPersoPane() {
+		return PersoPane;
 	}
 	
 	

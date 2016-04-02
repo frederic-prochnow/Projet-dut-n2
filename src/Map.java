@@ -108,10 +108,12 @@ public class Map {
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 				refresh(plateau, plateauGraph);
-								
+				
+				// si la selection n'est pas vide ou que la selection s'est faite a L'EXTERIEURE de PersoPane = on  boucle
 				while (selectionPrecisPosition.getLocation().equals(new Position(-1, -1))) {
 					plateauGraph.waitEvent(5000,true);
 					selectionPrecisPosition.setLocation(-1,plateauGraph.getPerso(plateauGraph.getCurrentEvent()));
+					System.out.println(selectionPrecisPosition.getLocation());
 				}
 				
 				if (selectionPrecisPosition.equals(new Position(-1, 0))) {
