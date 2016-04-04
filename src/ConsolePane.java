@@ -16,21 +16,25 @@ class ConsolePane extends JScrollPane {
 		this.setViewportView(textArea) ;
 	}
 	public void println(String message) {
-		textArea.append(message + '\n') ;
+		textArea.append("\n" + message) ;
 		// Positionne la scrollPane à son extrémité inférieure.
 		JScrollBar vertical = this.getVerticalScrollBar() ;
 		vertical.setValue(vertical.getMaximum()) ;
 	}
 	
-	public void clear(boolean equipe) {
+	public void printEquipe(boolean equipe) {
 		if (equipe) {
-			textArea.setText("C'est au tour de l'equipe 1\n");
+			textArea.append("equipe 1");
 		} else {
-			textArea.setText("C'est au tour de l'equipe 2\n");
+			textArea.append("equipe 2");
 		}
 	}
 	
-	public void clear(String message) {
-		textArea.setText(message + "\n");
+	public void print(String message) {
+		textArea.append(message) ;
+	}
+	
+	public void clear() {
+		textArea.setText("");
 	}
 }

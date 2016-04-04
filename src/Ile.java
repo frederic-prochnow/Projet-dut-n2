@@ -75,6 +75,11 @@ public class Ile {
 			plateau[0][i].setType(9);
 			plateau[plateau.length - 1][i].setType(9);
 			plateau[i][plateau.length - 1].setType(9);
+
+			tabIconesGraphique[i][0] = 9 +2;
+			tabIconesGraphique[0][i] = 9 +2;
+			tabIconesGraphique[plateau.length - 1][i] = 9 +2;
+			tabIconesGraphique[i][plateau.length - 1] = 9 +2;		
 		}
 		// NAVIRE
 		int cote = r.nextInt(4);
@@ -312,14 +317,40 @@ public class Ile {
 	 * 
 	 * @return int[][]
 	 */
-	public int[][] getImagesCorrespondants() {
-		for (int i = 0; i < plateau[0].length; i++) {
-			for (int j = 0; j < plateau[1].length; j++) {
-				tabIconesGraphique[i][j] = plateau[i][j].getType() + 2;
-				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
+	public int[][] getImagesCorrespondants(boolean equipeCourante) {
+		for (int i = 1; i < plateau[0].length-1; i++) {
+			for (int j = 1; j < plateau[1].length-1; j++) {
+				tabIconesGraphique[i][j] = 1;
+				// 0 pour sable
+				
+				
+				// on s'assure qu'on revele bien les entourages d'un personnages s'il correspond à l'équipe dont le tour courant appartient
+				if (equipeCourante && plateau[i][j].getEquipe1()) {
+					reveler(i,j);
+				} else if ( (!equipeCourante) && plateau[i][j].getEquipe2() ) {
+					reveler(i,j);
+				}
+				
 				}
 		}
+		tabIconesGraphique[getNavire(equipeCourante).x][getNavire(equipeCourante).y] = plateau[getNavire(equipeCourante).x][getNavire(equipeCourante).y].getType() + 2;
+		
 		return tabIconesGraphique;
+	}
+	
+	/*
+	 * Affecte les vrais valeurs a tabIconesGraphiques de x et y pour x-1 à x+1 d'un personnage
+	 */
+	public void reveler(int i, int j) {
+		for (int h = (i-1);h<=(i+1);h++) {
+		//	System.out.println("revealing h ");
+			for (int k = (j-1);k<=(j+1);k++) {
+			//	System.out.println(h+ " " + k + " revealed");
+			//	System.out.println("setting to " + (plateau[j][k].getType()+2));
+				tabIconesGraphique[h][k] = ((plateau[h][k].getType())+2);
+				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
+			}
+		}
 	}
 
 	/**
@@ -451,7 +482,7 @@ public class Ile {
 				}
 			}
 		// Verifie si c'est le navire allie
-		} else if (estNavire(destination, perso.getEquipe())) {
+		} else if (estSonNavire(destination, perso.getEquipe())) {
 			if (perso.getSurnavire()) { // Est sur navire
 				plateau[perso.getPos().x][perso.getPos().y].setType(2);
 				perso.setSurnavire(false);
@@ -473,7 +504,7 @@ public class Ile {
 		return (plateau[p.x][p.y].getType() == -1);
 	}
 
-	public boolean estNavire(Position p, int equipe) {
+	public boolean estSonNavire(Position p, int equipe) {
 		if (equipe == 1) {
 			return (plateau[p.x][p.y].getType() == 2);
 		} else {
@@ -492,13 +523,21 @@ public class Ile {
 	public boolean estCle(Position p) {
 		return p.equals(clef.getPos());
 	}
-
-	// permet de connaitre a quel equipe appartient le navire
-	public boolean getEquipe1(Position pos) {
-		if (plateau[pos.x][pos.y].getType() == 2) {
-			return true;
+	
+	public Position getNavire(boolean equipe1) {
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
+				if (equipe1 && plateau[i][j].getType() == 2) {
+					return new Position(i, j);
+				} else if ( (!equipe1) && plateau[i][j].getType() == 5) {
+					return new Position(i, j);
+				}
+			}
 		}
-		return false;
+		return null;
 	}
+
+
+	
 
 }

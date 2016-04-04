@@ -331,11 +331,27 @@ public class Plateau {
 		}
 	}
 	
-	public void clearConsole(boolean equipe) {
-		console.clear(equipe);
+	public void print(String message, boolean equipe, String message2) {
+		print(message, equipe);
+		console.print(" " + message2);
 	}
 	
-	public void clearConsole(String message) {
-		console.clear(message);
+	public void println(String message, boolean equipe, String message2) {
+		println(message, equipe);
+		console.print(" " + message2);
+	}
+		
+	public void print(String message, boolean equipe) {
+		console.print(message);
+		console.printEquipe(equipe);
+	}
+	
+	public void println(String message, boolean equipe) {
+		console.println(message);
+		console.printEquipe(equipe);
+	}
+	
+	public void clearConsole() {
+		console.clear();
 	}
 }

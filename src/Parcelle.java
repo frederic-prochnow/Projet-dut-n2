@@ -47,6 +47,21 @@ public class Parcelle {
 		this.estCompte = b;
 	}
 	
+	// permet de connaitre a quelle equipe est sur la position
+	public boolean getEquipe1() {
+		if (this.type == 0 || this.type == 1 || this.type == 2) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean getEquipe2() {
+		if (this.type == 3 || this.type == 4 || this.type == 5) {
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
 	 * <br>0 pour explorateur équipe 1
