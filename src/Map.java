@@ -1,6 +1,6 @@
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -70,7 +70,7 @@ public class Map {
 			choixDeplacementPosition.setLocation(-1, -1);
 			selectionPrecisPosition.setLocation(-1, -1);
 			presentsEquipe.clear();
-			plateauGraph.ajouterSelectionPersos(new ArrayList<Personnage>());
+			plateauGraph.ajouterSelectionPersos(img, new ArrayList<Personnage>());
 			deplacementInvalide = false;
 			confirmationFinTour.setLocation(-1, -1);
 				
@@ -86,7 +86,7 @@ public class Map {
 				plateauGraph.waitEvent(5000,false);
 				// on met persoSelection a x,y du clic de la souris
 				persoSelectionPosition.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
-		//		System.out.println("selection perso " +persoSelectionPosition.getLocation());
+				System.out.println("selection perso " +persoSelectionPosition.getLocation());
 				
 				// verifie si le joueur a bien selectionne un perso de son equipe seulment si il a clique
 				if (jeu.getTourEquipe() && !persoSelectionPosition.getLocation().equals(new Point(-1, -1))) {
@@ -106,7 +106,7 @@ public class Map {
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
 				plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
-				plateauGraph.ajouterSelectionPersos(presentsEquipe);
+				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
 				refresh(plateau, plateauGraph,jeu.getTourEquipe());
 				
 				// si la selection est pas vide = on  boucle
@@ -126,10 +126,13 @@ public class Map {
 				presentsEquipe.add(personnnageSelectionne);
 			}
 			
+			plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
+			
 			// on met que la perso selectionne (voir methode)
-			plateauGraph.ajouterSelectionPersos(presentsEquipe);
+			plateauGraph.ajouterSelectionPersos(img, presentsEquipe);
 			
 			while (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) {
+				plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 				plateauGraph.clearConsole();
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
 				plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
@@ -141,7 +144,6 @@ public class Map {
 				
 				if (!choixDeplacementPosition.getLocation().equals(new Point(-1, -1))) {
 					if (plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne.getPos(), personnnageSelectionne)) {
-						System.out.println("Le perso " + personnnageSelectionne.nom + " s'est deplace a " + choixDeplacementPosition.getLocation());
 						deplacementInvalide = false;
 					} else {
 						deplacementInvalide = true;

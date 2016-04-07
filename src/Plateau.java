@@ -1,8 +1,7 @@
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +23,7 @@ import javax.swing.JPanel;
  * @author M2103-Team
  */
 public class Plateau {
+	private static boolean defaultVisibility = true ;
 	private static final long serialVersionUID = 1L;
 	private JFrame window ;
 	private GraphicPane graphic ;
@@ -80,6 +79,16 @@ public class Plateau {
 		public void keyTyped(KeyEvent e) {
 		}
 	}
+	
+	/**
+	 * Détermine la visibilité par défaut des plateaux construits. La valeur initiale est true : 
+	 * tout plateau construit est immédiatement affiché.
+	 * @param defaultValue vrai si tout plateau est affiché immédiatement 
+	 */
+	public static void setDefaultVisibility(boolean defaultValue) {
+		defaultVisibility = defaultValue ;
+	}
+	
 	/**
 	 * Construit un plateau de jeu vide de dimension taille x taille.
 	 * Initialement, les cellules sont vides. Le constructeur demande la fourniture
@@ -96,6 +105,7 @@ public class Plateau {
 	 * Construit un plateau de jeu vide de dimension taille x taille aec une éventuelle zone de texte associée.
 	 * Initialement, les cellules sont vides. Le constructeur demande la fourniture
 	 * d'un catalogue d'images gif ou png.
+	 * @param class1
 	 * @param gif tableau 1D des chemins des fichiers des différentes images affichées.
 	 * @param taille Dimension (en nombre de cellules) d'un côté du plateau.
 	 *        <b>La taille fixée ici est la taille par défaut (plateau carré)</b> 
@@ -106,7 +116,8 @@ public class Plateau {
 	public Plateau(String[] gif,int taille, boolean withTextArea){
 		// Instancie la fenetre principale et et les deux composants.
 		window = new JFrame() ;
-		graphic = new GraphicPane(gif, taille) ;
+		ImageIcon[] images = loadImages(gif) ;
+		graphic = new GraphicPane(images, taille) ;
 		console = null ;
 		PersoPane = new JPanel();
 		PersoPane.setLayout(new BoxLayout(PersoPane, BoxLayout.Y_AXIS));
@@ -128,17 +139,13 @@ public class Plateau {
 			console = new ConsolePane() ;
 			window.getContentPane().add(console) ;
 		}
-		
-		
+				
 		window.getContentPane().add(PersoPane,BorderLayout.EAST);
-		resizeFromGraphic() ; // ajoute la console
-		
-		
-		
+		resizeFromGraphic() ; // ajoute la console		
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
 
 		// Affichage effectif 
-		window.setVisible(true);
+		window.setVisible(defaultVisibility);
 		// Ajout des listeners.
 		graphic.addMouseListener(new Mouse());
 		window.addKeyListener(new Key()) ;
@@ -170,6 +177,27 @@ public class Plateau {
 	public void affichage(){ 
 		window.setVisible(true);	// Révèle la fenêtre.
 		window.repaint(); 			// Délégué à Swing (appelle indirectement graphic.paintComponent via Swing)
+	}
+	/**
+	 * Détermine le titre de la fenetre associée.
+	 * @param title Le titre à afficher.
+	 */
+	public void setTitle(String title) {
+		window.setTitle(title) ;
+	}
+	/**
+	 * Provoque le masquage du plateau.
+	 * Le plateau est conservé en mémoire et peut être réaffiché par {@link #affichage()}.
+	 */
+	public void masquer() {
+		window.setVisible(false);
+	}
+	/**
+	 * Provoque la destruction du plateau. 
+	 * L'arrêt du programme est conditionné par la fermeture de tous les plateaux ouverts.
+	 */
+	public void close() {
+		window.dispose();
 	}
 	/**
 	 * prépare l'attente d'événements Swing (clavier ou souris).
@@ -224,32 +252,6 @@ public class Plateau {
 		return currentEvent ;
 	}
 	/**
-	 * Affiche un message dans la partie texte du plateau.
-	 * Si le plateau a été construit sans zone texte, cette méthode est sans effet.
-	 * Cela provoque aussi le déplacement du scroll vers l'extrémité basse de façon 
-	 * à rendre le texte ajouté visible.
-	 * @param message
-	 */
-	public void println(String message) {
-		if (console != null) {
-			console.println(message) ;
-		}
-	}
-	/**
-	 * Provoque la destruction du plateau. 
-	 * L'arrêt du programme est conditionné par la fermeture de tous les plateaux ouverts.
-	 */
-	public void close() {
-		window.dispose();
-	}
-	/**
-	 * Provoque le masquage du plateau.
-	 * Le plateau est conservé en mémoire et peut être réaffiché par {@link #affichage()}.
-	 */
-	public void masquer() {
-		window.setVisible(false);
-	}
-	/**
 	 * Calcule la ligne de la case ciblée par un mouseEvent.
 	 * Attention: il est possible si l'utilsateur agrandi la fenêtre que le clic
 	 * se produise à l'extérieur du plateau. Cette configuration n'est pas détectée par cette méthode
@@ -301,7 +303,6 @@ public class Plateau {
 	 * @param event L'évenement souris capturé.
 	 * @return int, le y du perso selectionne dans PersoPane
 	 */
-	@SuppressWarnings("unused")
 	public int getPerso(MouseEvent event) {
 		if (event != null) {
 			if (!event.getComponent().equals(PersoPane)) {
@@ -311,23 +312,32 @@ public class Plateau {
 		}
 		return -1;
 	}
-	
-	public JPanel getPersoPane() {
-		return PersoPane;
-	}
-	
-	
+		
 	// on designe chaque perso de la selection des persos que nous avons obtenus precedemment
 	// a une JPanel qui sera mis dans un grand JPanel (PersoPane)
-	public void ajouterSelectionPersos(List<Personnage> selection) {
+	public void ajouterSelectionPersos(String[] img, List<Personnage> selection) {
 		PersoPane.removeAll();
 		liste = new JPanel[selection.size()];
 		for (int i=0;i<liste.length;i++) {
-			ImageIcon image = new ImageIcon(img[selection.get(i).getType()]);
+			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			JLabel label = new JLabel("", image, JLabel.CENTER);
 			liste[i] = new JPanel(new BorderLayout());
 			liste[i].add(label,BorderLayout.CENTER);
 			PersoPane.add(liste[i]);
+		}
+	}
+	
+	/**
+	 * Affiche un message dans la partie texte du plateau.
+	 * Si le plateau a été construit sans zone texte, cette méthode est sans effet.
+	 * Cela provoque aussi le déplacement du scroll vers l'extrémité basse de façon 
+	 * à rendre le texte ajouté visible. On ajoute automatiquement une fin de ligne 
+	 * de telle sorte que le message est seul sur sa ligne.
+	 * @param message Le message à afficher.
+	 */
+	public void println(String message) {
+		if (console != null) {
+			console.println(message) ;
 		}
 	}
 	
@@ -353,5 +363,88 @@ public class Plateau {
 	
 	public void clearConsole() {
 		console.clear();
+	}
+	
+	/**
+	 * Efface la surbrillance pour toutes les cellules du plateau. 
+	 */
+	public void clearHighlight() {
+		if (graphic != null) {
+			graphic.clearHighlight();
+		}
+	}
+	/**
+	 * Place une cellule en surbrillance. La surbrillance provoque la superposition d'un carré translucide 
+	 * de la couleur précisée. 
+	 * Les cellules peuvent revenir à leur état normal:
+	 * <ul>
+	 * <li>globalement par un appel à {@link #clearHighlight()}</li>
+	 * <li>individuellement par un appel à {@link #resetHighlight(int, int)}</li>
+	 * </ul>
+	 * @param x La ligne de la cellule.
+	 * @param y La colonne de la cellule.
+	 * @param color La couleur du carré affiché.
+	 */
+	public void setHighlight(int x, int y, Color color) {
+		if (graphic != null) {
+			graphic.setHighlight(x, y, color);
+		}
+	}
+	/**
+	 * Efface la surbrillance pour une cellule du plateau. La cellule est déterminée par
+	 * son numéro de ligne et de colonne. Si la cellule n'était pas en surbrillance, 
+	 * cette méthode est sans effet.
+	 * @param x Numéro de ligne de la cellule à affecter.
+	 * @param y Numéro de colonne de la cellule à affecter.
+	 */
+	public void resetHighlight(int x, int y) {
+		if (graphic != null) {
+			graphic.resetHighlight(x, y);
+		}
+	}
+	/**
+	 * Permet de savoir si une cellule est actuellement en surbrillance.
+	 * @param x Le numéro de ligne de la cellule.
+	 * @param y Le numéro de colonne de la cellule.
+	 * @return true si la cellule est actuellement en surbrillance.
+	 */
+	public boolean isHighlight(int x, int y) {
+		return graphic.isHighlight(x, y) ;
+	}
+	/**
+	 * Efface l'affichage de tout texte dans la partie graphique.
+	 */
+	public void clearText() {
+		graphic.clearText() ;
+	}
+	/**
+	 * Demande l'affichage d'un texte dans une case. Le texte est centré horizontalement et verticalement. Ecrit en Color.BLACK.
+	 * @param x Le numéro de ligne de la cellule où apparaît le texte.
+	 * @param y Le numéro de colonne de la cellule où apparaît le texte.
+	 * @param msg les texte à afficher.
+	 */
+	public void setText(int x, int y, String msg) {
+		graphic.setText(x, y, msg) ;		
+	}
+	private ImageIcon[] loadImages(String[] imagesPath) {
+		int nbImages = imagesPath.length ;
+		ImageIcon notFound = null ;
+		java.net.URL notFoundURL = Plateau.class.getResource("images/not_found.gif") ;
+		if (notFoundURL != null) {
+			notFound = new ImageIcon(notFoundURL) ;
+		} else {
+			System.err.println("Image par défaut non trouvée") ;
+		}
+		ImageIcon[] images = new ImageIcon[nbImages] ;
+		for (int i=0; i<nbImages;i++) {
+			java.net.URL imageURL = Plateau.class.getResource(imagesPath[i]);
+			if (imageURL != null) {
+			    images[i] = new ImageIcon(imageURL);
+			} else {
+				System.err.println("Image : '" + imagesPath[i]+ "' non trouvée") ;
+				images[i] = notFound ;
+			}
+		}
+		return images ;
 	}
 }

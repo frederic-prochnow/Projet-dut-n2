@@ -14,8 +14,8 @@ public class Parcelle {
 	
 
 	/**
-	 * Constructeur avec param�tre de Parcelle
-	 * Ce param�tre permet de cr�er une parcelle type choisit
+	 * Constructeur avec paramétre de Parcelle
+	 * Ce paramétre permet de créer une parcelle type choisit
 	 *
 	 * @param type
 	 */
@@ -28,7 +28,7 @@ public class Parcelle {
 	}
 	
 	/**
-	 * Fonction permettant de r�cup�rer le type de la pareclle concern�e
+	 * Fonction permettant de récupérer le type de la pareclle concernée
 	 * @return int
 	 */
 	public int getType(){

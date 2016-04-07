@@ -4,6 +4,7 @@ public class Personnage {
 	protected String nom;
 	protected char symboleNom;
 	protected int type; // M�me que dans parcelle
+	protected String cheminImage;
 	protected int equipe;
 	protected int energie;
 	protected Point pos;
@@ -18,6 +19,15 @@ public class Personnage {
 		this.equipe = equipe;
 		this.surNavire = true;
 		this.type = type;
+		if (type == 0) {
+			this.cheminImage = "images/1.explorateur.png";
+		} else if (type == 1) {
+			this.cheminImage = "images/1.voleur.png";
+		} else if (type == 3) {
+			this.cheminImage = "images/2.explorateur.png";
+		} else if (type == 4) {
+			this.cheminImage = "images/2.voleur.png";
+		}
 		this.pos = p;
 		
 		if(equipe == 1){
@@ -29,6 +39,10 @@ public class Personnage {
 	
 	public int getType(){
 		return this.type;
+	}
+	
+	public String getCheminImage() {
+		return this.cheminImage;
 	}
 	
 	public void perdEnergie(int energie){
