@@ -16,7 +16,8 @@ public class Ile {
 	 * attributs de la classe
 	 */
 	private Parcelle[][] plateau;
-	private int[][] tabIconesGraphique;
+	private int[][] tabIconesGraphiqueEquipe1;
+	private int[][] tabIconesGraphiqueEquipe2;
 	private Random r = new Random();
 	private int nbRochers = 0;
 	private Coffre coffre;
@@ -50,7 +51,8 @@ public class Ile {
 		}
 
 		this.plateau = new Parcelle[tailleI][tailleI];
-		this.tabIconesGraphique = new int[tailleI][tailleI];
+		this.tabIconesGraphiqueEquipe1 = new int[tailleI][tailleI];
+		this.tabIconesGraphiqueEquipe2 = new int[tailleI][tailleI];
 
 		initialiser(percentR);
 	}
@@ -315,18 +317,24 @@ public class Ile {
 	 * @return int[][]
 	 */
 	public int[][] getImagesCorrespondants(boolean equipeCourante) {
+		int[][] tab;
+		if (equipeCourante) {
+			tab = tabIconesGraphiqueEquipe1;
+		} else {
+			tab = tabIconesGraphiqueEquipe1;
+		}
 		// reset eau
 		for (int i = 0; i < plateau.length; i++) {
-			tabIconesGraphique[i][0] = 9 +2;
-			tabIconesGraphique[0][i] = 9 +2;
-			tabIconesGraphique[plateau.length - 1][i] = 9 +2;
-			tabIconesGraphique[i][plateau.length - 1] = 9 +2;		
+			tab[i][0] = 9 +2;
+			tab[0][i] = 9 +2;
+			tab[plateau.length - 1][i] = 9 +2;
+			tab[i][plateau.length - 1] = 9 +2;		
 		}
 		// plateau interieur
 		for (int i = 1; i < plateau[0].length-1; i++) {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// 0 pour sable
-				tabIconesGraphique[i][j] = 1;
+				tab[i][j] = 1;
 			}
 		}
 		
@@ -334,31 +342,31 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// on s'assure qu'on revele bien les entourages d'un personnages s'il correspond à l'équipe dont le tour courant appartient
 				if (equipeCourante && plateau[i][j].getEquipe1()) {
-					reveler(i,j);
+					reveler(i,j, tab);
 				} else if ( (!equipeCourante) && plateau[i][j].getEquipe2() ) {
-					reveler(i,j);
+					reveler(i,j, tab);
 				}
 			}
 		}
 		// affecte la valeur pour le navire de l'equipe courante
-		tabIconesGraphique[getNavire(equipeCourante).y][getNavire(equipeCourante).x] = plateau[getNavire(equipeCourante).y][getNavire(equipeCourante).x].getType() + 2;
-		return tabIconesGraphique;
+		tab[getNavire(equipeCourante).y][getNavire(equipeCourante).x] = plateau[getNavire(equipeCourante).y][getNavire(equipeCourante).x].getType() + 2;
+		return tab;
 	}
 	
 	/*
 	 * Affecte les vrais valeurs a tabIconesGraphiques de x et y pour x-1 à x+1 d'un personnage
 	 */
-	public void reveler(int i, int j) {
+	public void reveler(int i, int j, int[][] tab) {
 		for (int h = (i-1);h<=(i+1);h++) {
 		//	System.out.println("revealing h ");
 			for (int k = (j-1);k<=(j+1);k++) {
 			//	System.out.println("x= " + h + " y=" + k + " revealed");
 			//	System.out.println("setting to " + (plateau[j][k].getType()+2));
-				tabIconesGraphique[h][k] = ((plateau[h][k].getType())+2);
+				tab[h][k] = ((plateau[h][k].getType())+2);
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 			}
 		}
-		tabIconesGraphique[1][5] = (8);
+		tab[1][5] = (8);
 	}
 
 	/**
