@@ -107,7 +107,6 @@ public class Map {
 				plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
 				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
-				refresh(plateau, plateauGraph,jeu.getTourEquipe());
 				
 				// si la selection est pas vide = on  boucle
 				// a savoir que getPerso() return -1 (selection vide) si la souris est appuyé en dehors de PersoPane
