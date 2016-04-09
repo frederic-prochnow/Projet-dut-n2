@@ -175,6 +175,7 @@ public class Ile {
 				}
 			}
 		}
+		System.out.println("fini les rochers");
 	}
 
 	/**
