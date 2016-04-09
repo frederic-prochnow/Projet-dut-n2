@@ -341,6 +341,12 @@ public class Plateau {
 		}
 	}
 	
+	public void print(String message) {
+		if (console != null) {
+			console.print(message) ;
+		}
+	}
+	
 	public void print(String message, boolean equipe, String message2) {
 		print(message, equipe);
 		console.print(" " + message2);
@@ -446,5 +452,17 @@ public class Plateau {
 			}
 		}
 		return images ;
+	}
+	
+	public void save() {
+		console.save();
+	}
+	
+	public void recover() {
+		console.recover();
+	}
+	
+	public void clearSave() {
+		console.clearSave();
 	}
 }

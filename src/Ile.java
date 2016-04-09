@@ -466,36 +466,37 @@ public class Ile {
 	 * @param destination La position destination
 	 * @param posActuel La position actuelle du personnage
 	 * @param perso L'instance du personnage, sert a verifier les possibilités de déplacement
+	 * @param plateauGraph 
 	 * 
 	 * @return boolean
 	 */
-	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso) {
+	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
 		// Cas thoeriquement valides
 		if (destination.x == posActuel.x+1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso);
+			return deplacerV2(destination, posActuel, perso, plateauGraph);
 		}
 		else if (destination.x == posActuel.x-1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso);
+			return deplacerV2(destination, posActuel, perso, plateauGraph);
 		}
 		else if (destination.y == posActuel.y+1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso);
+			return deplacerV2(destination, posActuel, perso, plateauGraph);
 		}
 		else if (destination.y == posActuel.y-1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso);
+			return deplacerV2(destination, posActuel, perso, plateauGraph);
 		}
 		if (perso instanceof Voleur) {
 			if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso);
+				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso);
+				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 			else if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y-1))) {
 				System.out.println("voleur se deplace haut a droite");
-				return deplacerV2(destination, posActuel, perso);
+				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y-1))) {
-				return deplacerV2(destination, posActuel, perso);
+				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 		}
 		return false;
@@ -510,8 +511,9 @@ public class Ile {
 	 * @param perso L'instance du personnage, sert a verifier s'il peut soulever les rochers
 	 * @return boolean si le deplacement est bien valide selon le personnage
 	 */
-	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso) {
-						
+	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
+		plateauGraph.clearConsole();
+		plateauGraph.clearSave();
 		if (estVide(destination)) {
 			if (perso.getSurnavire()) { // Est sur navire
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
@@ -526,23 +528,33 @@ public class Ile {
 			if (perso instanceof Explorateur) {
 				if (estCoffre(destination)) {
 					System.out.println("Peut soulever le rocher et il y a le coffre en dessous");
+					plateauGraph.println("Peut soulever le rocher et il y a le coffre en dessous");
+					plateauGraph.save();
 					plateau[destination.x][destination.y].setType(7); // on revele le coffre
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
 						System.out.println("Il a la cle donc il a pris le tresor");
+						plateauGraph.println("Il a la cle donc il a pris le tresor");
+						plateauGraph.save();
 						perso.setDetientTresor(true);
 						coffre.setEstVide(true);
 					}
 				} else if (estCle(destination)) {
 					System.out.println("Peut soulever le rocher et il y a la cle en dessous");
+					plateauGraph.println("Peut soulever le rocher et il y a la cle en dessous");
+					plateauGraph.save();
 					plateau[destination.x][destination.y].setType(8);
 					perso.setDetientClef(true);
 				} else {
 					System.out.println("Souleve le rocher et il n'a rien");
+					plateauGraph.println("Souleve le rocher et il n'a rien");
+					plateauGraph.save();
 				}
 				perso.perdEnergie(5);
 			} else {
 				System.out.println("Que les explorateurs peuvent soulever les rochers");
+				plateauGraph.println("Que les explorateurs peuvent soulever les rochers");
+				plateauGraph.save();
 				return false;
 			}
 		// le coffre est deja revele par une autre joueur
@@ -554,10 +566,14 @@ public class Ile {
 				if (perso.getDetientClef()) {
 					coffre.setEstOuvert(true); // on ouvre le coffre
 					System.out.println("Il a la cle donc il a pris le tresor");
+					plateauGraph.println("Il a la cle donc il a pris le tresor");
+					plateauGraph.save();
 					perso.setDetientTresor(true);
 					coffre.setEstVide(true);
 				} else { // pas ouvert, detient pas cle
 					System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
+					plateauGraph.println("Le personnage n'a pas la cle pour ouvrir le coffre");
+					plateauGraph.save();
 				}
 			}
 		// Verifie si c'est le navire allie
@@ -573,6 +589,8 @@ public class Ile {
 			perso.setSurnavire(true);
 		} else {
 			System.out.println("Ne peut pas se deplacer ici");
+			plateauGraph.println("Ne peut pas se deplacer ici");
+			plateauGraph.save();
 			return false;
 		}
 		return true;

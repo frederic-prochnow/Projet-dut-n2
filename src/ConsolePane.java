@@ -7,6 +7,7 @@ import javax.swing.JTextArea;
 class ConsolePane extends JScrollPane {
 	private static final long serialVersionUID = 3L;
 	private JTextArea textArea ;
+	private String save;
 	public ConsolePane() {
 		super() ;
 		textArea = new JTextArea() ;
@@ -16,10 +17,14 @@ class ConsolePane extends JScrollPane {
 		this.setViewportView(textArea) ;
 	}
 	public void println(String message) {
-		textArea.append("\n" + message) ;
-		// Positionne la scrollPane à son extrémité inférieure.
-		JScrollBar vertical = this.getVerticalScrollBar() ;
-		vertical.setValue(vertical.getMaximum()) ;
+		if (textArea.getText().equals(new String(""))) {
+			print(message);
+		} else {
+			textArea.append("\n" + message) ;
+			// Positionne la scrollPane à son extrémité inférieure.
+			JScrollBar vertical = this.getVerticalScrollBar() ;
+			vertical.setValue(vertical.getMaximum()) ;
+		}
 	}
 	
 	public void printEquipe(boolean equipe) {
@@ -32,9 +37,25 @@ class ConsolePane extends JScrollPane {
 	
 	public void print(String message) {
 		textArea.append(message) ;
+		JScrollBar vertical = this.getVerticalScrollBar() ;
+		vertical.setValue(vertical.getMaximum()) ;
 	}
 	
 	public void clear() {
 		textArea.setText("");
+	}
+	
+	public void save() {
+		save = textArea.getText();
+	}
+	
+	public void recover() {
+		if (save != null) {
+			println(save);
+		}
+	}
+	
+	public void clearSave() {
+		save = "";
 	}
 }
