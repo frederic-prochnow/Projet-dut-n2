@@ -403,21 +403,16 @@ public class Ile {
 	 **/
 	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {
 		for (int h = (x-1);h<=(x+1);h++) {
-		//	System.out.println("revealing h ");
 			for (int k = (y-1);k<=(y+1);k++) {
-			//	System.out.println("x= " + h + " y=" + k + " revealed");
-			//	System.out.println("setting to " + (plateau[j][k].getType()+2));
+				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 				tab[h][k] = ((plateau[h][k].getType())+2);
 				plateauGraph.resetHighlight(h, k);
 			
 				if (equipeCourante) {
-					System.out.println("x= " + h + " y=" + k + " revealed for team 1");
 					brouillardEquipe1[h][k] = 0;
 				} else {
-					System.out.println("x= " + h + " y=" + k + " revealed for team 2");
 					brouillardEquipe2[h][k] = 0;
 				}
-				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 			}
 		}
 	}
