@@ -40,7 +40,7 @@ public class Map {
 		
 
 		/* INITIALISATIONS */
-		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe()));
+		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph), jeu.getDebutJeu());
 
 		/* ACTIONS */
 		
@@ -57,14 +57,16 @@ public class Map {
 		
 		while (!jeu.getEstFini(equipe1) && !jeu.getEstFini(equipe2)) {// boucle tant que personne n'a gagne
 			
-			refresh(plateau, plateauGraph,jeu.getTourEquipe());
-			
 			if (!jeu.getDebutJeu()) {
 				plateauGraph.println("A l'equipe suivante");
 				System.out.println("A l'equipe suivante");
+			} else {
+				jeu.setDebutJeu(false);
 			}
-			jeu.setDebutJeu(false);
 			
+			plateauGraph.clearHighlight();
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu());
+					
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
 			choixDeplacementPosition.setLocation(-1, -1);
@@ -150,7 +152,7 @@ public class Map {
 				}
 			}
 			
-			refresh(plateau, plateauGraph,jeu.getTourEquipe());
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu());
 						
 			while (confirmationFinTour.equals(new Position(-1, -1))) {
 				plateauGraph.clearConsole();
@@ -171,16 +173,16 @@ public class Map {
 	}
 
 	/* permet de rafraichir l'affichage apres chaque action */
-	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipe1, int waitTime) {
-		refresh(plateau, plateauGraph, equipe1);
+	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipe1, int waitTime, boolean debut) {
+		refresh(plateau, plateauGraph, equipe1, debut);
 		try {
 			Thread.sleep(waitTime);
 		} catch (Exception ie) {
 		}
 	}
 	
-	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante) {
-		plateauGraph.setJeu(plateau.getImagesCorrespondants(equipeCourante));
+	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, boolean debut) {
+		plateauGraph.setJeu(plateau.getImagesCorrespondants(equipeCourante, plateauGraph), debut);
 		plateauGraph.affichage(); // Affichage graphique
 	}
 }

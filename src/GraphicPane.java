@@ -172,16 +172,18 @@ class GraphicPane extends JPanel {
 	 * la valeur numérique d'une cellule désigne l'image correspondante
 	 * dans le tableau des chemins (décalé de un, 0 désigne une case vide)
 	 */
-	public void setJeu(int[][] jeu){
+	public void setJeu(int[][] jeu, boolean debut){
 		// Calcule nbLig et nbCol en fonction de la taille réelle du tableau d'entier
 		if (jeu != null) {
 			this.jeu=jeu;	
 			nbCol = jeu.length ;
 			nbLig = jeu[0].length ;
 			setGraphicSize() ;
-			setSize() ;
-			clearHighlight() ;
-			clearText() ;
+			if (debut) {
+				setSize() ;
+				clearHighlight() ;
+				clearText() ;
+			}
 			text = new String[nbCol][nbLig] ;
 		} else {
 			text = null ;

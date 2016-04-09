@@ -18,6 +18,8 @@ public class Ile {
 	private Parcelle[][] plateau;
 	private int[][] tabIconesGraphiqueEquipe1;
 	private int[][] tabIconesGraphiqueEquipe2;
+	private int[][] brouillardEquipe1;
+	private int[][] brouillardEquipe2;
 	private Random r = new Random();
 	private int nbRochers = 0;
 	private Coffre coffre;
@@ -53,6 +55,8 @@ public class Ile {
 		this.plateau = new Parcelle[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe1 = new int[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe2 = new int[tailleI][tailleI];
+		this.brouillardEquipe1 = new int[tailleI][tailleI];
+		this.brouillardEquipe2 = new int[tailleI][tailleI];
 
 		initialiser(percentR);
 	}
@@ -70,6 +74,8 @@ public class Ile {
 		for (int i = 0; i < plateau.length; i++) {
 			for (int j = 0; j < plateau.length; j++) {
 				plateau[i][j] = new Parcelle(-1);
+				brouillardEquipe1[i][j] = 1;
+				brouillardEquipe2[i][j] = 1;
 			}
 		}
 		// EAU
@@ -316,12 +322,12 @@ public class Ile {
 	 * 
 	 * @return int[][]
 	 */
-	public int[][] getImagesCorrespondants(boolean equipeCourante) {
-		int[][] tab;
+	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph) {
+		int[][] tab = new int[plateau[0].length][plateau[1].length];
 		if (equipeCourante) {
-			tab = tabIconesGraphiqueEquipe1;
+			copy(tabIconesGraphiqueEquipe1, tab);
 		} else {
-			tab = tabIconesGraphiqueEquipe1;
+			copy(tabIconesGraphiqueEquipe2, tab);
 		}
 		// reset eau
 		for (int i = 0; i < plateau.length; i++) {
@@ -335,6 +341,19 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// 0 pour sable
 				tab[i][j] = 1;
+				plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
+			}
+		}
+		
+		// ici on affiche les cases precedemment vus grace a reveler()
+		// le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
+		for (int i = 1; i < plateau[0].length-1; i++) {
+			for (int j = 1; j < plateau[1].length-1; j++) {
+				if (equipeCourante && brouillardEquipe1[i][j] == 0) {
+						tab[i][j] = tabIconesGraphiqueEquipe1[i][j];
+				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0) {
+						tab[i][j] = tabIconesGraphiqueEquipe2[i][j];
+				}
 			}
 		}
 		
@@ -342,32 +361,70 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// on s'assure qu'on revele bien les entourages d'un personnages s'il correspond à l'équipe dont le tour courant appartient
 				if (equipeCourante && plateau[i][j].getEquipe1()) {
-					reveler(i,j, tab);
+					reveler(i,j, tab, plateauGraph, equipeCourante);
 				} else if ( (!equipeCourante) && plateau[i][j].getEquipe2() ) {
-					reveler(i,j, tab);
+					reveler(i,j, tab, plateauGraph, equipeCourante);
 				}
 			}
 		}
 		// affecte la valeur pour le navire de l'equipe courante
-		tab[getNavire(equipeCourante).y][getNavire(equipeCourante).x] = plateau[getNavire(equipeCourante).y][getNavire(equipeCourante).x].getType() + 2;
+		tab[getNavire(equipeCourante).x][getNavire(equipeCourante).y] = plateau[getNavire(equipeCourante).x][getNavire(equipeCourante).y].getType() + 2;
+		plateauGraph.resetHighlight(getNavire(equipeCourante).x, getNavire(equipeCourante).y);
+		
+		
+		
+		
+				
+		
+		if (equipeCourante) {
+			copy(tab, tabIconesGraphiqueEquipe1);
+		} else {
+			copy(tab, tabIconesGraphiqueEquipe2);
+		}
 		return tab;
 	}
 	
-	/*
-	 * Affecte les vrais valeurs a tabIconesGraphiques de x et y pour x-1 à x+1 d'un personnage
-	 */
-	public void reveler(int i, int j, int[][] tab) {
-		for (int h = (i-1);h<=(i+1);h++) {
+	/**
+	 * Affecte les vrais valeurs a tabIconesGraphiques de x-1 à x+1 pour y-1 à y+1.
+	 * Clear le highlight de ces cases
+	 * @param equipeCourante 
+	 **/
+	public void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {
+		for (int h = (x-1);h<=(x+1);h++) {
 		//	System.out.println("revealing h ");
-			for (int k = (j-1);k<=(j+1);k++) {
+			for (int k = (y-1);k<=(y+1);k++) {
 			//	System.out.println("x= " + h + " y=" + k + " revealed");
 			//	System.out.println("setting to " + (plateau[j][k].getType()+2));
 				tab[h][k] = ((plateau[h][k].getType())+2);
+				plateauGraph.resetHighlight(h, k);
+				
+				// 0 = l'equipe a vu cette case
+				// ce tab est mis à 1 au debut du jeu, des cases seront mises a 0 au cours du jeu
+				// mais jamais revenir a 1
+				if (equipeCourante) {
+					brouillardEquipe1[h][k] = 0;
+				} else {
+					brouillardEquipe2[h][k] = 0;
+				}
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 			}
 		}
-		tab[1][5] = (8);
 	}
+	
+	/**
+	 * Copie les valeurs d'un int[][] source à destination
+	 * 
+	 */
+	
+	private void copy(int[][] source, int[][] dest) {
+		for (int i = 1; i < plateau[0].length-1; i++) {
+			for (int j = 1; j < plateau[1].length-1; j++) {
+				dest[i][j] = source[i][j];
+			}
+		}
+	}
+	
+	
 
 	/**
 	 * Fonction de recuperation de la taille du plateau

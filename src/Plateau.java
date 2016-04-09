@@ -159,8 +159,8 @@ public class Plateau {
 	 * la valeur numérique d'une cellule désigne l'image correspondante
 	 * dans le tableau des chemins (décalé de un, 0 désigne une case vide)
 	 */
-	public void setJeu(int[][] jeu){
-		graphic.setJeu(jeu) ;	// Délégué au composant graphic.
+	public void setJeu(int[][] jeu, boolean debut){
+		graphic.setJeu(jeu, debut) ;	// Délégué au composant graphic.
 		resizeFromGraphic() ;
 	}
 	/**
