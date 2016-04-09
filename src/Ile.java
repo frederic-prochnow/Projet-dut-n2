@@ -74,6 +74,10 @@ public class Ile {
 		for (int i = 0; i < plateau.length; i++) {
 			for (int j = 0; j < plateau.length; j++) {
 				plateau[i][j] = new Parcelle(-1);
+				
+				// 0 = l'equipe a vu cette case
+				// ce tab est mis à 1 au debut du jeu, des cases seront mises a 0 au cours du jeu
+				// mais jamais revenir a 1
 				brouillardEquipe1[i][j] = 1;
 				brouillardEquipe2[i][j] = 1;
 			}
@@ -316,11 +320,17 @@ public class Ile {
 	}
 
 	/**
-	 * Traduit les types de Parcelle[][] vers un int[][].
-	 * Ces int correspondent a des images dans setJeu(int[][] jeu) de la classe Plateau
-	 * @param plateauGraph 
+	 * Traduit les types de Parcelle[][] vers un int[][] intermédiaire au vrai tableau de l'équipe.
+	 * Ceci permet de travailler sur une variable et éviter les if(equipeCourante).
+	 * Ces int correspondent a des images dans setJeu(int[][] jeu) de la classe Plateau.
+	 * Les cases qu'on ne peut ACTUELLEMENT voir sont highlight en gris clair
+	 * On sauvegarde les cases deja vus, ainsi, si on trouve un rocher puis s'éloigne, il sera toujours affiché
+	 * mais sous un highlight gris clair
 	 * 
-	 * @return int[][]
+	 * @param equipeCourante Permet de connaitre à qui appartient le tour
+	 * @param plateauGraph On travaille sur l'instance pour ajouter les highlight
+	 * 
+	 * @return int[][]. Ce tab est reinitialise avec du sable a chaque fois, à optimiser
 	 */
 	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph) {
 		int[][] tab = new int[plateau[0].length][plateau[1].length];
@@ -344,9 +354,8 @@ public class Ile {
 				plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
 			}
 		}
-		
-		// ici on affiche les cases precedemment vus grace a reveler()
-		// le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
+		// Ici on affiche les cases precedemment vus avec a reveler() et brouillardEquipe.
+		// Le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
 		for (int i = 1; i < plateau[0].length-1; i++) {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				if (equipeCourante && brouillardEquipe1[i][j] == 0) {
@@ -357,6 +366,7 @@ public class Ile {
 			}
 		}
 		
+		// On parcourt le tableau et révèle les alentours de chaque position de l'équipe courante
 		for (int i = 1; i < plateau[0].length-1; i++) {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// on s'assure qu'on revele bien les entourages d'un personnages s'il correspond à l'équipe dont le tour courant appartient
@@ -371,11 +381,7 @@ public class Ile {
 		tab[getNavire(equipeCourante).x][getNavire(equipeCourante).y] = plateau[getNavire(equipeCourante).x][getNavire(equipeCourante).y].getType() + 2;
 		plateauGraph.resetHighlight(getNavire(equipeCourante).x, getNavire(equipeCourante).y);
 		
-		
-		
-		
-				
-		
+		// sauvegarde du tableau dans un tab dedié a l'équipe
 		if (equipeCourante) {
 			copy(tab, tabIconesGraphiqueEquipe1);
 		} else {
@@ -387,9 +393,15 @@ public class Ile {
 	/**
 	 * Affecte les vrais valeurs a tabIconesGraphiques de x-1 à x+1 pour y-1 à y+1.
 	 * Clear le highlight de ces cases
-	 * @param equipeCourante 
+	 * 
+	 * @param x Le x de la case centre de révélation
+	 * @param y Le y de la case centre de révélation
+	 * @param tab Le tableau qu'on travaille dessus
+	 * @param plateauGraph On travaille sur l'instance pour retirer les highlight
+	 * @param equipeCourante Permet de connaitre l'équipe à qui appartient le jeu
+	 *  
 	 **/
-	public void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {
+	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {
 		for (int h = (x-1);h<=(x+1);h++) {
 		//	System.out.println("revealing h ");
 			for (int k = (y-1);k<=(y+1);k++) {
@@ -397,13 +409,12 @@ public class Ile {
 			//	System.out.println("setting to " + (plateau[j][k].getType()+2));
 				tab[h][k] = ((plateau[h][k].getType())+2);
 				plateauGraph.resetHighlight(h, k);
-				
-				// 0 = l'equipe a vu cette case
-				// ce tab est mis à 1 au debut du jeu, des cases seront mises a 0 au cours du jeu
-				// mais jamais revenir a 1
+			
 				if (equipeCourante) {
+					System.out.println("x= " + h + " y=" + k + " revealed for team 1");
 					brouillardEquipe1[h][k] = 0;
 				} else {
+					System.out.println("x= " + h + " y=" + k + " revealed for team 2");
 					brouillardEquipe2[h][k] = 0;
 				}
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
@@ -414,8 +425,10 @@ public class Ile {
 	/**
 	 * Copie les valeurs d'un int[][] source à destination
 	 * 
+	 * @param source Le tableau source
+	 * @param dest Le tableau destination
+	 * 
 	 */
-	
 	private void copy(int[][] source, int[][] dest) {
 		for (int i = 1; i < plateau[0].length-1; i++) {
 			for (int j = 1; j < plateau[1].length-1; j++) {
@@ -424,8 +437,6 @@ public class Ile {
 		}
 	}
 	
-	
-
 	/**
 	 * Fonction de recuperation de la taille du plateau
 	 * 
@@ -454,17 +465,15 @@ public class Ile {
 	}
 
 	/**
-	 * Fonction qui permet de deplacer un personnage dans une direction
+	 * Cette méthode permet de vérifier que le deplacement se fait bien dans une des directions
+	 * possibles selon le Personnage et que c'est dans ses alentours immédiats (x-1/x+1, y-1/y+1)
 	 * 
-	 * @param perso
-	 * @param x
+	 * @param destination La position destination
+	 * @param posActuel La position actuelle du personnage
+	 * @param perso L'instance du personnage, sert a verifier les possibilités de déplacement
 	 * 
-	 *            Si x vaut 1 => GAUCHE Si x vaut 2 => HAUT Si x vaut 3 =>
-	 *            DROITE Si x vaut 4 => BAS
-	 * 
+	 * @return boolean
 	 */
-
-	
 	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso) {
 		// Cas thoeriquement valides
 		if (destination.x == posActuel.x+1 && destination.y == posActuel.y) {
@@ -494,17 +503,19 @@ public class Ile {
 				return deplacerV2(destination, posActuel, perso);
 			}
 		}
-		/*
-		System.out.println("Le perso " + perso.nom + " est actuellement a   " + perso.getPos());
-		System.out.println("Le perso " + perso.nom + " veut se deplacer a  " + destination.getLocation());
-		System.out.println("C'est un deplacement invalide");
-		*/
 		return false;
 	}
 	
 	
-	
-	public boolean deplacerV2(Position destination, Point posActuel, Personnage perso) {
+	/**
+	 * Cette methode exécute le déplacement dans Plateau[][] 
+	 *  
+	 * @param destination La position destination
+	 * @param posActuel La position actuelle du personnage
+	 * @param perso L'instance du personnage, sert a verifier s'il peut soulever les rochers
+	 * @return boolean si le deplacement est bien valide selon le personnage
+	 */
+	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso) {
 						
 		if (estVide(destination)) {
 			if (perso.getSurnavire()) { // Est sur navire
@@ -572,7 +583,11 @@ public class Ile {
 		return true;
 	}
 	
-
+	/**
+	 * Permet de savoir si la position est inoccupé
+	 * @param p La position vérifiée
+	 * @return boolean
+	 */
 	public boolean estVide(Position p) {
 		return (plateau[p.x][p.y].getType() == -1);
 	}
