@@ -24,6 +24,8 @@ public class Ile {
 	private int nbRochers = 0;
 	private Coffre coffre;
 	private Clef clef;
+	private Navire navireEquipe1;
+	private Navire navireEquipe2;
 
 	/**
 	 * Constructeur de la classe sans parametres
@@ -121,6 +123,8 @@ public class Ile {
 
 		plateau[xn][yn].setType(2);
 		plateau[xN][yN].setType(5);
+		navireEquipe1 = new Navire(getPos(2), true);
+		navireEquipe2 = new Navire(getPos(5), false);
 
 		// COFFRE
 		int x, y;
@@ -378,8 +382,8 @@ public class Ile {
 			}
 		}
 		// affecte la valeur pour le navire de l'equipe courante
-		tab[getNavire(equipeCourante).x][getNavire(equipeCourante).y] = plateau[getNavire(equipeCourante).x][getNavire(equipeCourante).y].getType() + 2;
-		plateauGraph.resetHighlight(getNavire(equipeCourante).x, getNavire(equipeCourante).y);
+		tab[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y] = plateau[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y].getType() + 2;
+		plateauGraph.resetHighlight(getPositionNavire(equipeCourante).x, getPositionNavire(equipeCourante).y);
 		
 		// sauvegarde du tableau dans un tab dedié a l'équipe
 		if (equipeCourante) {
@@ -504,7 +508,9 @@ public class Ile {
 	
 	
 	/**
-	 * Cette methode exécute le déplacement dans Plateau[][] 
+	 * Cette methode exécute le déplacement dans Parcelle[][]
+	 * De base, on considere qu'il est correcte. On écrit que les cas où il est faux
+	 * ou qu'on veut verifier certaines conditions ou imprimer des messages.
 	 *  
 	 * @param destination La position destination
 	 * @param posActuel La position actuelle du personnage
@@ -515,9 +521,10 @@ public class Ile {
 		plateauGraph.clearConsole();
 		plateauGraph.clearSave();
 		if (estVide(destination)) {
-			if (perso.getSurnavire()) { // Est sur navire
+			if (perso.getSurNavire()) { // Est sur navire
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-				perso.setSurnavire(false);
+				perso.setSurNavire(false);
+				getNavire(perso.getEquipe1()).retirePerso();
 			} else { // Sur sol
 				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 			}
@@ -577,16 +584,17 @@ public class Ile {
 				}
 			}
 		// Verifie si c'est le navire allie
-		} else if (estSonNavire(destination, perso.getEquipe())) {
-			if (perso.getSurnavire()) { // Est sur navire
-				plateau[perso.getPos().x][perso.getPos().y].setType(2);
-				perso.setSurnavire(false);
-			} else { // Sur sol
-				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+		} else if (estSonNavire(destination, perso.getEquipe1())) {
+			if (getNavire(perso.getEquipe1()).getPlateauVide()) {
+				perso.setPos(destination.getLocation());
+				perso.perdEnergie(1);
+				perso.setSurNavire(true);
+			} else {
+				System.out.println("Vous devez avoir au moins un personnage sur le plateau");
+				plateauGraph.println("Vous devez avoir au moins un personnage sur le plateau");
+				plateauGraph.save();
+				return false;
 			}
-			perso.setPos(destination.getLocation());
-			perso.perdEnergie(1);
-			perso.setSurnavire(true);
 		} else {
 			System.out.println("Ne peut pas se deplacer ici");
 			plateauGraph.println("Ne peut pas se deplacer ici");
@@ -605,8 +613,8 @@ public class Ile {
 		return (plateau[p.x][p.y].getType() == -1);
 	}
 
-	public boolean estSonNavire(Position p, int equipe) {
-		if (equipe == 1) {
+	public boolean estSonNavire(Position p, boolean equipe1) {
+		if (equipe1) {
 			return (plateau[p.x][p.y].getType() == 2);
 		} else {
 			return (plateau[p.x][p.y].getType() == 5);
@@ -625,7 +633,7 @@ public class Ile {
 		return p.equals(clef.getPos());
 	}
 	
-	public Position getNavire(boolean equipe1) {
+	public Position getPositionNavire(boolean equipe1) {
 		for (int i = 0; i < plateau[0].length; i++) {
 			for (int j = 0; j < plateau[1].length; j++) {
 				if (equipe1 && plateau[i][j].getType() == 2) {
@@ -637,6 +645,18 @@ public class Ile {
 		}
 		return null;
 	}
+	/**
+	 * Retourne l'instance de Navire de l'équipe.
+	 * @param equipe1 vous cherchez le navire de l'équipe 1
+	 * @return Navire
+	 */
+	public Navire getNavire(boolean equipe1) {
+		if (equipe1) {
+			return navireEquipe1;
+		} 
+		return navireEquipe2;
+	}
+	
 
 
 	

@@ -3,20 +3,27 @@ import java.awt.Point;
 public class Personnage {
 	protected String nom;
 	protected char symboleNom;
-	protected int type; // M�me que dans parcelle
+	protected int type; // Même que dans parcelle
 	protected String cheminImage;
-	protected int equipe;
+	protected boolean equipe1;
 	protected int energie;
 	protected Point pos;
 	protected boolean surNavire;
 	private boolean detientClef;
 	private boolean detientTresor;
 
-	
-	Personnage(String nom, int equipe, int energie, Position p, int type){
+	/**
+	 * Constructeur de Personnage
+	 * @param nom Son nom
+	 * @param equipe1 Appartient à l'équipe 1 
+	 * @param energie Energie de base
+	 * @param p Sa position de base
+	 * @param type Son type selon Parcelle
+	 */
+	Personnage(String nom, boolean equipe1, int energie, Position p, int type){
 		this.nom = nom;
 		this.energie = energie;
-		this.equipe = equipe;
+		this.equipe1 = equipe1;
 		this.surNavire = true;
 		this.type = type;
 		if (type == 0) {
@@ -30,7 +37,7 @@ public class Personnage {
 		}
 		this.pos = p;
 		
-		if(equipe == 1){
+		if(equipe1){
 			this.symboleNom = nom.charAt(0);
 		}else{
 			this.symboleNom = (nom.toUpperCase()).charAt(0);
@@ -63,7 +70,7 @@ public class Personnage {
 	
 	// retourne le type du navire selon le personnage
 	public int getNavireType(){
-		if(equipe == 1){
+		if(equipe1){
 			return 2;
 		}else{
 			return 5;
@@ -74,19 +81,19 @@ public class Personnage {
 		return symboleNom;
 	}
 	
-	public int getEquipe(){
-		return equipe;
+	public boolean getEquipe1(){
+		return equipe1;
 	}
 	
 	public int getEnergie(){
 		return energie;
 	}
 	
-	public boolean getSurnavire(){
+	public boolean getSurNavire(){
 		return this.surNavire;
 	}
 	
-	public void setSurnavire(boolean b){
+	public void setSurNavire(boolean b){
 		this.surNavire = b;
 	}
 	
@@ -106,7 +113,10 @@ public class Personnage {
 		this.detientTresor = set;
 	}
 	public String toString(){
-		return nom+" de l'équipe "+equipe+" possede "+energie+" points d'energie.";
+		if (equipe1) {
+			return nom+" de l'équipe 1 possede "+energie+" points d'energie.";
+		}
+		return nom+" de l'équipe 2 possede "+energie+" points d'energie.";
 	}
 	
 	Object[] actionsSimples = { "haut", "bas", "gauche", "droite" };

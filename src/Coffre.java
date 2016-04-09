@@ -5,7 +5,7 @@ public class Coffre {
 	private boolean estVide;
 	private int type;
 	
-	Coffre(Position p){
+	public Coffre(Position p){
 		this.pos = p;
 		this.estOuvert = false;
 		this.type = 7;

@@ -28,17 +28,18 @@ public class Map {
 		List<Personnage> equipe1 = new ArrayList<>();
 		List<Personnage> equipe2 = new ArrayList<>();
 		
-		Explorateur explo1 = new Explorateur("explorateur", 1, 100, plateau.getPos(2), 0);
-		Personnage voleur1 = new Voleur("voleur", 1, 100, plateau.getPos(2), 1);
+		Explorateur explo1 = new Explorateur("explorateur", true, 100, plateau.getPos(2), 0);
+		Personnage voleur1 = new Voleur("voleur", true, 100, plateau.getPos(2), 1);
 		equipe1.add(explo1);
 		equipe1.add(voleur1);
+		plateau.getNavire(true).addPersos(2);
 
-		Explorateur explo2 = new Explorateur("explorateur", 2, 100, plateau.getPos(5), 3);
-		Personnage voleur2 = new Voleur("voleur", 2, 100, plateau.getPos(5), 4);
+		Explorateur explo2 = new Explorateur("explorateur", false, 100, plateau.getPos(5), 3);
+		Personnage voleur2 = new Voleur("voleur", false, 100, plateau.getPos(5), 4);
 		equipe2.add(explo2);
 		equipe2.add(voleur2);
-		
-
+		plateau.getNavire(false).addPersos(2);
+				
 		/* INITIALISATIONS */
 		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph), jeu.getDebutJeu());
 

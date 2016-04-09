@@ -28,7 +28,7 @@ public class GestionJeu {
 		Personnage temp;
 		for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
 			temp = itr.next();
-			if (temp.getDetientTresor() && temp.getSurnavire()) {
+			if (temp.getDetientTresor() && temp.getSurNavire()) {
 				this.fini = true;
 				if (this.round % 2 == 0 ) {
 					this.equipeVainqueur = 1;
