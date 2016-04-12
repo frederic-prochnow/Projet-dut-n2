@@ -28,14 +28,18 @@ public class Map {
 		List<Personnage> equipe1 = new ArrayList<>();
 		List<Personnage> equipe2 = new ArrayList<>();
 		
-		Explorateur explo1 = new Explorateur("explorateur", true, 100, plateau.getPos(2), 0);
-		Personnage voleur1 = new Voleur("voleur", true, 100, plateau.getPos(2), 1);
+		Explorateur explo1 = new Explorateur("explorateur1-1", true, 100, plateau.getPos(2), 0);
+		Personnage voleur1 = new Voleur("voleur1-1", true, 100, plateau.getPos(2), 1);
+		Personnage voleur12 = new Voleur("voleur1-2", true, 100, plateau.getPos(2), 1);
+		Personnage voleur13 = new Voleur("voleur1-3", true, 100, plateau.getPos(2), 1);
 		equipe1.add(explo1);
 		equipe1.add(voleur1);
+		equipe1.add(voleur12);
+		equipe1.add(voleur13);
 		plateau.getNavire(true).addPersos(2);
 
-		Explorateur explo2 = new Explorateur("explorateur", false, 100, plateau.getPos(5), 3);
-		Personnage voleur2 = new Voleur("voleur", false, 100, plateau.getPos(5), 4);
+		Explorateur explo2 = new Explorateur("explorateur2-1", false, 100, plateau.getPos(5), 3);
+		Personnage voleur2 = new Voleur("voleur2-1", false, 100, plateau.getPos(5), 4);
 		equipe2.add(explo2);
 		equipe2.add(voleur2);
 		plateau.getNavire(false).addPersos(2);
@@ -51,6 +55,7 @@ public class Map {
 		List<Personnage> presentsEquipe = new ArrayList<>();
 		Personnage personnnageSelectionne;
 		Position confirmationFinTour = new Position(-1, -1);
+		int persoSelec = -1;
 		
 		boolean bonneSelectionEquipe = true; 
 		boolean deplacementInvalide = false;
@@ -76,6 +81,7 @@ public class Map {
 			plateauGraph.ajouterSelectionPersos(img, new ArrayList<Personnage>());
 			deplacementInvalide = false;
 			confirmationFinTour.setLocation(-1, -1);
+			persoSelec = -1;
 				
 			// ici on clique sur une case d'un de notre personnage
 			// tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide (voir methode), la boucle continue a tourner
@@ -98,9 +104,8 @@ public class Map {
 					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2);
 					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
 				}
-				
+				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
 			}
-			personnnageSelectionne = presentsEquipe.get(0);
 						
 			// CAS : il y a plusieurs persos sur une case : le debut du jeu
 			if ( presentsEquipe.size() > 1) {
@@ -110,26 +115,17 @@ public class Map {
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
 				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
 				
-				// si la selection est pas vide = on  boucle
-				// a savoir que getPerso() return -1 (selection vide) si la souris est appuyé en dehors de PersoPane
-				while (selectionPrecisPosition.getLocation().equals(new Position(-1, -1))) {
+				while (persoSelec == -1) {
 					plateauGraph.waitEvent(5000,true);
-					selectionPrecisPosition.setLocation(-1,plateauGraph.getPerso(plateauGraph.getCurrentEvent()));
+					persoSelec = plateauGraph.getPerso();
 				}
-				
-				if (selectionPrecisPosition.equals(new Position(-1, 0))) {
-					personnnageSelectionne = presentsEquipe.get(0);
-				} else  if (selectionPrecisPosition.equals(new Position(-1, 1))) {
-					personnnageSelectionne = presentsEquipe.get(1);
-				}
-				presentsEquipe.clear();
-				presentsEquipe.add(personnnageSelectionne);
+				personnnageSelectionne = presentsEquipe.get(persoSelec);
+			} else {
+				personnnageSelectionne = presentsEquipe.get(0);
 			}
 			
 			plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 			
-			// on met que la perso selectionne (voir methode)
-			plateauGraph.ajouterSelectionPersos(img, presentsEquipe);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 			
 			while (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) {
@@ -163,9 +159,7 @@ public class Map {
 				plateauGraph.waitEvent(5000, false);
 				confirmationFinTour.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 			}
-
 			jeu.nextRound();
-		
 		}
 		plateauGraph.clearConsole();
 		plateauGraph.println(jeu.toString());

@@ -2,6 +2,9 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,10 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -29,8 +31,9 @@ public class Plateau {
 	private GraphicPane graphic ;
 	private ConsolePane console ;
 	private JPanel PersoPane ;
-	JPanel[] liste;
-	String[] img = {"images/1.explorateur.png","images/1.piegeur.png","images/1.navire.png","images/2.explorateur.png","images/2.piegeur.png","images/2.navire.png"};
+	private JButton[] liste;
+	private String[] img = {"images/1.explorateur.png","images/1.piegeur.png","images/1.navire.png","images/2.explorateur.png","images/2.piegeur.png","images/2.navire.png"};
+	private int persoSelectionne;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -120,9 +123,10 @@ public class Plateau {
 		graphic = new GraphicPane(images, taille) ;
 		console = null ;
 		PersoPane = new JPanel();
-		PersoPane.setLayout(new BoxLayout(PersoPane, BoxLayout.Y_AXIS));
-		PersoPane.setPreferredSize(new Dimension(50, 200));
+		PersoPane.setLayout(new GridLayout(2,3));
+		PersoPane.setPreferredSize(new Dimension(100, 100));
 		liste = null;
+		persoSelectionne = -1;
 
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
@@ -206,6 +210,7 @@ public class Plateau {
 	private void prepareWaitEvent(boolean paneSelectionPrecis) {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
+		persoSelectionne = -1;
 		if (paneSelectionPrecis) {
 			PersoPane.requestFocusInWindow() ;
 		} else {
@@ -225,13 +230,24 @@ public class Plateau {
 	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis) {
 		int time = 0 ;
 		prepareWaitEvent(paneSelectionPrecis) ;
-		while ((currentEvent == null) && (time < timeout)) {
-			try {
-				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		if (paneSelectionPrecis) {
+			while ((persoSelectionne == -1) && (time < timeout)) {
+				try {
+					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				time += 100 ;
 			}
-			time += 100 ;
+		} else {
+			while ((currentEvent == null) && (time < timeout)) {
+				try {
+					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				time += 100 ;
+			}
 		}
 		return currentEvent ;
 	}
@@ -284,11 +300,7 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		if (console == null) {
-			dim.height += 10 ;
-		} else {
-			dim.height += 150 ;
-		}
+		dim.height += 100;
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
 	}
@@ -303,29 +315,41 @@ public class Plateau {
 	 * @param event L'évenement souris capturé.
 	 * @return int, le y du perso selectionne dans PersoPane
 	 */
-	public int getPerso(MouseEvent event) {
-		if (event != null) {
-			if (!event.getComponent().equals(PersoPane)) {
-				return -1;
-			}
-			return (event.getY()+25) / 100; // divise par 100 (total = 200) pour l'instant car deux icones qui prennent 100y
-		}
-		return -1;
+	public int getPerso() {
+		return persoSelectionne;
 	}
 		
 	// on designe chaque perso de la selection des persos que nous avons obtenus precedemment
 	// a une JPanel qui sera mis dans un grand JPanel (PersoPane)
 	public void ajouterSelectionPersos(String[] img, List<Personnage> selection) {
 		PersoPane.removeAll();
-		liste = new JPanel[selection.size()];
+		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
-			JLabel label = new JLabel("", image, JLabel.CENTER);
-			liste[i] = new JPanel(new BorderLayout());
-			liste[i].add(label,BorderLayout.CENTER);
+			liste[i] = new JButton(image);
+			liste[i].setOpaque(true);
+			liste[i].setBackground(Color.WHITE);
+			liste[i].setActionCommand("" + i);
+			liste[i].addActionListener(new Action());
+			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
 		}
 	}
+	
+	private class Action implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			for (int i=0;i<liste.length;i++) {
+				// si ce n'est psa le bouton appuyé, on le desactive
+				if (!(""+i).equals(e.getActionCommand())) {
+					liste[i].setEnabled(false);
+				} else {
+					persoSelectionne = i;
+				}
+			}
+		}		
+	}
+	
 	
 	/**
 	 * Affiche un message dans la partie texte du plateau.

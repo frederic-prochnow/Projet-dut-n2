@@ -47,7 +47,6 @@ public class Ile {
 
 		String taille = JOptionPane.showInputDialog(null, "Taille de l'ile? (max: " + maxHeight + ")");
 		tailleI = Integer.valueOf(taille);
-		System.out.println(maxHeight);
 		while (tailleI < 10 || tailleI > maxHeight) {
 			JOptionPane.showMessageDialog(null, "Cette valeur n'est pas autorisee");
 			taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
