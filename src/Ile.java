@@ -28,6 +28,10 @@ public class Ile {
 	private Clef clef;
 	private Navire navireEquipe1;
 	private Navire navireEquipe2;
+	private Position tagDeE1 = new Position(-1, -1);
+	private Position tagDeV1 = new Position(-1, -1);
+	private Position tagDeE2 = new Position(-1, -1);
+	private Position tagDeV2 = new Position(-1, -1);
 
 	/**
 	 * Constructeur de la classe sans parametres
@@ -345,11 +349,7 @@ public class Ile {
 	 */
 	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph) {
 		int[][] tab = new int[plateau[0].length][plateau[1].length];
-		if (equipeCourante) {
-			copy(tabIconesGraphiqueEquipe1, tab);
-		} else {
-			copy(tabIconesGraphiqueEquipe2, tab);
-		}
+
 		// reset eau
 		for (int i = 0; i < plateau.length; i++) {
 			tab[i][0] = 9 +2;
@@ -362,7 +362,7 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// 0 pour sable
 				tab[i][j] = 1;
-				plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
+				plateauGraph.setHighlight(i, j, Color.BLACK);
 			}
 		}
 		// Ici on affiche les cases precedemment vus avec a reveler() et brouillardEquipe.
@@ -371,8 +371,10 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				if (equipeCourante && brouillardEquipe1[i][j] == 0) {
 						tab[i][j] = tabIconesGraphiqueEquipe1[i][j];
+						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
 				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0) {
 						tab[i][j] = tabIconesGraphiqueEquipe2[i][j];
+						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
 				}
 			}
 		}
@@ -412,7 +414,7 @@ public class Ile {
 	 * @param equipeCourante Permet de connaitre l'équipe à qui appartient le jeu
 	 *  
 	 **/
-	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {
+	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {		
 		for (int h = (x-1);h<=(x+1);h++) {
 			for (int k = (y-1);k<=(y+1);k++) {
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
@@ -421,10 +423,37 @@ public class Ile {
 			
 				if (equipeCourante) {
 					brouillardEquipe1[h][k] = 0;
+					// si la case actuellement vue est l'explorateur de l'équipe adverse, on efface l'ancien tag de cet explorateur
+					if (plateau[h][k].getType()==3) {
+						removeOldTag(tagDeE2, tab);
+						tagDeE2.setLocation(h, k);
+					} else if (plateau[h][k].getType()==4) {
+						removeOldTag(tagDeV2, tab);
+						tagDeV2.setLocation(h, k);
+					}
 				} else {
 					brouillardEquipe2[h][k] = 0;
+					if (plateau[h][k].getType()==0) {
+						removeOldTag(tagDeE1, tab);
+						tagDeE1.setLocation(h, k);
+					} else if (plateau[h][k].getType()==1) {
+						removeOldTag(tagDeV1, tab);
+						tagDeV1.setLocation(h, k);
+					}
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Le "tag" est la position ancienne d'un des personnages vu par l'autre equipe
+	 * Retire le vieux tag dans le tab
+	 * @param tag Position du tag a retirer
+	 * @param tab le tableau sur lequel on travaille
+	 */
+	private void removeOldTag(Position tag, int[][] tab) {
+		if (!tag.equals(new Position(-1, -1))) {
+			tab[tag.x][tag.y] = plateau[tag.x][tag.y].getType()+2;
 		}
 	}
 	
@@ -503,7 +532,6 @@ public class Ile {
 				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 			else if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y-1))) {
-				System.out.println("voleur se deplace haut a droite");
 				return deplacerV2(destination, posActuel, perso, plateauGraph);
 			}
 			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y-1))) {

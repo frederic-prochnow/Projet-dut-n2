@@ -127,33 +127,4 @@ public class Personnage {
 		return -1;
 	}
 
-	public boolean deplacementInvalide(Point destination) {
-		if ((destination.x == (pos.x+1)) && (destination.y == pos.y)) {
-			return false;
-		}
-		else if ((destination.x == (pos.x-1)) && (destination.y == pos.y)) {
-			return false;
-		}
-		else if ((destination.y == (pos.y+1)) && (destination.x == pos.x)) {
-			return false;
-		}
-		else if ((destination.y == (pos.y-1)) && (destination.x == pos.x)) {
-			return false;
-		}
-		if (this instanceof Voleur) {
-			if ((destination.x == (pos.x+1)) && (destination.y == pos.y+1)) {
-				return false;
-			}
-			else if ((destination.x == (pos.x-1)) && (destination.y == pos.y+1)) {
-				return false;
-			}
-			else if ((destination.y == (pos.x+1)) && (destination.y == pos.y-1)) {
-				return false;
-			}
-			else if ((destination.y == (pos.x-1)) && (destination.y == pos.y-1)) {
-				return false;
-			}
-		}
-		return true;
-	}
 }

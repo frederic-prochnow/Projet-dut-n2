@@ -50,7 +50,6 @@ public class Map {
 		/* ACTIONS */
 		
 		Position persoSelectionPosition = new Position(-1, -1);
-		Position selectionPrecisPosition = new Position(-1,-1);
 		Position choixDeplacementPosition = new Position(-1, -1);
 		List<Personnage> presentsEquipe = new ArrayList<>();
 		Personnage personnnageSelectionne;
@@ -76,9 +75,8 @@ public class Map {
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
 			choixDeplacementPosition.setLocation(-1, -1);
-			selectionPrecisPosition.setLocation(-1, -1);
 			presentsEquipe.clear();
-			plateauGraph.ajouterSelectionPersos(img, new ArrayList<Personnage>());
+			plateauGraph.ajouterSelectionPersos(new ArrayList<Personnage>());
 			deplacementInvalide = false;
 			confirmationFinTour.setLocation(-1, -1);
 			persoSelec = -1;
@@ -104,7 +102,7 @@ public class Map {
 					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2);
 					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
 				}
-				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
+				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
 						
 			// CAS : il y a plusieurs persos sur une case : le debut du jeu
@@ -113,11 +111,11 @@ public class Map {
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
 				plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
-				plateauGraph.ajouterSelectionPersos(img,presentsEquipe);
+				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 				
 				while (persoSelec == -1) {
 					plateauGraph.waitEvent(5000,true);
-					persoSelec = plateauGraph.getPerso();
+					persoSelec = plateauGraph.getPersoPrecis();
 				}
 				personnnageSelectionne = presentsEquipe.get(persoSelec);
 			} else {

@@ -33,7 +33,7 @@ public class Plateau {
 	private JPanel PersoPane ;
 	private JButton[] liste;
 	private String[] img = {"images/1.explorateur.png","images/1.piegeur.png","images/1.navire.png","images/2.explorateur.png","images/2.piegeur.png","images/2.navire.png"};
-	private int persoSelectionne;
+	private int persoPrecis;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -126,7 +126,7 @@ public class Plateau {
 		PersoPane.setLayout(new GridLayout(2,3));
 		PersoPane.setPreferredSize(new Dimension(100, 100));
 		liste = null;
-		persoSelectionne = -1;
+		persoPrecis = -1;
 
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
@@ -210,7 +210,7 @@ public class Plateau {
 	private void prepareWaitEvent(boolean paneSelectionPrecis) {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
-		persoSelectionne = -1;
+		persoPrecis = -1;
 		if (paneSelectionPrecis) {
 			PersoPane.requestFocusInWindow() ;
 		} else {
@@ -231,7 +231,7 @@ public class Plateau {
 		int time = 0 ;
 		prepareWaitEvent(paneSelectionPrecis) ;
 		if (paneSelectionPrecis) {
-			while ((persoSelectionne == -1) && (time < timeout)) {
+			while ((persoPrecis == -1) && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -315,13 +315,15 @@ public class Plateau {
 	 * @param event L'évenement souris capturé.
 	 * @return int, le y du perso selectionne dans PersoPane
 	 */
-	public int getPerso() {
-		return persoSelectionne;
+	public int getPersoPrecis() {
+		return persoPrecis;
 	}
 		
-	// on designe chaque perso de la selection des persos que nous avons obtenus precedemment
-	// a une JPanel qui sera mis dans un grand JPanel (PersoPane)
-	public void ajouterSelectionPersos(String[] img, List<Personnage> selection) {
+	/**
+	 * Chaque perso sur la position est un JButton qui sera ajouté dans persoPane
+	 * @param selection
+	 */
+	public void ajouterSelectionPersos(List<Personnage> selection) {
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -336,6 +338,10 @@ public class Plateau {
 		}
 	}
 	
+	/**
+	 * On desactive les boutons si on choisit deja une
+	 *
+	 */
 	private class Action implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -344,7 +350,7 @@ public class Plateau {
 				if (!(""+i).equals(e.getActionCommand())) {
 					liste[i].setEnabled(false);
 				} else {
-					persoSelectionne = i;
+					persoPrecis = i;
 				}
 			}
 		}		
