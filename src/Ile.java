@@ -1,5 +1,7 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -37,10 +39,16 @@ public class Ile {
 	Ile() {
 		int tailleI = 0;
 		int percentR = 10;
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
+		// 50 par case, -3 car la console prend la hauteur de 3 cases
+		int maxHeight = (int) (screenSize.getHeight()/50) -3;
 
-		String taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
+		String taille = JOptionPane.showInputDialog(null, "Taille de l'ile? (max: " + maxHeight + ")");
 		tailleI = Integer.valueOf(taille);
-		while (tailleI < 10 || tailleI > 25) {
+		System.out.println(maxHeight);
+		while (tailleI < 10 || tailleI > maxHeight) {
 			JOptionPane.showMessageDialog(null, "Cette valeur n'est pas autorisee");
 			taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
 			tailleI = Integer.valueOf(taille);
@@ -175,7 +183,6 @@ public class Ile {
 				}
 			}
 		}
-		System.out.println("fini les rochers");
 	}
 
 	/**
