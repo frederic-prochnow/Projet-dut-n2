@@ -14,12 +14,17 @@ public class Map {
 	 * Main de test et applications des classes Ile et Parcelle
 	 */
 	public static void main(String[] args) {
-
+	
 		/* DECLARATION DES VARIABLES */
 		String[] img = { "images/sable.png", "images/1.explorateur.png", "images/1.voleur.png", "images/1.navire.png",
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
 				"images/coffre.png", "images/cle.jpg", "images/mer.png" };
-		Ile plateau = new Ile();
+		Menu menu = new Menu();
+		menu.affichage();
+		while (!menu.getConfirme()) {
+			menu.waitValidation(10000);
+		}
+		Ile plateau = new Ile(menu.getTaille(), menu.getRochers());
 		Plateau plateauGraph = new Plateau(img, plateau.getSize(),true);
 		GestionJeu jeu = new GestionJeu(true);
 

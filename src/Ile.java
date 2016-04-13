@@ -17,6 +17,8 @@ public class Ile {
 	/**
 	 * attributs de la classe
 	 */
+	private int tailleI;
+	private int percentR;
 	private Parcelle[][] plateau;
 	private int[][] tabIconesGraphiqueEquipe1;
 	private int[][] tabIconesGraphiqueEquipe2;
@@ -40,38 +42,17 @@ public class Ile {
 	 * Ensuite, ceci est traduit vers un int[][] (geIcones) dont chaque int correspond a une image
 	 * 
 	 */
-	Ile() {
-		int tailleI = 0;
-		int percentR = 10;
+	Ile(int tailleI, int pourcentageRochers) {
+		this.tailleI = tailleI;
+		this.percentR = pourcentageRochers;
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
-		// 50 par case, -3 car la console prend la hauteur de 3 cases
-		int maxHeight = (int) (screenSize.getHeight()/50) -3;
-
-		String taille = JOptionPane.showInputDialog(null, "Taille de l'ile? (max: " + maxHeight + ")");
-		tailleI = Integer.valueOf(taille);
-		while (tailleI < 10 || tailleI > maxHeight) {
-			JOptionPane.showMessageDialog(null, "Cette valeur n'est pas autorisee");
-			taille = JOptionPane.showInputDialog(null, "Taille de l'ile? ");
-			tailleI = Integer.valueOf(taille);
-		}
-
-		String percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
-		percentR = Integer.valueOf(percent);
-		while (percentR < 0 || percentR > 40) {
-			JOptionPane.showMessageDialog(null, "Cette valeur n'est pas autorisee");
-			percent = JOptionPane.showInputDialog(null, "Pourcentage de rochers ?");
-			percentR = Integer.valueOf(percent);
-		}
-
 		this.plateau = new Parcelle[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe1 = new int[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe2 = new int[tailleI][tailleI];
 		this.brouillardEquipe1 = new int[tailleI][tailleI];
 		this.brouillardEquipe2 = new int[tailleI][tailleI];
 
-		initialiser(percentR);
+		initialiser(pourcentageRochers);
 	}
 
 	/**

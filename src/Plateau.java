@@ -300,7 +300,11 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		dim.height += 100;
+		if (console == null) {
+			dim.height += 10 ;
+		} else {
+			dim.height += 150 ;
+		}
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
 	}
