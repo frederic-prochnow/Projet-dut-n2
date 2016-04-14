@@ -5,7 +5,7 @@
  * (3/3) Brouillard de guerre, sauvegarde les positions deja vus et visualisation
  des positions pas encore decouverts.
 
- * (1/2) mise a jour des vielles positions lorsuqu'on rencontre un meme type de 
- personnage adverse sur une nouvelle position. A completer avec une tableau de 
- longeueur variable selon le nombre de personnages et types adverses. A 
- l'instant ne distingue pas les persos differents de meme type.
+ * (2/2) mise à jour de la case du plateau où on a dernierement vu un personnage si on le rencontre
+ de nouveau sur une autre case. Attenion : s'il se déplace pendant son tour, alors quand cela revient
+ a notre tour, on n'aura pas un tag car on peut actuellement voir où il était. C'est au joueur de retenir
+ s'il quelqu'un a disparu entre temps.

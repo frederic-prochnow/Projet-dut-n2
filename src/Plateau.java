@@ -32,7 +32,6 @@ public class Plateau {
 	private ConsolePane console ;
 	private JPanel PersoPane ;
 	private JButton[] liste;
-	private String[] img = {"images/1.explorateur.png","images/1.piegeur.png","images/1.navire.png","images/2.explorateur.png","images/2.piegeur.png","images/2.navire.png"};
 	private int persoPrecis;
 	private Color sable;
 	/**
@@ -337,7 +336,7 @@ public class Plateau {
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
 			liste[i].setBackground(sable);
-			liste[i].setActionCommand("" + i);
+			liste[i].setActionCommand("perso_" + i);
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
@@ -353,7 +352,7 @@ public class Plateau {
 		public void actionPerformed(ActionEvent e) {
 			for (int i=0;i<liste.length;i++) {
 				// si ce n'est psa le bouton appuyé, on le desactive
-				if (!(""+i).equals(e.getActionCommand())) {
+				if (!("perso_"+i).equals(e.getActionCommand())) {
 					liste[i].setEnabled(false);
 					liste[i].setBackground(Color.LIGHT_GRAY);
 				} else {

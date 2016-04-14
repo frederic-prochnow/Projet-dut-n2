@@ -11,6 +11,7 @@ public class Personnage {
 	protected boolean surNavire;
 	private boolean detientClef;
 	private boolean detientTresor;
+	private Position dernierTag;
 
 	/**
 	 * Constructeur de Personnage
@@ -36,6 +37,7 @@ public class Personnage {
 			this.cheminImage = "images/2.voleur.png";
 		}
 		this.pos = p;
+		this.dernierTag = new Position(-1, -1);
 		
 		if(equipe1){
 			this.symboleNom = nom.charAt(0);
@@ -126,5 +128,12 @@ public class Personnage {
 	public int choixDeplacement(){
 		return -1;
 	}
-
+	
+	public Position getDernierTag() {
+		return this.dernierTag;
+	}
+	
+	public void setDernierTag(int x, int y) {
+		this.dernierTag.setLocation(x, y);
+	}
 }

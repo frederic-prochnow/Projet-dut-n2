@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -17,8 +19,6 @@ public class Ile {
 	/**
 	 * attributs de la classe
 	 */
-	private int tailleI;
-	private int percentR;
 	private Parcelle[][] plateau;
 	private int[][] tabIconesGraphiqueEquipe1;
 	private int[][] tabIconesGraphiqueEquipe2;
@@ -30,10 +30,6 @@ public class Ile {
 	private Clef clef;
 	private Navire navireEquipe1;
 	private Navire navireEquipe2;
-	private Position tagDeE1 = new Position(-1, -1);
-	private Position tagDeV1 = new Position(-1, -1);
-	private Position tagDeE2 = new Position(-1, -1);
-	private Position tagDeV2 = new Position(-1, -1);
 
 	/**
 	 * Constructeur de la classe sans parametres
@@ -42,10 +38,7 @@ public class Ile {
 	 * Ensuite, ceci est traduit vers un int[][] (geIcones) dont chaque int correspond a une image
 	 * 
 	 */
-	Ile(int tailleI, int pourcentageRochers) {
-		this.tailleI = tailleI;
-		this.percentR = pourcentageRochers;
-		
+	Ile(int tailleI, int pourcentageRochers) {		
 		this.plateau = new Parcelle[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe1 = new int[tailleI][tailleI];
 		this.tabIconesGraphiqueEquipe2 = new int[tailleI][tailleI];
@@ -146,7 +139,6 @@ public class Ile {
 		// ROCHERS
 		int xR, yR;
 		while (pourcentageActuel < pourcentage / 100) {
-
 			// on ajoute un rocher random
 			xR = r.nextInt(plateau.length - 2) + 1;
 			yR = r.nextInt(plateau.length - 2) + 1;
@@ -314,21 +306,19 @@ public class Ile {
 		}
 		return res;
 	}
-
 	/**
-	 * Traduit les types de Parcelle[][] vers un int[][] intermédiaire au vrai tableau de l'équipe.
-	 * Ceci permet de travailler sur une variable et éviter les if(equipeCourante).
-	 * Ces int correspondent a des images dans setJeu(int[][] jeu) de la classe Plateau.
-	 * Les cases qu'on ne peut ACTUELLEMENT voir sont highlight en gris clair
-	 * On sauvegarde les cases deja vus, ainsi, si on trouve un rocher puis s'éloigne, il sera toujours affiché
-	 * mais sous un highlight gris clair
+	 * Traduit les types de Parcelle[][] vers un int[][] intermédiaire.
+	 * Ceci permet de travailler sur une variable au lieu de 2.
+	 * Les cases non vus sont highlight en noir, et ceux precedemment vus sont en gris clair.
+	 * On sauvegarde les cases deja vus.
 	 * 
 	 * @param equipeCourante Permet de connaitre à qui appartient le tour
 	 * @param plateauGraph On travaille sur l'instance pour ajouter les highlight
-	 * 
+	 * @param equipe1 La liste des personnages de l'équipe 1 pour reveler()
+	 * @param equipe2 La liste des personnages de l'équipe 2 pour reveler()
 	 * @return int[][]. Ce tab est reinitialise avec du sable a chaque fois, à optimiser
 	 */
-	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph) {
+	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph, List<Personnage> equipe1, List<Personnage> equipe2) {
 		int[][] tab = new int[plateau[0].length][plateau[1].length];
 
 		// reset eau
@@ -365,9 +355,9 @@ public class Ile {
 			for (int j = 1; j < plateau[1].length-1; j++) {
 				// on s'assure qu'on revele bien les entourages d'un personnages s'il correspond à l'équipe dont le tour courant appartient
 				if (equipeCourante && plateau[i][j].getEquipe1()) {
-					reveler(i,j, tab, plateauGraph, equipeCourante);
+					reveler(i,j, tab, plateauGraph, equipeCourante, equipe1, equipe2);
 				} else if ( (!equipeCourante) && plateau[i][j].getEquipe2() ) {
-					reveler(i,j, tab, plateauGraph, equipeCourante);
+					reveler(i,j, tab, plateauGraph, equipeCourante, equipe1, equipe2);
 				}
 			}
 		}
@@ -383,19 +373,20 @@ public class Ile {
 		}
 		return tab;
 	}
-	
 	/**
 	 * Affecte les vrais valeurs a tabIconesGraphiques de x-1 à x+1 pour y-1 à y+1.
 	 * Clear le highlight de ces cases
 	 * 
 	 * @param x Le x de la case centre de révélation
 	 * @param y Le y de la case centre de révélation
-	 * @param tab Le tableau qu'on travaille dessus
+	 * @param tab Le tableau qu'on travaille dessus = celui qui est affiché à l'équipe courante
 	 * @param plateauGraph On travaille sur l'instance pour retirer les highlight
-	 * @param equipeCourante Permet de connaitre l'équipe à qui appartient le jeu
-	 *  
-	 **/
-	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante) {		
+	 * @param equipeCourante Permet de connaitre l'équipe à qui appartient le tour
+	 * @param equipe1 La liste des personnages de l'équipe 1
+	 * @param equipe2 La liste des personnages de l'équipe 2
+	 */
+	private void reveler(int x, int y, int[][] tab, Plateau plateauGraph, boolean equipeCourante, List<Personnage> equipe1, List<Personnage> equipe2) {
+		Personnage temp;
 		for (int h = (x-1);h<=(x+1);h++) {
 			for (int k = (y-1);k<=(y+1);k++) {
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
@@ -404,22 +395,21 @@ public class Ile {
 			
 				if (equipeCourante) {
 					brouillardEquipe1[h][k] = 0;
-					// si la case actuellement vue est l'explorateur de l'équipe adverse, on efface l'ancien tag de cet explorateur
-					if (plateau[h][k].getType()==3) {
-						removeOldTag(tagDeE2, tab);
-						tagDeE2.setLocation(h, k);
-					} else if (plateau[h][k].getType()==4) {
-						removeOldTag(tagDeV2, tab);
-						tagDeV2.setLocation(h, k);
+					for (Iterator<Personnage> persoIt = equipe2.iterator(); persoIt.hasNext();) {
+						temp = persoIt.next();
+						if (temp.getPos().equals(new Point(h, k))) {
+							removeTagDansTableau(temp, tab);
+							temp.setDernierTag(h, k);
+						}
 					}
 				} else {
 					brouillardEquipe2[h][k] = 0;
-					if (plateau[h][k].getType()==0) {
-						removeOldTag(tagDeE1, tab);
-						tagDeE1.setLocation(h, k);
-					} else if (plateau[h][k].getType()==1) {
-						removeOldTag(tagDeV1, tab);
-						tagDeV1.setLocation(h, k);
+					for (Iterator<Personnage> persoIt = equipe1.iterator(); persoIt.hasNext();) {
+						temp = persoIt.next();
+						if (temp.getPos().equals(new Point(h, k))) {
+							removeTagDansTableau(temp, tab);
+							temp.setDernierTag(h, k);
+						}
 					}
 				}
 			}
@@ -428,13 +418,14 @@ public class Ile {
 	
 	/**
 	 * Le "tag" est la position ancienne d'un des personnages vu par l'autre equipe
+	 * par l'intermédiaire du type dans Parcelle[][]
 	 * Retire le vieux tag dans le tab
 	 * @param tag Position du tag a retirer
 	 * @param tab le tableau sur lequel on travaille
 	 */
-	private void removeOldTag(Position tag, int[][] tab) {
-		if (!tag.equals(new Position(-1, -1))) {
-			tab[tag.x][tag.y] = plateau[tag.x][tag.y].getType()+2;
+	private void removeTagDansTableau(Personnage perso, int[][] tab) {
+		if (!perso.getDernierTag().equals(new Position(-1, -1))) {
+			tab[perso.getDernierTag().x][perso.getDernierTag().y] = plateau[perso.getDernierTag().x][perso.getDernierTag().y].getType()+2;
 		}
 	}
 	

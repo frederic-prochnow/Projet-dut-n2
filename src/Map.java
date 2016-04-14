@@ -50,7 +50,7 @@ public class Map {
 		plateau.getNavire(false).addPersos(2);
 				
 		/* INITIALISATIONS */
-		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph), jeu.getDebutJeu());
+		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph, equipe1, equipe2), jeu.getDebutJeu());
 
 		/* ACTIONS */
 		
@@ -75,7 +75,7 @@ public class Map {
 			}
 			
 			plateauGraph.clearHighlight();
-			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu());
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
 					
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
@@ -152,7 +152,7 @@ public class Map {
 				}
 			}
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
-			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu());
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
 						
 			while (confirmationFinTour.equals(new Position(-1, -1))) {
 				plateauGraph.clearConsole();
@@ -169,16 +169,16 @@ public class Map {
 	}
 
 	/* permet de rafraichir l'affichage apres chaque action */
-	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipe1, int waitTime, boolean debut) {
-		refresh(plateau, plateauGraph, equipe1, debut);
+	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, int waitTime, boolean debut, List<Personnage> equipe1, List<Personnage> equipe2) {
+		refresh(plateau, plateauGraph, equipeCourante, debut, equipe1, equipe2);
 		try {
 			Thread.sleep(waitTime);
 		} catch (Exception ie) {
 		}
 	}
 	
-	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, boolean debut) {
-		plateauGraph.setJeu(plateau.getImagesCorrespondants(equipeCourante, plateauGraph), debut);
+	public static void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, boolean debut, List<Personnage> equipe1, List<Personnage> equipe2) {
+		plateauGraph.setJeu(plateau.getImagesCorrespondants(equipeCourante, plateauGraph, equipe1, equipe2), debut);
 		plateauGraph.affichage(); // Affichage graphique
 	}
 }
