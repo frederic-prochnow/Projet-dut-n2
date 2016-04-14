@@ -34,6 +34,7 @@ public class Plateau {
 	private JButton[] liste;
 	private String[] img = {"images/1.explorateur.png","images/1.piegeur.png","images/1.navire.png","images/2.explorateur.png","images/2.piegeur.png","images/2.navire.png"};
 	private int persoPrecis;
+	private Color sable;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -127,6 +128,7 @@ public class Plateau {
 		PersoPane.setPreferredSize(new Dimension(100, 100));
 		liste = null;
 		persoPrecis = -1;
+		sable = new Color(239, 228, 176);
 
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
@@ -303,7 +305,7 @@ public class Plateau {
 		if (console == null) {
 			dim.height += 10 ;
 		} else {
-			dim.height += 150 ;
+			dim.height += 100 ;
 		}
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
@@ -334,7 +336,7 @@ public class Plateau {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
-			liste[i].setBackground(Color.WHITE);
+			liste[i].setBackground(sable);
 			liste[i].setActionCommand("" + i);
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
@@ -353,6 +355,7 @@ public class Plateau {
 				// si ce n'est psa le bouton appuyé, on le desactive
 				if (!(""+i).equals(e.getActionCommand())) {
 					liste[i].setEnabled(false);
+					liste[i].setBackground(Color.LIGHT_GRAY);
 				} else {
 					persoPrecis = i;
 				}

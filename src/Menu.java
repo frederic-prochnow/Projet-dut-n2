@@ -42,7 +42,7 @@ public class Menu {
 	 */
 	public Menu() {
 		// frame et panels
-		frame = new JFrame("Treasue Hunt");
+		frame = new JFrame("Treasure Hunt");
 		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		typeJeuPanel = new JPanel();
@@ -68,13 +68,18 @@ public class Menu {
 		versusOrdi = false;
 		
 		// Choix taille et rochers
-		tailleLabel = new JLabel("Taile de l'île ? ");
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
+		// 50 par case, -3 car la console prend la hauteur de 3 cases
+		maxHeight = (int) (screenSize.getHeight()/50) -2;
+		
+		tailleLabel = new JLabel("Taile de l'île ? (max: " + maxHeight + ") ");
 		tailleField = new JTextField();
 		tailleField.setPreferredSize(new Dimension(50, 25));
 		tailleField.setActionCommand("taille");
 		tailleField.addActionListener(new fieldAction());
 		
-		rochersLabel = new JLabel("Quel Pourcentage de rochers ? ");
+		rochersLabel = new JLabel("Quel Pourcentage de rochers ? (0 - 40%)");
 		rochersField = new JTextField();
 		rochersField.setPreferredSize(new Dimension(50, 25));
 		rochersField.setActionCommand("rochers");
@@ -93,11 +98,6 @@ public class Menu {
 		confirmation.add(validerButton);
 		confirme = false;
 		choixValides = true;
-		
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
-		// 50 par case, -3 car la console prend la hauteur de 3 cases
-		maxHeight = (int) (screenSize.getHeight()/50) -3;
 	}
 	/**
 	 * Remet en place le menu et le rend visible
@@ -151,6 +151,8 @@ public class Menu {
 					choixValides = false;
 				}
 				if (choixValides) {
+					// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
+					// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
 					confirme = true;
 					masquer();
 				}
@@ -208,6 +210,7 @@ public class Menu {
 	}
 	
 	public void waitValidation(int timeout) {
+		frame.requestFocusInWindow();
 		int time = 0;
 		while (!getConfirme() && (time < timeout)) {
 			try {
