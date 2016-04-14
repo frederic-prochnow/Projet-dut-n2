@@ -3,7 +3,10 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class Menu {
 
@@ -34,6 +39,9 @@ public class Menu {
 	private boolean confirme;
 	private boolean choixValides;
 	
+	private JPanel messagePane;
+	private JLabel messages;
+	
 	private Dimension screenSize;
 	private int maxHeight;
 	
@@ -50,8 +58,12 @@ public class Menu {
 		choix = new JPanel();
 		choix.setLayout(new FlowLayout(FlowLayout.CENTER));
 		confirmation = new JPanel();
+		messagePane = new JPanel();
+		messagePane.setPreferredSize(new Dimension(frame.getWidth(), 20));
 		frame.add(typeJeuPanel);
+		frame.add(Box.createRigidArea(new Dimension(frame.getWidth(),20)));
 		frame.add(choix);
+		frame.add(messagePane);
 		frame.add(confirmation);
 		
 		// Choix type de jeu
@@ -78,18 +90,25 @@ public class Menu {
 		tailleField.setPreferredSize(new Dimension(50, 25));
 		tailleField.setActionCommand("taille");
 		tailleField.addActionListener(new fieldAction());
+		tailleField.getDocument().addDocumentListener(new fieldTypeAction());
 		
 		rochersLabel = new JLabel("Quel Pourcentage de rochers ? (0 - 40%)");
 		rochersField = new JTextField();
 		rochersField.setPreferredSize(new Dimension(50, 25));
 		rochersField.setActionCommand("rochers");
 		rochersField.addActionListener(new fieldAction());
+		rochersField.getDocument().addDocumentListener(new fieldTypeAction());
 		taille = "";
 		rochers = "";
 		choix.add(tailleLabel);
 		choix.add(tailleField);
 		choix.add(rochersLabel);
 		choix.add(rochersField);
+		
+		// messages
+		messages = new JLabel();
+	//	messages.setPreferredSize(new Dimension(messagePane.getWidth(), messagePane.getHeight()));
+		messagePane.add(messages);
 		
 		// validation des choix
 		validerButton = new JButton("Validation");
@@ -137,17 +156,21 @@ public class Menu {
 				taille = tailleField.getText();
 				rochers = rochersField.getText();
 				if (getTaille() < 10) {
-					System.out.println(getTaille());
 					JOptionPane.showMessageDialog(null, "L'île est trop petite");
+					tailleField.setText("");
 					choixValides = false;
 				} else if (getTaille() > maxHeight) {
 					JOptionPane.showMessageDialog(null, "L'île est trop grande pour jouer sur votre écran");
+					tailleField.setText("");
 					choixValides = false;
-				} else if (getRochers() < 0) {
+				} 
+				if (getRochers() < 0) {
 					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers voulue est impossible");
+					rochersField.setText("");
 					choixValides = false;
 				} else if (getRochers() > 40) {
 					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers est trop grand pour pouvoir jouer");
+					rochersField.setText("");
 					choixValides = false;
 				}
 				if (choixValides) {
@@ -168,10 +191,61 @@ public class Menu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ("taille".equals(e.getActionCommand())) {
-				rochersField.requestFocusInWindow();
+				taille = tailleField.getText();
+				if (getTaille() < 10) {
+					messages.setText("L'île est trop petite");
+				} else if (getTaille() > maxHeight) {
+					messages.setText("L'île est trop grande pour jouer sur votre écran");
+				} else {
+					messages.setText("");
+					rochersField.requestFocusInWindow();
+				}
 			} else if ("rochers".equals(e.getActionCommand())) {
-				validerButton.requestFocusInWindow();
+				rochers = rochersField.getText();
+				if (getRochers() < 0) {
+					messages.setText("Le pourcentage de rochers voulue est impossible");
+				} else if (getRochers() > 40) {
+					messages.setText("Le pourcentage de rochers est trop grand pour pouvoir jouer");
+				} else {
+					messages.setText("");
+					validerButton.requestFocusInWindow();
+				}
 			}
+		}
+	}
+	/**
+	 * {@link DocumentListener} propre aux text dans JTextField
+	 * @author Christopher Caroni
+	 *
+	 */
+	private class fieldTypeAction implements DocumentListener {
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+		}
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			if (tailleField.hasFocus()) {
+				taille = tailleField.getText();
+				if (getTaille() < 10) {
+					messages.setText("L'île est trop petite");
+				} else if (getTaille() > maxHeight) {
+					messages.setText("L'île est trop grande pour jouer sur votre écran");
+				} else {
+					messages.setText("");
+				}
+			} else if (rochersField.hasFocus()) {
+				rochers = rochersField.getText();
+				if (getRochers() < 0) {
+					messages.setText("Le pourcentage de rochers voulue est impossible");
+				} else if (getRochers() > 40) {
+					messages.setText("Le pourcentage de rochers est trop grand pour pouvoir jouer");
+				} else {
+					messages.setText("");
+				}
+			}
+		}
+		@Override
+		public void removeUpdate(DocumentEvent e) {
 		}
 	}
 	/**
