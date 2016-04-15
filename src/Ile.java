@@ -593,14 +593,15 @@ public class Ile {
 		// Verifie si c'est le navire allie
 		} else if (estSonNavire(destination, perso.getEquipe1())) {
 			if (getNavire(perso.getEquipe1()).getPlateauVide()) {
-				perso.setPos(destination.getLocation());
-				perso.perdEnergie(1);
-				perso.setSurNavire(true);
-			} else {
 				System.out.println("Vous devez avoir au moins un personnage sur le plateau");
 				plateauGraph.println("Vous devez avoir au moins un personnage sur le plateau");
 				plateauGraph.save();
 				return false;
+			} else {
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				perso.setPos(destination.getLocation());
+				perso.perdEnergie(1);
+				perso.setSurNavire(true);
 			}
 		} else {
 			System.out.println("Ne peut pas se deplacer ici");
@@ -609,6 +610,72 @@ public class Ile {
 			return false;
 		}
 		return true;
+	}
+	/**
+	 * Met à jour l'affichage de l'énergie sur le Plateau
+	 * 
+	 * @param tourEquipe permet de savoir pour quels équipe afficher les énergies
+	 * @param equipe1 liste des personnages de l'équipe 1
+	 * @param equipe2 liste des personnages de l'équipe 2
+	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
+	 */
+	public void updateEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
+		Personnage temp;
+		plateauGraph.clearText();
+		for (int x=1;x<plateau[0].length-1;x++) {
+			for (int y=1;y<plateau[1].length-1;y++) {
+				if (tourEquipe) {
+					for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
+						temp = perso.next();
+						if (temp.getPos().equals(new Point(x,y))) {
+							plateauGraph.setText(x, y, "" + temp.getEnergie());
+						}
+					}
+				} else {
+					for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
+						temp = perso.next();
+						if (temp.getPos().equals(new Point(x,y))) {
+							plateauGraph.setText(x, y, "" + temp.getEnergie());
+						}
+					}
+				}
+			}
+		}
+	}
+	/**
+	 * Applique les bonus d'énergie pour les personnages de l'équipe courante
+	 * si elles sont dans leur bateau
+	 * 
+	 * @param tourEquipe permet de savoir pour quels équipe afficher les énergies
+	 * @param equipe1 liste des personnages de l'équipe 1
+	 * @param equipe2 liste des personnages de l'équipe 2
+	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
+	 */
+	public void bonusEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
+		Personnage temp;
+		if (tourEquipe) {
+			for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
+				temp = perso.next();
+				if (temp.getSurNavire()) {
+					if (temp.getEnergie()<90) {
+						temp.setEnergie(temp.getEnergie() + 10);
+					} else {
+						temp.setEnergie(100);
+					}
+				}
+			}
+		} else {
+			for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
+				temp = perso.next();
+				if (temp.getSurNavire()) {
+					if (temp.getEnergie()<90) {
+						temp.setEnergie(temp.getEnergie() + 10);
+					} else {
+						temp.setEnergie(100);
+					}
+				}
+			}
+		}
 	}
 	
 	/**

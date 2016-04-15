@@ -90,6 +90,9 @@ public class Personnage {
 	public int getEnergie(){
 		return energie;
 	}
+	public void setEnergie(int setEnergie) {
+		this.energie = setEnergie;
+	}
 	
 	public boolean getSurNavire(){
 		return this.surNavire;

@@ -63,6 +63,7 @@ public class Map {
 		
 		boolean bonneSelectionEquipe = true; 
 		boolean deplacementInvalide = false;
+		boolean pasEnergie = false;
 		
 		
 		while (!jeu.getEstFini(equipe1) && !jeu.getEstFini(equipe2)) {// boucle tant que personne n'a gagne
@@ -75,6 +76,8 @@ public class Map {
 			}
 			
 			plateauGraph.clearHighlight();
+			plateau.bonusEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
+			plateau.updateEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
 			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
 					
 			personnnageSelectionne = null;
@@ -88,11 +91,14 @@ public class Map {
 				
 			// ici on clique sur une case d'un de notre personnage
 			// tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide (voir methode), la boucle continue a tourner
-			while (persoSelectionPosition.getLocation().equals(new Point(-1, -1)) || !bonneSelectionEquipe) {
+			while (persoSelectionPosition.getLocation().equals(new Point(-1, -1)) || !bonneSelectionEquipe || pasEnergie) {
 				plateauGraph.clearConsole();
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
 				if (!bonneSelectionEquipe) {
 					plateauGraph.println("Vous n'avez pas selectionnee une case ou vous disposez de personnage");
+				}
+				if (pasEnergie) {
+					plateauGraph.println("Ce personnage n'a plus d'énergie, veuillez séléctionner un autre");
 				}
 				plateauGraph.println("Cliquez sur le personnage que vous voulez deplacer");
 				plateauGraph.waitEvent(5000,false);
@@ -101,11 +107,21 @@ public class Map {
 				
 				// verifie si le joueur a bien selectionne un perso de son equipe seulment si il a clique
 				if (jeu.getTourEquipe() && !persoSelectionPosition.getLocation().equals(new Point(-1, -1))) {
-					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe1);
-					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe1);
+					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe1, plateauGraph);
+					pasEnergie = persoSelectionPosition.getEnergieInvalide();
+					if (bonneSelectionEquipe && !pasEnergie) {
+						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe1);
+					} else {
+						presentsEquipe = new ArrayList<Personnage>();
+					}
 				} else if (!jeu.getTourEquipe()){
-					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2);
-					presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
+					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2, plateauGraph);
+					pasEnergie = persoSelectionPosition.getEnergieInvalide();
+					if (bonneSelectionEquipe && !pasEnergie) {
+						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
+					} else {
+						presentsEquipe = new ArrayList<Personnage>();
+					}
 				}
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
@@ -151,6 +167,7 @@ public class Map {
 					}
 				}
 			}
+			plateau.updateEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
 						

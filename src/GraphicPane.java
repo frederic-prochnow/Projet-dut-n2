@@ -26,6 +26,7 @@ class GraphicPane extends JPanel {
 	private String[][] text ;
 	private boolean[][] highlight = null ;
 	private Color[][] highlightColor = null ;
+	private int yText = 0;
 	/**
 	 * Construit un plateau de jeu vide de dimension taille x taille.
 	 * Initialement, les cellules sont vides. Le constructeur demande la fourniture
@@ -59,16 +60,14 @@ class GraphicPane extends JPanel {
 	private void setGraphicSize() {
 		this.setPreferredSize(getGraphicSize());
 	}
-	private void showText(Graphics g, String msg, Rectangle r) {
-		// Calcule la position du message pour qu'il soit centré.
-		Rectangle dimText = g.getFontMetrics().getStringBounds(msg, g).getBounds() ;
-		
-		int x0 = (r.width - dimText.width) / 2 ;
-		int y0 = (r.height - dimText.height) / 2 ;
-		
+	private void showText(Graphics g, String msg, Rectangle r) {	
 		g.setColor(Color.BLACK) ;
-		g.setFont(new Font("Arial", Font.BOLD, 16)) ;
-		g.drawString(msg, r.x + x0, r.y + dimImage - y0) ;
+		g.setFont(new Font("Arial", Font.BOLD, 14)) ;
+		yText = 0;
+		for (String line : msg.split("\n")) {
+			g.drawString(line, r.x+ 25, r.y +12 + yText) ;
+			yText += g.getFontMetrics().getStringBounds(msg, g).getHeight()-5;
+		}
 	}
 	private void showText(Graphics g, String msg) {
 		Dimension dimPage = this.getPreferredSize() ;
@@ -183,8 +182,8 @@ class GraphicPane extends JPanel {
 				setSize() ;
 				clearHighlight() ;
 				clearText() ;
+				text = new String[nbCol][nbLig] ;
 			}
-			text = new String[nbCol][nbLig] ;
 		} else {
 			text = null ;
 		}
@@ -192,13 +191,16 @@ class GraphicPane extends JPanel {
 	public void clearText() {
 		for (int c = 0 ; c < nbCol ; c++) {
 			for (int l = 0 ; l < nbLig ; l++) {
-				text[l][c] = null ;
+				text[l][c] = "" ;
 			}
 		}
 	}
+	public void clearText(int x, int y) {
+		text[x][y] = null;
+	}
 	public void setText(int x, int y, String msg) {
 		if (text != null) {
-			text[x][y] = msg ;
+			text[x][y] += msg + "\n";
 		}
 	}
 	private String getText(int x, int y) {

@@ -124,7 +124,7 @@ public class Plateau {
 		console = null ;
 		PersoPane = new JPanel();
 		PersoPane.setLayout(new GridLayout(2,3));
-		PersoPane.setPreferredSize(new Dimension(100, 100));
+		PersoPane.setPreferredSize(new Dimension(120, 100));
 		liste = null;
 		persoPrecis = -1;
 		sable = new Color(239, 228, 176);
@@ -335,11 +335,19 @@ public class Plateau {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
-			liste[i].setBackground(sable);
 			liste[i].setActionCommand("perso_" + i);
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
+		}
+		if (liste.length > 1) {
+			for (int i=0;i<liste.length;i++) {
+				liste[i].setBackground(Color.GREEN);
+			}
+		} else {
+			for (int i=0;i<liste.length;i++) {
+				liste[i].setBackground(sable);
+			}
 		}
 	}
 	
@@ -356,6 +364,7 @@ public class Plateau {
 					liste[i].setEnabled(false);
 					liste[i].setBackground(Color.LIGHT_GRAY);
 				} else {
+					liste[i].setBackground(sable);
 					persoPrecis = i;
 				}
 			}
@@ -458,6 +467,14 @@ public class Plateau {
 	 */
 	public void clearText() {
 		graphic.clearText() ;
+	}
+	/**
+	 * Efface l'affichage de texte dans la case [x][y].
+	 * @param x
+	 * @param y
+	 */
+	public void clearText(int x, int y) {
+		graphic.clearText(x, y);
 	}
 	/**
 	 * Demande l'affichage d'un texte dans une case. Le texte est centré horizontalement et verticalement. Ecrit en Color.BLACK.

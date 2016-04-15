@@ -1,6 +1,11 @@
 # Treasure Hunt
 
 ### Version avec la souris
+ 
+ * Contrôle des niveaux d'énergie.
+ * * Visualisation de l'énergie sur le plateau
+ * * Mise à jour de l'énergie lorsqu'un personnage est resté sur son navire
+ * * Séléction du personnage impossible lorsque son énergie == 0
 
  * (3/3) Brouillard de guerre, sauvegarde les positions deja vus et visualisation
  des positions pas encore decouverts.
