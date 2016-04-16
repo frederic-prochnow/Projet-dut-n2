@@ -145,9 +145,7 @@ public class Map {
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
 			
-			
 			plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
-			
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 			
 			while (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) {

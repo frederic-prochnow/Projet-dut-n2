@@ -2,10 +2,14 @@
 
 ### Version avec la souris
  
+ * Choix du nombre de personnages dans le menu. A remplacer par un tableau et faire
+ la création à l'aide de for()
+ 
  * Contrôle des niveaux d'énergie.
  * * Visualisation de l'énergie sur le plateau
  * * Mise à jour de l'énergie lorsqu'un personnage est resté sur son navire
  * * Séléction du personnage impossible lorsque son énergie == 0
+
 
  * (3/3) Brouillard de guerre, sauvegarde les positions deja vus et visualisation
  des positions pas encore decouverts.
