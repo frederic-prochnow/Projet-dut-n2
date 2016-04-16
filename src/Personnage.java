@@ -86,6 +86,12 @@ public class Personnage {
 	public boolean getEquipe1(){
 		return equipe1;
 	}
+	public boolean getEquipe2() {
+		if (getEquipe1()) {
+			return false;
+		}
+		return true;
+	}
 	
 	public int getEnergie(){
 		return energie;
@@ -139,4 +145,5 @@ public class Personnage {
 	public void setDernierTag(int x, int y) {
 		this.dernierTag.setLocation(x, y);
 	}
+
 }

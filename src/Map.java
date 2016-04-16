@@ -88,6 +88,7 @@ public class Map {
 			deplacementInvalide = false;
 			confirmationFinTour.setLocation(-1, -1);
 			persoSelec = -1;
+			plateauGraph.setPeutVoler(false);
 				
 			// ici on clique sur une case d'un de notre personnage
 			// tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide (voir methode), la boucle continue a tourner
@@ -123,9 +124,8 @@ public class Map {
 						presentsEquipe = new ArrayList<Personnage>();
 					}
 				}
-				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
-						
+			
 			// CAS : il y a plusieurs persos sur une case : le debut du jeu
 			if ( presentsEquipe.size() > 1) {
 				plateauGraph.clearConsole();
@@ -141,7 +141,10 @@ public class Map {
 				personnnageSelectionne = presentsEquipe.get(persoSelec);
 			} else {
 				personnnageSelectionne = presentsEquipe.get(0);
+				plateauGraph.setPeutVoler(plateau.tenterVol(personnnageSelectionne));
+				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
+			
 			
 			plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 			

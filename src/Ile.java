@@ -679,6 +679,28 @@ public class Ile {
 	}
 	
 	/**
+	 * On balaie l'entourage du voleur. Si il y a une personnage de l'éequipe adverse
+	 * on peut faire une tentative de vol.
+	 * @param perso pour connaitre sa position
+	 * @return si tentative possible
+	 */
+	public boolean tenterVol(Personnage perso) {
+		if (perso.getType() == 1 || perso.getType() == 4) {
+			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
+				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
+					if ( (plateau[i][j].getEquipe1() && perso.getEquipe2()) || (plateau[i][j].getEquipe2() && perso.getEquipe1()) ) {
+						System.out.println("alentour equipe 1 " + plateau[i][j].getEquipe1());
+						System.out.println("voleur equipe 1 " + perso.getEquipe1());
+						return true;
+					}
+				}
+			}
+		}
+		System.out.println("il peut PAS voler");
+		return false;
+	}
+	
+	/**
 	 * Permet de savoir si la position est inoccupé
 	 * @param p La position vérifiée
 	 * @return boolean

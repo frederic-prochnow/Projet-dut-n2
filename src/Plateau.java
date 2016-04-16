@@ -34,6 +34,8 @@ public class Plateau {
 	private JButton[] liste;
 	private int persoPrecis;
 	private Color sable;
+	private boolean peutVoler;
+	private boolean ajouteVolFait;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -127,6 +129,7 @@ public class Plateau {
 		PersoPane.setPreferredSize(new Dimension(120, 100));
 		liste = null;
 		persoPrecis = -1;
+		peutVoler = false;
 		sable = new Color(239, 228, 176);
 
 		// Caractéristiques initiales pour la fenetre.
@@ -329,25 +332,39 @@ public class Plateau {
 	 * @param selection
 	 */
 	public void ajouterSelectionPersos(List<Personnage> selection) {
+		ajouteVolFait = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
+			liste[i].setBackground(Color.GREEN);
 			liste[i].setActionCommand("perso_" + i);
+			liste[i].setName(""+ selection.get(i).getType());
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
 		}
-		if (liste.length > 1) {
-			for (int i=0;i<liste.length;i++) {
-				liste[i].setBackground(Color.GREEN);
-			}
+		if (liste.length == 1) {
+			liste[0].setBackground(sable);
+		}
+		if (liste.length == 1 && (selection.get(0).getType() == 1 || selection.get(0).getType() == 4)) {
+			System.out.println("he is alone and is thief");
+			ajouterActionVoler();
+			ajouteVolFait = true;
+		}
+	}
+	
+	private void ajouterActionVoler() {
+		ImageIcon volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
+		JButton voler = new JButton(volerIcone);
+		voler.setPreferredSize(new Dimension(volerIcone.getIconWidth(), volerIcone.getIconHeight()));
+		PersoPane.add(voler);
+		if (peutVoler) {
+			voler.setBackground(Color.GREEN);
 		} else {
-			for (int i=0;i<liste.length;i++) {
-				liste[i].setBackground(sable);
-			}
+			voler.setBackground(Color.LIGHT_GRAY);
 		}
 	}
 	
@@ -366,9 +383,22 @@ public class Plateau {
 				} else {
 					liste[i].setBackground(sable);
 					persoPrecis = i;
+					if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
+						ajouterActionVoler();
+						ajouteVolFait = true;
+					}
+					
 				}
 			}
 		}		
+	}
+	
+	public boolean getPeutVoler() {
+		return this.peutVoler;
+	}
+	
+	public void setPeutVoler(boolean set) {
+		this.peutVoler = set;
 	}
 	
 	
