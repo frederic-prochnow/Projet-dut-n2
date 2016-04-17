@@ -144,10 +144,13 @@ public class Menu {
 		for (int i=0;i<boutonMoins.length;i++) {
 			inputPersos[i] = new JPanel();
 			boutonMoins[i] = new JButton(" - ");
-			boutonMoins[i].setActionCommand("moins_perso_" + i);
+			boutonMoins[i].setActionCommand("moins_" +i);
+			boutonMoins[i].addActionListener(new buttonAction());
 			boutonPlus[i] = new JButton(" + ");
-			boutonPlus[i].setActionCommand("plus_perso_" + i);
+			boutonPlus[i].setActionCommand("plus_" + i);
+			boutonPlus[i].addActionListener(new buttonAction());
 			input[i] = new JTextField();
+			input[i].setText("" + 0);
 			input[i].setPreferredSize(new Dimension(30, 25));
 		}
 		for (int i=0; i<boutonMoins.length/2;i++) {
@@ -275,6 +278,18 @@ public class Menu {
 					// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
 					confirme = true;
 					masquer();
+				}
+			} else if (e.getActionCommand().startsWith("moins_")) {
+				for (int i=0;i<boutonMoins.length;i++) {
+					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
+						input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+					}
+				}
+			} else if (e.getActionCommand().startsWith("plus_")) {
+				for (int i=0;i<boutonPlus.length;i++) {
+					if (e.getActionCommand().endsWith("_"+i)) {
+						input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+					}
 				}
 			}
 		}
