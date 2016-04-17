@@ -51,48 +51,11 @@ public class Menu {
 	private JPanel nbPersos1;
 	private JPanel texteJoueur2;
 	private JPanel nbPersos2;
-	private JPanel exp1;
-	private int nbExp1;
-	private JButton exp1Moins;
-	private JButton exp1Plus;
-	private JTextField nbExp1Field;
-	private JPanel vol1;
-	private int nbVol1;
-	private JButton vol1Moins;
-	private JButton vol1Plus;
-	private JTextField nbVol1Field;
-	private JPanel gue1;
-	private int nbGuer1;
-	private JButton guerrier1Moins;
-	private JButton guerrier1Plus;
-	private JTextField nbGue1Field;
-	private JPanel pie1;
-	private int nbPieg1;
-	private JButton piegeur1Moins;
-	private JButton piegeur1Plus;
-	private JTextField nbPie1Field;
-
-	private JPanel exp2;
-	private int nbExp2;
-	private JButton exp2Moins;
-	private JButton exp2Plus;
-	private JTextField nbExp2Field;
-	private JPanel vol2;
-	private int nbVol2;
-	private JButton vol2Moins;
-	private JButton vol2Plus;
-	private JTextField nbVol2Field;
-	private JPanel gue2;
-	private int nbGuer2;
-	private JButton guerrier2Moins;
-	private JButton guerrier2Plus;
-	private JTextField nbGue2Field;
-	private JPanel pie2;
-	private int nbPieg2;
-	private JButton piegeur2Moins;
-	private JButton piegeur2Plus;
-	private JTextField nbPie2Field;
 	
+	private JPanel[] inputPersos;
+	private JButton[] boutonMoins;
+	private JButton[] boutonPlus;
+	private JTextField[] input;	
 	
 	/**
 	 * Constructeur du menu. Crée tout le JFrame et tous les JPanels, JButtons...
@@ -174,110 +137,36 @@ public class Menu {
 		texteJoueur2 = new JPanel();
 		texteJoueur2.setLayout(new BoxLayout(texteJoueur2, BoxLayout.Y_AXIS));
 		
-		nbExp1 = 0;
-		exp1Moins = new JButton(" - ");
-		exp1Plus = new JButton(" + ");
-		exp1Moins.setActionCommand("e1_moins");
-		exp1Plus.setActionCommand("e1_plus");
-		nbExp1Field = new JTextField(nbExp1);
-		nbExp1Field.setPreferredSize(new Dimension(30, 25));
-		exp1 = new JPanel();
-		exp1.add(exp1Moins);
-		exp1.add(nbExp1Field);
-		exp1.add(exp1Plus);
-		
-		nbVol1 = 0;
-		vol1Moins = new JButton(" - ");
-		vol1Plus = new JButton(" + ");
-		vol1Moins.setActionCommand("v1_moins");
-		vol1Plus.setActionCommand("v1_plus");
-		nbVol1Field = new JTextField(nbVol1);
-		nbVol1Field.setPreferredSize(new Dimension(30, 25));
-		vol1 = new JPanel();
-		vol1.add(vol1Moins);
-		vol1.add(nbVol1Field);
-		vol1.add(vol1Plus);
-		
-		nbGuer1 = 0;
-		guerrier1Moins = new JButton(" - ");
-		guerrier1Plus = new JButton(" + ");
-		guerrier1Moins.setActionCommand("g1_moins");
-		guerrier1Plus.setActionCommand("g1_plus");
-		nbGue1Field = new JTextField(nbGuer1);
-		nbGue1Field.setPreferredSize(new Dimension(30, 25));
-		gue1 = new JPanel();
-		gue1.add(guerrier1Moins);
-		gue1.add(nbGue1Field);
-		gue1.add(guerrier1Plus);
-		
-		nbPieg1 = 0;
-		piegeur1Moins = new JButton(" - ");
-		piegeur1Plus = new JButton(" + ");
-		piegeur1Moins.setActionCommand("p1_moins");
-		piegeur1Plus.setActionCommand("p1_plus");
-		nbPie1Field = new JTextField(nbPieg1);
-		nbPie1Field.setPreferredSize(new Dimension(30, 25));
-		pie1 = new JPanel();
-		pie1.add(piegeur1Moins);
-		pie1.add(nbPie1Field);
-		pie1.add(piegeur1Plus);
-		
-		nbExp2 = 0;
-		exp2Moins = new JButton(" - ");
-		exp2Plus = new JButton(" + ");
-		exp2Moins.setActionCommand("e2_moins");
-		exp2Plus.setActionCommand("e2_plus");
-		nbExp2Field = new JTextField(nbExp2);
-		nbExp2Field.setPreferredSize(new Dimension(30, 25));
-		exp2 = new JPanel();
-		exp2.add(exp2Moins);
-		exp2.add(nbExp2Field);
-		exp2.add(exp2Plus);
-		
-		nbVol2 = 0;
-		vol2Moins = new JButton(" - ");
-		vol2Plus = new JButton(" + ");
-		vol2Moins.setActionCommand("v2_moins");
-		vol2Plus.setActionCommand("v2_plus");
-		nbVol2Field = new JTextField(nbVol2);
-		nbVol2Field.setPreferredSize(new Dimension(30, 25));
-		vol2 = new JPanel();
-		vol2.add(vol2Moins);
-		vol2.add(nbVol2Field);
-		vol2.add(vol2Plus);
-		
-		nbGuer2 = 0;
-		guerrier2Moins = new JButton(" - ");
-		guerrier2Plus = new JButton(" + ");
-		guerrier2Moins.setActionCommand("g2_moins");
-		guerrier2Plus.setActionCommand("g2_plus");
-		nbGue2Field = new JTextField(nbGuer2);
-		nbGue2Field.setPreferredSize(new Dimension(30, 25));
-		gue2 = new JPanel();
-		gue2.add(guerrier2Moins);
-		gue2.add(nbGue2Field);
-		gue2.add(guerrier2Plus);
-		
-		nbPieg2 = 0;
-		piegeur2Moins = new JButton(" - ");
-		piegeur2Plus = new JButton(" + ");
-		piegeur2Moins.setActionCommand("p2_moins");
-		piegeur2Plus.setActionCommand("p2_plus");
-		nbPie2Field = new JTextField(nbPieg2);
-		nbPie2Field.setPreferredSize(new Dimension(30, 25));
-		pie2 = new JPanel();
-		pie2.add(piegeur2Moins);
-		pie2.add(nbPie2Field);
-		pie2.add(piegeur2Plus);
-
-		nbPersos1.add(exp1);
-		nbPersos1.add(vol1);
-		nbPersos1.add(gue1);
-		nbPersos1.add(pie1);
-		nbPersos2.add(exp2);
-		nbPersos2.add(vol2);
-		nbPersos2.add(gue2);
-		nbPersos2.add(pie2);
+		inputPersos = new JPanel[8];
+		boutonMoins = new JButton[8];
+		boutonPlus = new JButton[8];
+		input = new JTextField[8];
+		for (int i=0;i<boutonMoins.length;i++) {
+			inputPersos[i] = new JPanel();
+			boutonMoins[i] = new JButton(" - ");
+			boutonMoins[i].setActionCommand("moins_perso_" + i);
+			boutonPlus[i] = new JButton(" + ");
+			boutonPlus[i].setActionCommand("plus_perso_" + i);
+			input[i] = new JTextField();
+			input[i].setPreferredSize(new Dimension(30, 25));
+		}
+		for (int i=0; i<boutonMoins.length/2;i++) {
+			inputPersos[i].add(boutonMoins[i]);
+			inputPersos[i].add(input[i]);
+			inputPersos[i].add(boutonPlus[i]);
+		}
+		for (int i=boutonMoins.length/2; i<boutonMoins.length;i++) {
+			inputPersos[i].add(boutonMoins[i]);
+			inputPersos[i].add(input[i]);
+			inputPersos[i].add(boutonPlus[i]);
+		}
+		for (int i=0;i<inputPersos.length/2;i++) {
+			nbPersos1.add(inputPersos[i]);
+		}
+		for (int i=inputPersos.length/2;i<inputPersos.length;i++) {
+			System.out.println(i);
+			nbPersos2.add(inputPersos[i]);
+		}
 		texteJoueur1.add(new JLabel("Nombre d'Explorateurs : "));
 		texteJoueur1.add(Box.createRigidArea(new Dimension(texteJoueur1.getWidth(), 20)));
 		texteJoueur1.add(new JLabel("Nombre de Voleurs : "));
@@ -503,29 +392,12 @@ public class Menu {
 			time += 100 ;
 		}
 	}
-	public int getNbExp1() {
-		return nbExp1;
+	/**
+	 * 
+	 * @param i le numéro du personnage 
+	 * @return le nombre de personnages souhaités pour ce type
+	 */
+	public int getNbPersos(int i) {
+		return Integer.valueOf(input[i].getText());
 	}
-	public int getNbVol1() {
-		return nbVol1;
-	}
-	public int getNbGuer1() {
-		return nbGuer1;
-	}
-	public int getNbPieg1() {
-		return nbPieg1;
-	}
-	public int getNbExp2() {
-		return nbExp2;
-	}
-	public int getNbVol2() {
-		return nbVol2;
-	}
-	public int getNbGuer2() {
-		return nbGuer2;
-	}
-	public int getNbPieg2() {
-		return nbPieg2;
-	}
-
 }

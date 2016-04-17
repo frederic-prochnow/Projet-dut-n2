@@ -2,8 +2,8 @@
 
 ### Version avec la souris
  
- * Choix du nombre de personnages dans le menu. A remplacer par un tableau et faire
- la création à l'aide de for()
+ * Choix du nombre de personnages dans le menu. Chaque personnage est associé à un élément dans
+ un tableau (ex: JButton[])
  
  * Contrôle des niveaux d'énergie.
  * * Visualisation de l'énergie sur le plateau
