@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,11 +46,12 @@ public class Menu {
 	
 	private Dimension screenSize;
 	private int maxHeight;
-	
-	
-	private JPanel texteJoueur1;
+
+	private JPanel texteJouer1;
+	private JPanel texteJouer2;
+	private JPanel descJoueur1;
 	private JPanel nbPersos1;
-	private JPanel texteJoueur2;
+	private JPanel descJoueur2;
 	private JPanel nbPersos2;
 	
 	private JPanel[] inputPersos;
@@ -77,14 +79,17 @@ public class Menu {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 4;
+		c.insets = new Insets(0, 0, 5, 0);
 		frame.add(typeJeuPanel,c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
+		c.insets = new Insets(5, 0,-5, 0);
 		frame.add(choix,c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
+		c.insets = new Insets(5, 0, 5, 0);
 		frame.add(messagePane,c);
 		
 		// Choix type de jeu
@@ -126,17 +131,36 @@ public class Menu {
 		choix.add(rochersLabel);
 		choix.add(rochersField);
 		
-		// nombre de persos
+		texteJouer1 = new JPanel();
+		texteJouer1.add(new JLabel("Joueur 1"));
+		texteJouer2 = new JPanel();
+		texteJouer2.add(new JLabel("Joueur 2"));
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.insets = new Insets(5, 10, 0, 0);
+		frame.add(texteJouer1,c);
+		c.gridx = 2;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.insets = new Insets(5, 0, 0, 5);
+		frame.add(texteJouer2,c);
+		
+		// JButton et JTextField des types de persos
 
 		nbPersos1 = new JPanel();
 		nbPersos1.setLayout(new BoxLayout(nbPersos1, BoxLayout.Y_AXIS));
 		nbPersos2 = new JPanel();
 		nbPersos2.setLayout(new BoxLayout(nbPersos2, BoxLayout.Y_AXIS));
-		texteJoueur1 = new JPanel();
-		texteJoueur1.setLayout(new BoxLayout(texteJoueur1, BoxLayout.Y_AXIS));
-		texteJoueur2 = new JPanel();
-		texteJoueur2.setLayout(new BoxLayout(texteJoueur2, BoxLayout.Y_AXIS));
+		// Identification du type de personnage
+		descJoueur1 = new JPanel();
+		descJoueur1.setLayout(new BoxLayout(descJoueur1, BoxLayout.Y_AXIS));
+		descJoueur2 = new JPanel();
+		descJoueur2.setLayout(new BoxLayout(descJoueur2, BoxLayout.Y_AXIS));
 		
+		// Il y a 8 panes associés chacun à 16 boutons et 8 fields
+		// les 4 premiers sont pour le joueur 1 et les 4 derniers pour le joueur 2
 		inputPersos = new JPanel[8];
 		boutonMoins = new JButton[8];
 		boutonPlus = new JButton[8];
@@ -150,6 +174,7 @@ public class Menu {
 			boutonPlus[i].setActionCommand("plus_" + i);
 			boutonPlus[i].addActionListener(new buttonAction());
 			input[i] = new JTextField();
+			input[i].setHorizontalAlignment(JTextField.CENTER);
 			input[i].setText("" + 0);
 			input[i].setPreferredSize(new Dimension(30, 25));
 		}
@@ -170,40 +195,45 @@ public class Menu {
 			System.out.println(i);
 			nbPersos2.add(inputPersos[i]);
 		}
-		texteJoueur1.add(new JLabel("Nombre d'Explorateurs : "));
-		texteJoueur1.add(Box.createRigidArea(new Dimension(texteJoueur1.getWidth(), 20)));
-		texteJoueur1.add(new JLabel("Nombre de Voleurs : "));
-		texteJoueur1.add(Box.createRigidArea(new Dimension(texteJoueur1.getWidth(), 20)));
-		texteJoueur1.add(new JLabel("Nombre de Guerriers : "));
-		texteJoueur1.add(Box.createRigidArea(new Dimension(texteJoueur1.getWidth(), 20)));
-		texteJoueur1.add(new JLabel("Nombre de Piégueurs : "));
-		texteJoueur2.add(new JLabel("Nombre d'Explorateurs : "));
-		texteJoueur2.add(Box.createRigidArea(new Dimension(texteJoueur2.getWidth(), 20)));
-		texteJoueur2.add(new JLabel("Nombre de Voleurs : "));
-		texteJoueur2.add(Box.createRigidArea(new Dimension(texteJoueur2.getWidth(), 20)));
-		texteJoueur2.add(new JLabel("Nombre de Guerriers : "));
-		texteJoueur2.add(Box.createRigidArea(new Dimension(texteJoueur2.getWidth(), 20)));
-		texteJoueur2.add(new JLabel("Nombre de Piégueurs : "));
+		descJoueur1.add(new JLabel("Nombre d'Explorateurs : "));
+		descJoueur1.add(Box.createRigidArea(new Dimension(descJoueur1.getWidth(), 20)));
+		descJoueur1.add(new JLabel("Nombre de Voleurs : "));
+		descJoueur1.add(Box.createRigidArea(new Dimension(descJoueur1.getWidth(), 20)));
+		descJoueur1.add(new JLabel("Nombre de Guerriers : "));
+		descJoueur1.add(Box.createRigidArea(new Dimension(descJoueur1.getWidth(), 20)));
+		descJoueur1.add(new JLabel("Nombre de Piégueurs : "));
+		descJoueur2.add(new JLabel("Nombre d'Explorateurs : "));
+		descJoueur2.add(Box.createRigidArea(new Dimension(descJoueur2.getWidth(), 20)));
+		descJoueur2.add(new JLabel("Nombre de Voleurs : "));
+		descJoueur2.add(Box.createRigidArea(new Dimension(descJoueur2.getWidth(), 20)));
+		descJoueur2.add(new JLabel("Nombre de Guerriers : "));
+		descJoueur2.add(Box.createRigidArea(new Dimension(descJoueur2.getWidth(), 20)));
+		descJoueur2.add(new JLabel("Nombre de Piégueurs : "));
 		
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 1;
-		frame.add(texteJoueur1,c);
+		c.insets = new Insets(5, 10, 0, 0);
+		frame.add(descJoueur1,c);
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 1;
+		c.insets = new Insets(5, 0, 0, 5);
 		frame.add(nbPersos1,c);
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 1;
-		frame.add(texteJoueur2,c);
+		c.insets = new Insets(5, 5, 0, 0);
+		frame.add(descJoueur2,c);
 		c.gridx = 3;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 1;
+		c.insets = new Insets(5, 0, 5, 10);
 		frame.add(nbPersos2,c);
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		c.gridwidth = 4;
+		c.insets = new Insets(5, 0, 0, 0);
 		frame.add(confirmation,c);
 		
 		// messages
@@ -408,7 +438,8 @@ public class Menu {
 		}
 	}
 	/**
-	 * 
+	 * Les numéros des personnages vont de 0 à 7 pour les deux joueurs
+	 * ex pour joueur 1 : 0 = explorateur, 1 = voleur, 2 = guerrier, 3 = piégeur
 	 * @param i le numéro du personnage 
 	 * @return le nombre de personnages souhaités pour ce type
 	 */
