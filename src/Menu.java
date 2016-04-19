@@ -59,6 +59,10 @@ public class Menu {
 	private JButton[] boutonPlus;
 	private JTextField[] input;	
 	
+	private int maxPerso; // Nombre perso max par equipe
+	private int nbPersoSelected1; // Equipe 1
+	private int nbPersoSelected2; // Equipe 2
+	
 	/**
 	 * Constructeur du menu. Crée tout le JFrame et tous les JPanels, JButtons...
 	 */
@@ -91,6 +95,10 @@ public class Menu {
 		c.gridy = 2;
 		c.insets = new Insets(5, 0, 5, 0);
 		frame.add(messagePane,c);
+		
+		nbPersoSelected1 = 0;
+		nbPersoSelected2 = 0;
+		maxPerso = 3;
 		
 		// Choix type de jeu
 		humain = new JButton("1 v 1");
@@ -303,6 +311,12 @@ public class Menu {
 					rochersField.setText("");
 					choixValides = false;
 				}
+				
+				if(nbPersoSelected1 != maxPerso || nbPersoSelected2 != maxPerso){
+					JOptionPane.showMessageDialog(null, "Il doit y avoir 3 personnages dans chaques équipes");
+					choixValides = false;
+				}
+				
 				if (choixValides) {
 					// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
 					// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
@@ -313,12 +327,27 @@ public class Menu {
 				for (int i=0;i<boutonMoins.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
 						input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+						
+						// On decremente le nombre de la bonne equipe
+						if(i >= 4){
+							nbPersoSelected2--;
+						}else{
+							nbPersoSelected1--;
+						}
 					}
 				}
 			} else if (e.getActionCommand().startsWith("plus_")) {
 				for (int i=0;i<boutonPlus.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i)) {
-						input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+						
+						// On incremente le nombre de la bonne equipe
+						if(i >= 4 && nbPersoSelected2 < maxPerso){
+							input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+							nbPersoSelected2++;
+						}else if(i < 4 && nbPersoSelected1 < maxPerso){
+							input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+							nbPersoSelected1++;
+						}
 					}
 				}
 			}
@@ -437,6 +466,7 @@ public class Menu {
 			time += 100 ;
 		}
 	}
+	
 	/**
 	 * Les numéros des personnages vont de 0 à 7 pour les deux joueurs
 	 * ex pour joueur 1 : 0 = explorateur, 1 = voleur, 2 = guerrier, 3 = piégeur
@@ -446,4 +476,5 @@ public class Menu {
 	public int getNbPersos(int i) {
 		return Integer.valueOf(input[i].getText());
 	}
+	
 }

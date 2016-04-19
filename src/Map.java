@@ -33,21 +33,45 @@ public class Map {
 		List<Personnage> equipe1 = new ArrayList<>();
 		List<Personnage> equipe2 = new ArrayList<>();
 		
-		Explorateur explo1 = new Explorateur("explorateur1-1", true, 100, plateau.getPos(2), 0);
-		Personnage voleur1 = new Voleur("voleur1-1", true, 100, plateau.getPos(2), 1);
-		Personnage voleur12 = new Voleur("voleur1-2", true, 100, plateau.getPos(2), 1);
-		Personnage voleur13 = new Voleur("voleur1-3", true, 100, plateau.getPos(2), 1);
-		equipe1.add(explo1);
-		equipe1.add(voleur1);
-		equipe1.add(voleur12);
-		equipe1.add(voleur13);
-		plateau.getNavire(true).addPersos(2);
-
-		Explorateur explo2 = new Explorateur("explorateur2-1", false, 100, plateau.getPos(5), 3);
-		Personnage voleur2 = new Voleur("voleur2-1", false, 100, plateau.getPos(5), 4);
-		equipe2.add(explo2);
-		equipe2.add(voleur2);
-		plateau.getNavire(false).addPersos(2);
+		// Gestion de la liste d'explorateur de l'équipe 1
+		Explorateur[] listExplo1 = new Explorateur[menu.getNbPersos(0)];
+		int i = 0;
+		for(Explorateur e : listExplo1){
+			i++;
+			e = new Explorateur("explorateur1-"+i, true, 100, plateau.getPos(2), 0);
+			equipe1.add(e);
+		}
+		
+		// Gestion de la liste de voleur de l'equipe 1
+		Personnage[] listVoleur1 = new Voleur[menu.getNbPersos(1)];
+		i = 0;
+		for(Personnage e : listVoleur1){
+			i++;
+			e = new Voleur("voleur1-"+i, true, 100, plateau.getPos(2), 1);
+			equipe1.add(e);
+		}
+		
+		
+		// Gestion de la liste d'explorateur de l'équipe 2
+		Explorateur[] listExplo2 = new Explorateur[menu.getNbPersos(4)];
+		i = 0;
+		for(Explorateur e : listExplo2){
+			i++;
+			e = new Explorateur("explorateur2-"+i, false, 100, plateau.getPos(5), 3);
+			equipe2.add(e);
+		}
+		
+		// gestion de la liste de voleur de l'équipe 2
+		Personnage[] listVoleur2 = new Voleur[menu.getNbPersos(5)];
+		i = 0;
+		for(Personnage e : listVoleur2){
+			i++;
+			e = new Voleur("voleur2-"+i, false, 100, plateau.getPos(5), 4);
+			equipe2.add(e);
+		}
+		
+		plateau.getNavire(true).addPersos(3);
+		plateau.getNavire(false).addPersos(3);
 				
 		/* INITIALISATIONS */
 		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph, equipe1, equipe2), jeu.getDebutJeu());
