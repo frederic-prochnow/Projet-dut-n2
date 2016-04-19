@@ -172,7 +172,7 @@ public class Map {
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
 						
-			while (confirmationFinTour.equals(new Position(-1, -1))) {
+			while (confirmationFinTour.equals(new Position(-1, -1)) && !jeu.getEstFini()) {
 				plateauGraph.clearConsole();
 				plateauGraph.recover();
 				plateauGraph.println("L'", jeu.getTourEquipe(),"a fini son tour");

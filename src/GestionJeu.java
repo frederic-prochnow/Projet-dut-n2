@@ -57,6 +57,9 @@ public class GestionJeu {
 		this.debutJeu = set;
 	}
 	
+	/**
+	 * Imprime l'etat de jeu, soit le numero de round ou le gagnant
+	 */
 	public String toString(){
 		if(this.fini){
 			return "Le vainqueur est l'équipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
