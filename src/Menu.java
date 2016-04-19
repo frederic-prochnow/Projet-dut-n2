@@ -24,6 +24,7 @@ public class Menu {
 	private JFrame frame;
 	private JPanel typeJeuPanel;
 	private JPanel choix;
+	private JPanel confirmeManuel;
 	
 	private JButton humain;
 	private JButton ordi;
@@ -36,7 +37,6 @@ public class Menu {
 	private String taille;
 	private String rochers;
 	
-	private JPanel confirmation;
 	private JButton validerButton;
 	private boolean confirme;
 	private boolean choixValides;
@@ -63,6 +63,9 @@ public class Menu {
 	private int nbPersoSelected1; // Equipe 1
 	private int nbPersoSelected2; // Equipe 2
 	
+	private JButton boutonPlacement;
+	private boolean choixManuel;
+	
 	/**
 	 * Constructeur du menu. Crée tout le JFrame et tous les JPanels, JButtons...
 	 */
@@ -78,7 +81,6 @@ public class Menu {
 		choix.setLayout(new FlowLayout(FlowLayout.CENTER));
 		messagePane = new JPanel();
 		messagePane.setPreferredSize(new Dimension(frame.getWidth(), 20));
-		confirmation = new JPanel();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -200,7 +202,6 @@ public class Menu {
 			nbPersos1.add(inputPersos[i]);
 		}
 		for (int i=inputPersos.length/2;i<inputPersos.length;i++) {
-			System.out.println(i);
 			nbPersos2.add(inputPersos[i]);
 		}
 		descJoueur1.add(new JLabel("Nombre d'Explorateurs : "));
@@ -238,11 +239,15 @@ public class Menu {
 		c.gridwidth = 1;
 		c.insets = new Insets(5, 0, 5, 10);
 		frame.add(nbPersos2,c);
+		
+		confirmeManuel = new JPanel();
+		confirmeManuel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
 		c.gridx = 0;
 		c.gridy = 5;
 		c.gridwidth = 4;
 		c.insets = new Insets(5, 0, 0, 0);
-		frame.add(confirmation,c);
+		frame.add(confirmeManuel,c);
 		
 		// messages
 		messages = new JLabel();
@@ -252,9 +257,14 @@ public class Menu {
 		validerButton = new JButton("Validation");
 		validerButton.setActionCommand("valider");
 		validerButton.addActionListener(new buttonAction());
-		confirmation.add(validerButton);
+		confirmeManuel.add(validerButton);
 		confirme = false;
 		choixValides = true;
+		
+		boutonPlacement =new JButton("Placement manuel");
+		boutonPlacement.setActionCommand("manuel");
+		boutonPlacement.addActionListener(new buttonAction());
+		confirmeManuel.add(boutonPlacement);
 	}
 	/**
 	 * Remet en place le menu et le rend visible
@@ -323,6 +333,8 @@ public class Menu {
 					confirme = true;
 					masquer();
 				}
+			} else if ("manuel".equals(e.getActionCommand())){			
+				choixManuel=true;
 			} else if (e.getActionCommand().startsWith("moins_")) {
 				for (int i=0;i<boutonMoins.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
@@ -477,4 +489,8 @@ public class Menu {
 		return Integer.valueOf(input[i].getText());
 	}
 	
+	public boolean getChoixManuel() {
+		return this.choixManuel;
+	}
+
 }
