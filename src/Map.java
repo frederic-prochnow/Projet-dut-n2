@@ -18,7 +18,7 @@ public class Map {
 		/* DECLARATION DES VARIABLES */
 		String[] img = { "images/sable.png", "images/1.explorateur.png", "images/1.voleur.png", "images/1.navire.png",
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
-				"images/coffre.png", "images/cle.jpg", "images/mer.png" };
+				"images/coffre.png", "images/cle.jpg", "images/mer.png", "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png" };
 		Menu menu = new Menu();
 		menu.affichage();
 		while (!menu.getConfirme()) {
@@ -51,6 +51,23 @@ public class Map {
 			equipe1.add(e);
 		}
 		
+		// Gestion de la liste de guerrier de l'equipe 1
+		Personnage[] listGuerrier1 = new Guerrier[menu.getNbPersos(2)];
+		i = 0;
+		for(Personnage e : listGuerrier1){
+			i++;
+			e = new Guerrier("guerrier1-"+i, true, 100, plateau.getPos(2), 10);
+			equipe1.add(e);
+		}
+		
+		// Gestion de la liste de piegeur de l'equipe 1
+		Personnage[] listPiegeur1 = new Piegeur[menu.getNbPersos(3)];
+		i = 0;
+		for(Personnage e : listPiegeur1){
+			i++;
+			e = new Piegeur("piegeur1-"+i, true, 100, plateau.getPos(2), 11);
+			equipe1.add(e);
+		}
 		
 		// Gestion de la liste d'explorateur de l'équipe 2
 		Explorateur[] listExplo2 = new Explorateur[menu.getNbPersos(4)];
@@ -69,6 +86,25 @@ public class Map {
 			e = new Voleur("voleur2-"+i, false, 100, plateau.getPos(5), 4);
 			equipe2.add(e);
 		}
+		
+		// Gestion de la liste de guerrier de l'equipe 2
+		Personnage[] listGuerrier2 = new Guerrier[menu.getNbPersos(6)];
+		i = 0;
+		for(Personnage e : listGuerrier2){
+			i++;
+			e = new Guerrier("guerrier2-"+i, true, 100, plateau.getPos(5), 12);
+			equipe2.add(e);
+		}
+		
+		// Gestion de la liste de piegeur de l'equipe 2
+		Personnage[] listPiegeur2 = new Piegeur[menu.getNbPersos(7)];
+		i = 0;
+		for(Personnage e : listPiegeur2){
+			i++;
+			e = new Piegeur("piegeur2-"+i, true, 100, plateau.getPos(5), 13);
+			equipe2.add(e);
+		}
+				
 		
 		plateau.getNavire(true).addPersos(3);
 		plateau.getNavire(false).addPersos(3);

@@ -88,6 +88,10 @@ public class Parcelle {
 		else if(type == 7) {return "C";} // coffre
 		else if(type == 8) {return "K";} // cle
 		else if(type == 9) {return "~";} // eau
+		else if(type == 10) {return "g";} // guerrier1
+		else if(type == 11) {return "p";} // piegeur1
+		else if(type == 12) {return "G";} // guerrier2
+		else if(type == 13) {return "P";} // piegeur2
 		else  { return "";}
 	} 
 	

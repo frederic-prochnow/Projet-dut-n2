@@ -35,7 +35,17 @@ public class Personnage {
 			this.cheminImage = "images/2.explorateur.png";
 		} else if (type == 4) {
 			this.cheminImage = "images/2.voleur.png";
+		} else if (type == 10) {
+			this.cheminImage = "images/2.voleur.png";
+		} else if (type == 11) {
+			this.cheminImage = "images/2.voleur.png";
+		} else if (type == 12) {
+			this.cheminImage = "images/2.voleur.png";
+		} else if (type == 13) {
+			this.cheminImage = "images/2.voleur.png";
 		}
+		
+		
 		this.pos = p;
 		this.dernierTag = new Position(-1, -1);
 		
