@@ -48,6 +48,10 @@ public class Map {
 		equipe2.add(explo2);
 		equipe2.add(voleur2);
 		plateau.getNavire(false).addPersos(2);
+		
+		if(menu.getChoixManuel()){
+			//lancement du menu de choix manuel
+		}
 				
 		/* INITIALISATIONS */
 		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph, equipe1, equipe2), jeu.getDebutJeu());
@@ -173,7 +177,6 @@ public class Map {
 			plateau.updateEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
-						
 			while (confirmationFinTour.equals(new Position(-1, -1)) && !jeu.getEstFini()) {
 				plateauGraph.clearConsole();
 				plateauGraph.recover();
