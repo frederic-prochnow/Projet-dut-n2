@@ -30,23 +30,23 @@ public class Map {
 
 		/* PERSONNAGES */
 		
-		List<Personnage> equipe1 = new ArrayList<>();
-		List<Personnage> equipe2 = new ArrayList<>();
+		Equipe equipe1 = new Equipe();
+		Equipe equipe2 = new Equipe();
 		
 		Explorateur explo1 = new Explorateur("explorateur1-1", true, 100, plateau.getPos(2), 0);
 		Personnage voleur1 = new Voleur("voleur1-1", true, 100, plateau.getPos(2), 1);
 		Personnage voleur12 = new Voleur("voleur1-2", true, 100, plateau.getPos(2), 1);
 		Personnage voleur13 = new Voleur("voleur1-3", true, 100, plateau.getPos(2), 1);
-		equipe1.add(explo1);
-		equipe1.add(voleur1);
-		equipe1.add(voleur12);
-		equipe1.add(voleur13);
+		equipe1.getListe().add(explo1);
+		equipe1.getListe().add(voleur1);
+		equipe1.getListe().add(voleur12);
+		equipe1.getListe().add(voleur13);
 		plateau.getNavire(true).addPersos(2);
 
 		Explorateur explo2 = new Explorateur("explorateur2-1", false, 100, plateau.getPos(5), 3);
 		Personnage voleur2 = new Voleur("voleur2-1", false, 100, plateau.getPos(5), 4);
-		equipe2.add(explo2);
-		equipe2.add(voleur2);
+		equipe2.getListe().add(explo2);
+		equipe2.getListe().add(voleur2);
 		plateau.getNavire(false).addPersos(2);
 		
 		if(menu.getChoixManuel()){
@@ -54,7 +54,7 @@ public class Map {
 		}
 				
 		/* INITIALISATIONS */
-		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph, equipe1, equipe2), jeu.getDebutJeu());
+		plateauGraph.setJeu(plateau.getImagesCorrespondants(jeu.getTourEquipe(), plateauGraph, equipe1.getListe(), equipe2.getListe()), jeu.getDebutJeu());
 
 		/* ACTIONS */
 		
@@ -70,7 +70,7 @@ public class Map {
 		boolean pasEnergie = false;
 		
 		
-		while (!jeu.getEstFini(equipe1) && !jeu.getEstFini(equipe2)) {// boucle tant que personne n'a gagne
+		while (!jeu.getEstFini(equipe1.getListe()) && !jeu.getEstFini(equipe2.getListe())) {// boucle tant que personne n'a gagne
 			
 			if (!jeu.getDebutJeu()) {
 				plateauGraph.println("A l'equipe suivante");
@@ -80,9 +80,9 @@ public class Map {
 			}
 			
 			plateauGraph.clearHighlight();
-			plateau.bonusEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
-			plateau.updateEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
-			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
+			plateau.bonusEnergie(jeu.getTourEquipe(), equipe1.getListe(), equipe2.getListe(), plateauGraph);
+			plateau.updateEnergie(jeu.getTourEquipe(), equipe1.getListe(), equipe2.getListe(), plateauGraph);
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 					
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
@@ -112,18 +112,18 @@ public class Map {
 				
 				// verifie si le joueur a bien selectionne un perso de son equipe seulment si il a clique
 				if (jeu.getTourEquipe() && !persoSelectionPosition.getLocation().equals(new Point(-1, -1))) {
-					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe1, plateauGraph);
+					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe1.getListe(), plateauGraph);
 					pasEnergie = persoSelectionPosition.getEnergieInvalide();
 					if (bonneSelectionEquipe && !pasEnergie) {
-						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe1);
+						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe1.getListe());
 					} else {
 						presentsEquipe = new ArrayList<Personnage>();
 					}
 				} else if (!jeu.getTourEquipe()){
-					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2, plateauGraph);
+					bonneSelectionEquipe = persoSelectionPosition.pointValide(equipe2.getListe(), plateauGraph);
 					pasEnergie = persoSelectionPosition.getEnergieInvalide();
 					if (bonneSelectionEquipe && !pasEnergie) {
-						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2);
+						presentsEquipe = persoSelectionPosition.getPersosSurPosition(equipe2.getListe());
 					} else {
 						presentsEquipe = new ArrayList<Personnage>();
 					}
@@ -146,8 +146,8 @@ public class Map {
 			} else {
 				personnnageSelectionne = presentsEquipe.get(0);
 				plateauGraph.setPeutVoler(plateau.tenterVol(personnnageSelectionne));
-				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(personnnageSelectionne, true));
-				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(personnnageSelectionne, false));
+				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(personnnageSelectionne, true, equipe1, equipe2));
+				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(personnnageSelectionne, false, equipe1, equipe2));
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
 			
@@ -174,9 +174,9 @@ public class Map {
 					}
 				}
 			}
-			plateau.updateEnergie(jeu.getTourEquipe(), equipe1, equipe2, plateauGraph);
+			plateau.updateEnergie(jeu.getTourEquipe(), equipe1.getListe(), equipe2.getListe(), plateauGraph);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
-			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1, equipe2);
+			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 			while (confirmationFinTour.equals(new Position(-1, -1)) && !jeu.getEstFini()) {
 				plateauGraph.clearConsole();
 				plateauGraph.recover();

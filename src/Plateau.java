@@ -360,6 +360,7 @@ public class Plateau {
 			ajouterActionVoler();
 			ajouteVolFait = true;
 		} else if (liste.length == 1 && peutEchangerClef) {
+			System.out.println("peut prendre/donner tresor et seul dans liste selection");
 			ajouterActionEchangerClef();
 			dejaAjoutClef = true;
 		} else if (liste.length == 1 && peutEchangerTresor) {
