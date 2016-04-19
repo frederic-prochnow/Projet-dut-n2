@@ -142,6 +142,8 @@ public class Map {
 			} else {
 				personnnageSelectionne = presentsEquipe.get(0);
 				plateauGraph.setPeutVoler(plateau.tenterVol(personnnageSelectionne));
+				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(personnnageSelectionne, true));
+				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(personnnageSelectionne, false));
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
 			

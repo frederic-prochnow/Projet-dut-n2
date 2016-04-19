@@ -701,6 +701,31 @@ public class Ile {
 	}
 	
 	/**
+	 * On vérifie si le personnage détient et peut echanger soit la clef ou le tresor
+	 * @param perso l'instance du personnage qui pourrait eventuellement transferer son objet
+	 * @param chercheClef si on veut savoir s'il peut echanger sa clef ou echanger son tresor
+	 * @return si un echange est possible
+	 */
+	public boolean peutEchanger(Personnage perso, boolean chercheClef) {
+		for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
+			for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
+				if ( (plateau[i][j].getEquipe1() && perso.getEquipe1()) || (plateau[i][j].getEquipe2() && perso.getEquipe2()) ) {
+					if (chercheClef && perso.getDetientClef() && !perso.getPos().equals(new Position(i, j))) {
+						System.out.println("l'autre perso est a x=" +i + " y=" +j);
+						System.out.println("il possede la clef et peut l'echanger");
+						return true;
+					} else if (!chercheClef && perso.getDetientTresor() && !perso.getPos().equals(new Position(i, j))) {
+						System.out.println("l'autre perso est a x=" +i + " y=" +j);
+						System.out.println("il possede le tresor et peut l'echanger");
+						return true;
+					}
+				}
+			}
+		}
+	return false;
+	}
+	
+	/**
 	 * Permet de savoir si la position est inoccupé
 	 * @param p La position vérifiée
 	 * @return boolean
@@ -752,6 +777,7 @@ public class Ile {
 		} 
 		return navireEquipe2;
 	}
+
 	
 
 

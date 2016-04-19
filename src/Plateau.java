@@ -36,6 +36,10 @@ public class Plateau {
 	private Color sable;
 	private boolean peutVoler;
 	private boolean ajouteVolFait;
+	private boolean peutEchangerClef;
+	private boolean peutEchangerTresor;
+	private boolean dejaAjoutClef;
+	private boolean dejaAjoutTresor;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -333,6 +337,8 @@ public class Plateau {
 	 */
 	public void ajouterSelectionPersos(List<Personnage> selection) {
 		ajouteVolFait = false;
+		dejaAjoutClef = false;
+		dejaAjoutTresor = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -353,9 +359,17 @@ public class Plateau {
 			System.out.println("he is alone and is thief");
 			ajouterActionVoler();
 			ajouteVolFait = true;
+		} else if (liste.length == 1 && peutEchangerClef) {
+			ajouterActionEchangerClef();
+			dejaAjoutClef = true;
+		} else if (liste.length == 1 && peutEchangerTresor) {
+			ajouterActionEchangerTresor();
+			dejaAjoutTresor = true;
 		}
 	}
-	
+	/**
+	 * On ajoute le bouton de l'action voler. Ensuite, selon si un vol est possible, le bouton est vert ou gris
+	 */
 	private void ajouterActionVoler() {
 		ImageIcon volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
 		JButton voler = new JButton(volerIcone);
@@ -366,6 +380,26 @@ public class Plateau {
 		} else {
 			voler.setBackground(Color.LIGHT_GRAY);
 		}
+	}
+	/**
+	 * On ajoute le bouton de l'action d'échanger une clef dans PersoPane
+	 */
+	private void ajouterActionEchangerClef() {
+		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
+		JButton echangerClef = new JButton(clefIcone);
+		echangerClef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
+		echangerClef.setBackground(Color.GREEN);
+		PersoPane.add(echangerClef);
+	}
+	/**
+	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
+	 */
+	private void ajouterActionEchangerTresor() {
+		ImageIcon tresorIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
+		JButton echangerTresor = new JButton(tresorIcone);
+		echangerTresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
+		echangerTresor.setBackground(Color.GREEN);
+		PersoPane.add(echangerTresor);
 	}
 	
 	/**
@@ -387,7 +421,12 @@ public class Plateau {
 						ajouterActionVoler();
 						ajouteVolFait = true;
 					}
-					
+					if (peutEchangerClef && !dejaAjoutClef) {
+						ajouterActionEchangerClef();
+					}
+					if (peutEchangerTresor && ! dejaAjoutTresor) {
+						ajouterActionEchangerTresor();
+					}
 				}
 			}
 		}		
@@ -399,6 +438,14 @@ public class Plateau {
 	
 	public void setPeutVoler(boolean set) {
 		this.peutVoler = set;
+	}
+	
+	public void setPeutEchangerClef(boolean set) {
+		this.peutEchangerClef = set;
+	}
+	
+	public void setPeutEchangerTresor(boolean set) {
+		this.peutEchangerTresor = set;
 	}
 	
 	
