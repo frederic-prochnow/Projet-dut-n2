@@ -192,7 +192,6 @@ public class Menu {
 			nbPersos1.add(inputPersos[i]);
 		}
 		for (int i=inputPersos.length/2;i<inputPersos.length;i++) {
-			System.out.println(i);
 			nbPersos2.add(inputPersos[i]);
 		}
 		descJoueur1.add(new JLabel("Nombre d'Explorateurs : "));
