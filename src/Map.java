@@ -18,7 +18,7 @@ public class Map {
 		/* DECLARATION DES VARIABLES */
 		String[] img = { "images/sable.png", "images/1.explorateur.png", "images/1.voleur.png", "images/1.navire.png",
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
-				"images/coffre.png", "images/cle.jpg", "images/mer.png", "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png" };
+				"images/coffre.png", "images/cle.jpg", "images/mer.png", "images/1.explorateur.png", "images/1.explorateur.png" , "images/1.explorateur.png" , "images/1.explorateur.png" };
 		Menu menu = new Menu();
 		menu.affichage();
 		while (!menu.getConfirme()) {
@@ -92,7 +92,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listGuerrier2){
 			i++;
-			e = new Guerrier("guerrier2-"+i, true, 100, plateau.getPos(5), 12);
+			e = new Guerrier("guerrier2-"+i, false, 100, plateau.getPos(5), 12);
 			equipe2.add(e);
 		}
 		
@@ -101,7 +101,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listPiegeur2){
 			i++;
-			e = new Piegeur("piegeur2-"+i, true, 100, plateau.getPos(5), 13);
+			e = new Piegeur("piegeur2-"+i, false, 100, plateau.getPos(5), 13);
 			equipe2.add(e);
 		}
 				

@@ -362,7 +362,7 @@ public class Ile {
 			}
 		}
 		// affecte la valeur pour le navire de l'equipe courante
-		tab[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y] = plateau[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y].getType() + 2;
+		tab[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y] = (plateau[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y].getType() + 2);
 		plateauGraph.resetHighlight(getPositionNavire(equipeCourante).x, getPositionNavire(equipeCourante).y);
 		
 		// sauvegarde du tableau dans un tab dedié a l'équipe
