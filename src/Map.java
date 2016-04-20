@@ -192,11 +192,16 @@ public class Map {
 			
 			// CAS : il y a plusieurs persos sur une case : le debut du jeu
 			if ( presentsEquipe.size() > 1) {
+				Personnage temp = new Personnage("temp plusieurs", jeu.getTourEquipe(), 100, new Position(persoSelectionPosition), 0);
 				plateauGraph.clearConsole();
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
 				plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
+
+				plateauGraph.setPeutVoler(plateau.tenterVol(temp));
+				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(temp, true, equipe1, equipe2));
+				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(temp, false, equipe1, equipe2));
 				
 				while (persoSelec == -1) {
 					plateauGraph.waitEvent(5000,true);

@@ -342,6 +342,7 @@ public class Plateau {
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
+			System.out.println("longeur liste = " + liste.length);
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
@@ -359,13 +360,14 @@ public class Plateau {
 			System.out.println("he is alone and is thief");
 			ajouterActionVoler();
 			ajouteVolFait = true;
-		} else if (liste.length == 1 && peutEchangerClef) {
-			System.out.println("peut prendre/donner tresor et seul dans liste selection");
+		}
+		if (liste.length == 1 && peutEchangerClef) {
+			System.out.println("peut prendre/donner clef et seul dans liste selection");
 			ajouterActionEchangerClef();
-			dejaAjoutClef = true;
-		} else if (liste.length == 1 && peutEchangerTresor) {
+		}
+		if (liste.length == 1 && peutEchangerTresor) {
+			System.out.println("peut prendre/donner tresor et seul dans liste selection");
 			ajouterActionEchangerTresor();
-			dejaAjoutTresor = true;
 		}
 	}
 	/**
@@ -390,17 +392,23 @@ public class Plateau {
 		JButton echangerClef = new JButton(clefIcone);
 		echangerClef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
 		echangerClef.setBackground(Color.GREEN);
-		PersoPane.add(echangerClef);
+		if (!dejaAjoutClef) {
+			PersoPane.add(echangerClef);
+			dejaAjoutClef = true;
+		}
 	}
 	/**
 	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
 	 */
 	private void ajouterActionEchangerTresor() {
-		ImageIcon tresorIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
+		ImageIcon tresorIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
 		JButton echangerTresor = new JButton(tresorIcone);
 		echangerTresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
 		echangerTresor.setBackground(Color.GREEN);
-		PersoPane.add(echangerTresor);
+		if (!dejaAjoutTresor) {
+			PersoPane.add(echangerTresor);
+			dejaAjoutTresor = true;
+		}
 	}
 	
 	/**
@@ -422,6 +430,10 @@ public class Plateau {
 						ajouterActionVoler();
 						ajouteVolFait = true;
 					}
+					System.out.println("deja ajout clef " + dejaAjoutClef);
+					System.out.println("deja ajout tresor " + dejaAjoutTresor);
+					System.out.println("peut echanger clef " + peutEchangerClef);
+					System.out.println("peut echanger tresor " + peutEchangerTresor);
 					if (peutEchangerClef && !dejaAjoutClef) {
 						ajouterActionEchangerClef();
 					}

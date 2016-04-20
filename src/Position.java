@@ -15,6 +15,11 @@ public class Position extends Point{
 		plusdEnergie = true;
 	}
 		
+	public Position(Point point){
+		super(point);
+		persosPresents = new ArrayList<>();
+		plusdEnergie = true;
+	}
 	// on parcour les personnages de l'equipe voulue, et on verifie si l'un
 	// au moins a la meme position que celle selectionnee
 	public boolean pointValide(List<Personnage> equipe, Plateau plateauGraph) {

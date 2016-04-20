@@ -718,8 +718,6 @@ public class Ile {
 				if ( (plateau[i][j].getEquipe1() && perso.getEquipe1()) || (plateau[i][j].getEquipe2() && perso.getEquipe2()) ) {
 					// si on cherche la clef et que le perso detient lui meme la clef OU l'autre perso de son equipe detient la clef
 					if (chercheClef && !perso.getPos().equals(new Position(i, j)) && (perso.getDetientClef() || tempEquipe.getPersoSurPosition(i, j).getDetientClef() ) ) {
-						System.out.println("l'autre perso est a x=" +i + " y=" +j);
-						System.out.println("l'un des deux possde la clef et peut l'echanger");
 						return true;
 					} else if (!chercheClef && !perso.getPos().equals(new Position(i, j)) && (perso.getDetientTresor() || tempEquipe.getPersoSurPosition(i, j).getDetientTresor() ) ) {
 						System.out.println("l'autre perso est a x=" +i + " y=" +j);
