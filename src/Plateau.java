@@ -36,6 +36,8 @@ public class Plateau {
 	private Color sable;
 	private boolean peutVoler;
 	private boolean ajouteVolFait;
+	private boolean afficheclefe1 = true;
+	private boolean affichetresore1 = true;
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -357,21 +359,23 @@ public class Plateau {
 	}
 	
 	private void ajouterBoutonClef() {
-		ImageIcon clefIcone = new ImageIcon (Plateau.class.getResource("images/cle.jpg"));
+		ImageIcon clefIcone = new ImageIcon (Plateau.class.getResource("images/cle2.gif"));
 		JButton clef = new JButton(clefIcone);
 		clef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
-		clef.setBackground(Color.LIGHT_GRAY);
 		PersoPane.add(clef);
-		clef.setBackground(Color.LIGHT_GRAY);
+		if (!peutVoler) {
+			clef.setBackground(Color.LIGHT_GRAY);
+		}
 	}
 	
 	private void ajouterBoutonTresor() {
 		ImageIcon tresorIcone = new ImageIcon (Plateau.class.getResource("images/coffre.png"));
 		JButton tresor = new JButton(tresorIcone);
 		tresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
-		tresor.setBackground(Color.LIGHT_GRAY);
+		if (!peutVoler) {
+			tresor.setBackground(Color.LIGHT_GRAY);
+		}
 		PersoPane.add(tresor);
-		tresor.setBackground(Color.LIGHT_GRAY);
 	}
 	
 	
@@ -382,6 +386,7 @@ public class Plateau {
 		PersoPane.add(voler);
 		if (peutVoler) {
 			voler.setBackground(Color.GREEN);
+			
 		} else {
 			voler.setBackground(Color.LIGHT_GRAY);
 		}
@@ -394,8 +399,8 @@ public class Plateau {
 	private class Action implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean afficheclef = true;
-			boolean affichetresor = true;
+			/*boolean afficheclef = true;
+			boolean affichetresor = true;*/
 			for (int i=0;i<liste.length;i++) {
 				// si ce n'est psa le bouton appuyé, on le desactive
 				if (!("perso_"+i).equals(e.getActionCommand())) {
@@ -410,15 +415,14 @@ public class Plateau {
 					}
 				
 				}
-				if (afficheclef == true && liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4)) {
+				if (afficheclefe1 && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
 					ajouterBoutonClef();
-					afficheclef = false;
+					afficheclefe1 = false;
 				}
-				if (affichetresor == true && liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4)) {
+				if (affichetresore1 && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
 					ajouterBoutonTresor();
-					affichetresor = false;
+					affichetresore1 = false;
 				}
-			}
 		}		
 	}
 	
@@ -577,4 +581,4 @@ public class Plateau {
 	public void clearSave() {
 		console.clearSave();
 	}
-}
+}	
