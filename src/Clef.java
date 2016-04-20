@@ -2,7 +2,7 @@ public class Clef {
 	private Position pos;
 	private int type;
 	
-	Clef(Position p){
+	public Clef(Position p){
 		this.pos = p;
 		this.type = 8;
 	}

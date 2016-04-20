@@ -14,8 +14,8 @@ public class Parcelle {
 	
 
 	/**
-	 * Constructeur avec paramétre de Parcelle
-	 * Ce paramétre permet de créer une parcelle type choisit
+	 * Constructeur avec paramÃ©tre de Parcelle
+	 * Ce paramÃ©tre permet de crÃ©er une parcelle type choisit
 	 *
 	 * @param type
 	 */
@@ -28,7 +28,7 @@ public class Parcelle {
 	}
 	
 	/**
-	 * Fonction permettant de récupérer le type de la pareclle concernée
+	 * Fonction permettant de rÃ©cupÃ©rer le type de la pareclle concernÃ©e
 	 * @return int
 	 */
 	public int getType(){
@@ -47,17 +47,32 @@ public class Parcelle {
 		this.estCompte = b;
 	}
 	
+	// permet de connaitre a quelle equipe est sur la position
+	public boolean getEquipe1() {
+		if (this.type == 0 || this.type == 1 || this.type == 2) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean getEquipe2() {
+		if (this.type == 3 || this.type == 4 || this.type == 5) {
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
-	 * <br>0 pour explorateur équipe 1
-	 * <br>1 pour voleur équipe 1
-	 * <br>2 pour navire équipe 1
-	 * <br>3 pour explorateur équipe 2
-	 * <br>4 pour voleur équipe 2
-	 * <br>5 pour navire équipe 2
+	 * <br>0 pour explorateur Ã©quipe 1
+	 * <br>1 pour voleur Ã©quipe 1
+	 * <br>2 pour navire Ã©quipe 1
+	 * <br>3 pour explorateur Ã©quipe 2
+	 * <br>4 pour voleur Ã©quipe 2
+	 * <br>5 pour navire Ã©quipe 2
 	 * <br>6 pour rocher
 	 * <br>7 pour coffre
-	 * <br>8 pour clé
+	 * <br>8 pour clÃ©
 	 * <br>9 pour eau
 	 * @return String
 	 */
