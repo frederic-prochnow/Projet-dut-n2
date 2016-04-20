@@ -29,21 +29,21 @@ public class Plateau {
 	private static final long serialVersionUID = 1L;
 	private JFrame window ;
 	private GraphicPane graphic ;
-	private ConsolePane console ;
-	private JPanel PersoPane ;
-	private JButton[] liste;
+	private ConsolePane console ;	
+	private JPanel PersoPane ;	
+	private JButton[] liste;	
 	private int persoPrecis;
-	private Color sable;
+	private Color sable;	
 	private boolean peutVoler;
 	private boolean ajouteVolFait;
 	private boolean afficheclefe1 = true;
-	private boolean affichetresore1 = true;
+	private boolean affichetresore1 	= true;
 	/**
-	 *  Attribut ou est enregistré un événement observé. Cet attribut est
+	 *  Attribut ou est enregistré un �	�vénement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
-	 * par les deux listeners (mouseListener et keyListener). 
+	 * par les deux listeners (mouseListener	 et keyListener). 
 	 * cf {@link java.awt.event.InputEvent}.
-	 */
+	 */	
 	private InputEvent currentEvent = null ;
 	private MouseEvent mouse = null;
 	/**
@@ -363,19 +363,25 @@ public class Plateau {
 		JButton clef = new JButton(clefIcone);
 		clef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
 		PersoPane.add(clef);
-		if (!peutVoler) {
+		if (peutVoler) {
+			clef.setBackground(Color.GREEN);
+			
+		} else {
 			clef.setBackground(Color.LIGHT_GRAY);
 		}
 	}
 	
 	private void ajouterBoutonTresor() {
-		ImageIcon tresorIcone = new ImageIcon (Plateau.class.getResource("images/coffre.png"));
+		ImageIcon tresorIcone = new ImageIcon (Plateau.class.getResource("images/coffre2.gif"));
 		JButton tresor = new JButton(tresorIcone);
 		tresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
-		if (!peutVoler) {
+		PersoPane.add(tresor);
+		if (peutVoler) {
+			tresor.setBackground(Color.GREEN);
+			
+		} else {
 			tresor.setBackground(Color.LIGHT_GRAY);
 		}
-		PersoPane.add(tresor);
 	}
 	
 	
@@ -433,7 +439,6 @@ public class Plateau {
 	public void setPeutVoler(boolean set) {
 		this.peutVoler = set;
 	}
-	
 	
 	/**
 	 * Affiche un message dans la partie texte du plateau.
@@ -581,4 +586,4 @@ public class Plateau {
 	public void clearSave() {
 		console.clearSave();
 	}
-}	
+	}
