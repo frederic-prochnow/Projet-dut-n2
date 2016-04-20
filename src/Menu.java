@@ -98,8 +98,8 @@ public class Menu {
 		c.insets = new Insets(5, 0, 5, 0);
 		frame.add(messagePane,c);
 		
-		nbPersoSelected1 = 0;
-		nbPersoSelected2 = 0;
+		nbPersoSelected1 = 1;
+		nbPersoSelected2 = 1;
 		maxPerso = 3;
 		
 		// Choix type de jeu
@@ -185,7 +185,12 @@ public class Menu {
 			boutonPlus[i].addActionListener(new buttonAction());
 			input[i] = new JTextField();
 			input[i].setHorizontalAlignment(JTextField.CENTER);
-			input[i].setText("" + 0);
+			
+			if(i == 0 || i == 4){
+				input[i].setText("" + 1);
+			}else{
+				input[i].setText("" + 0);
+			}
 			input[i].setPreferredSize(new Dimension(30, 25));
 		}
 		for (int i=0; i<boutonMoins.length/2;i++) {
@@ -338,13 +343,18 @@ public class Menu {
 			} else if (e.getActionCommand().startsWith("moins_")) {
 				for (int i=0;i<boutonMoins.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
-						input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
 						
 						// On decremente le nombre de la bonne equipe
 						if(i >= 4){
-							nbPersoSelected2--;
+							if((i == 4 && Integer.valueOf(input[i].getText()) > 1) || i > 4){ // Un explorateur au moins
+								input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+								nbPersoSelected2--;
+							}			
 						}else{
-							nbPersoSelected1--;
+							if((i == 0 && Integer.valueOf(input[i].getText()) > 1) || (i > 0 && i < 4)){ // Un explorateur au moins
+								input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+								nbPersoSelected1--;
+							}
 						}
 					}
 				}
