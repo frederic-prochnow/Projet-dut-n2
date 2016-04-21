@@ -12,6 +12,7 @@ public class Personnage {
 	private boolean detientClef;
 	private boolean detientTresor;
 	private Position dernierTag;
+	private Position directionDeplacement;
 
 	/**
 	 * Constructeur de Personnage
@@ -48,6 +49,7 @@ public class Personnage {
 		
 		this.pos = p;
 		this.dernierTag = new Position(-1, -1);
+		this.directionDeplacement = new Position(-1,-1);
 		
 		if(equipe1){
 			this.symboleNom = nom.charAt(0);
@@ -68,7 +70,7 @@ public class Personnage {
 		this.energie -= energie;
 	}
 	
-	public Point getPos(){
+	public Position getPos(){
 		return pos;
 	}
 	
@@ -155,6 +157,13 @@ public class Personnage {
 	
 	public void setDernierTag(int x, int y) {
 		this.dernierTag.setLocation(x, y);
+	}
+	
+	public Position getDirectionDeplacement() {
+		return this.directionDeplacement;
+	}
+	public void setDirectionDeplacement(Position p) {
+		this.directionDeplacement.setLocation(p);
 	}
 
 }

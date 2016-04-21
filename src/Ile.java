@@ -536,6 +536,7 @@ public class Ile {
 			} else { // Sur sol
 				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 			}
+			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
 			perso.perdEnergie(1);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());

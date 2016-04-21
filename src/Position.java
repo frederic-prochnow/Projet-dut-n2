@@ -59,5 +59,13 @@ public class Position extends Point{
 		this.y = p.y;
 	}
 	
+	public Position differenceCoordonnees(Position p) {
+		return new Position(this.x-p.x, this.y-p.y);
+	}
+	
+	public Position additionner(Position p) {
+		return new Position(this.x+p.x, this.y+p.y);
+	}
+	
 }
 
