@@ -12,7 +12,9 @@
  * * Retour vers navire quand energie est bas
  * * Possiblité de voler/pieger/combattre
  * * Stratégie de jeu ???
- * * Choix du nombre de personnages dans le menu. Chaque personnage est associé à un élément dans
+
+ * #### Choix du nombre de personnages dans le menu.
+     Chaque personnage est associé à un élément dans
  un tableau (ex: JButton[])
  
 
