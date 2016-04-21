@@ -28,6 +28,7 @@ public class Map {
 		Ile plateau = new Ile(menu.getTaille(), menu.getRochers());
 		Plateau plateauGraph = new Plateau(img, plateau.getSize(),true);
 		GestionJeu jeu = new GestionJeu(true);
+		Actions actions = new Actions();
 
 		/* PERSONNAGES */
 		
@@ -200,10 +201,10 @@ public class Map {
 				plateauGraph.println("Veuillez selectionner une de ceux-cis");
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 
-				plateauGraph.setPeutVoler(plateau.tenterVol(temp));
-				plateauGraph.setPeutPieger(plateau.tenterPiege(temp));
-				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(temp, true, equipe1, equipe2));
-				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(temp, false, equipe1, equipe2));
+				plateauGraph.setPeutVoler(actions.tenterVol(temp, plateau));
+				plateauGraph.setPeutPieger(actions.tenterPiege(temp, plateau));
+				plateauGraph.setPeutEchangerClef(actions.peutEchanger(temp, true, equipe1, equipe2, plateau));
+				plateauGraph.setPeutEchangerTresor(actions.peutEchanger(temp, false, equipe1, equipe2, plateau));
 				
 				while (persoSelec == -1) {
 					plateauGraph.waitEvent(5000,true);
@@ -212,9 +213,9 @@ public class Map {
 				personnnageSelectionne = presentsEquipe.get(persoSelec);
 			} else {
 				personnnageSelectionne = presentsEquipe.get(0);
-				plateauGraph.setPeutVoler(plateau.tenterVol(personnnageSelectionne));
-				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(personnnageSelectionne, true, equipe1, equipe2));
-				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(personnnageSelectionne, false, equipe1, equipe2));
+				plateauGraph.setPeutVoler(actions.tenterVol(personnnageSelectionne, plateau));
+				plateauGraph.setPeutEchangerClef(actions.peutEchanger(personnnageSelectionne, true, equipe1, equipe2, plateau));
+				plateauGraph.setPeutEchangerTresor(actions.peutEchanger(personnnageSelectionne, false, equipe1, equipe2, plateau));
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 			}
 			

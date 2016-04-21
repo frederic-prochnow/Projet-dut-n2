@@ -54,5 +54,10 @@ public class Position extends Point{
 		return plusdEnergie;
 	}
 	
+	public void setLocation(Position p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+	
 }
 
