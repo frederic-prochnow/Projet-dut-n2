@@ -559,6 +559,7 @@ public class Ile {
 					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
 					plateauGraph.save();
 					plateau[destination.x][destination.y].setType(15);
+					clef.setPosition(new Position(-1,-1));
 					perso.setDetientClef(true);
 				} else {
 					System.out.println("Souleve le rocher et il n'a rien");

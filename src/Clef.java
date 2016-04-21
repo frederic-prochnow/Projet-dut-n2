@@ -14,4 +14,8 @@ public class Clef {
 	public int getType(){
 		return this.type;
 	}
+	
+	public void setPosition(Position p) {
+		this.pos = p;
+	}
 }
