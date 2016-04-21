@@ -346,6 +346,7 @@ public class Plateau {
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
+			System.out.println("longeur liste = " + liste.length);
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			liste[i] = new JButton(image);
 			liste[i].setOpaque(true);
