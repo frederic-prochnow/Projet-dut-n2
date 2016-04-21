@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -613,6 +614,7 @@ public class Ile {
 	}
 	/**
 	 * Met à jour l'affichage de l'énergie sur le Plateau
+	 * et prévient de la mort imminente d'un personnage
 	 * 
 	 * @param tourEquipe permet de savoir pour quels équipe afficher les énergies
 	 * @param equipe1 liste des personnages de l'équipe 1
@@ -621,21 +623,22 @@ public class Ile {
 	 */
 	public void updateEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
 		Personnage temp;
+		List<Personnage> tempEquipe = new ArrayList<>();
+		if (tourEquipe) {
+			tempEquipe = equipe1;
+		} else {
+			tempEquipe = equipe2;
+		}
 		plateauGraph.clearText();
 		for (int x=1;x<plateau[0].length-1;x++) {
 			for (int y=1;y<plateau[1].length-1;y++) {
-				if (tourEquipe) {
-					for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
-						temp = perso.next();
-						if (temp.getPos().equals(new Point(x,y))) {
-							plateauGraph.setText(x, y, "" + temp.getEnergie());
-						}
-					}
-				} else {
-					for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
-						temp = perso.next();
-						if (temp.getPos().equals(new Point(x,y))) {
-							plateauGraph.setText(x, y, "" + temp.getEnergie());
+				for (Iterator<Personnage> perso = tempEquipe.iterator();perso.hasNext();) {
+					temp = perso.next();
+					if (temp.getPos().equals(new Point(x,y))) {
+						plateauGraph.setText(x, y, "" + temp.getEnergie());
+						if (temp.getEnergie() <= 0) {
+							plateauGraph.println("Le personnage n'a plus d'énergie. Il va mourir");
+							plateauGraph.save();
 						}
 					}
 				}
@@ -653,27 +656,49 @@ public class Ile {
 	 */
 	public void bonusEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
 		Personnage temp;
+		List<Personnage> tempE = new ArrayList<>();
 		if (tourEquipe) {
-			for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
-				temp = perso.next();
-				if (temp.getSurNavire()) {
-					if (temp.getEnergie()<90) {
-						temp.setEnergie(temp.getEnergie() + 10);
-					} else {
-						temp.setEnergie(100);
-					}
+			tempE = equipe1;
+		} else {
+			tempE = equipe2;
+		}
+		for (Iterator<Personnage> perso = tempE.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (temp.getSurNavire()) {
+				if (temp.getEnergie()<90) {
+					temp.setEnergie(temp.getEnergie() + 10);
+				} else {
+					temp.setEnergie(100);
 				}
 			}
+		}
+	}
+	/**
+	 * On retire les personnages n'ayant plus d'énergie
+	 * @param tourEquipe si c'est au tour de l'équipe 1
+	 * @param equipe1 la liste des personnages de l'équipe 1
+	 * @param equipe2 la liste des personnages de l'équipe 2
+	 */
+	public void retirerMorts(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2) {
+		Personnage tempPerso;
+		List<Personnage> tempEquipe = new ArrayList<>();
+		if (tourEquipe) {
+			tempEquipe = equipe1;
 		} else {
-			for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
-				temp = perso.next();
-				if (temp.getSurNavire()) {
-					if (temp.getEnergie()<90) {
-						temp.setEnergie(temp.getEnergie() + 10);
-					} else {
-						temp.setEnergie(100);
-					}
+			tempEquipe = equipe2;
+		}
+		for (int i=0; i<tempEquipe.size();i++) {
+			tempPerso = tempEquipe.get(i);
+			if (tempPerso.getEnergie() <= 0) {
+				System.out.println(tempPerso.getNom() + " est mort");
+				if (tempPerso.getDetientClef() && !tempPerso.getDetientTresor()) {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(8);
+				} else if (tempPerso.getDetientTresor()) {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
+				} else {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(-1);
 				}
+				tempEquipe.remove(i);
 			}
 		}
 	}

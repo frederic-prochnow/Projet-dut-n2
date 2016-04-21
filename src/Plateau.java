@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 /**
  * La classe Plateau permet d'afficher un plateau de Jeu carré
@@ -141,9 +142,7 @@ public class Plateau {
 		window.setLocationRelativeTo(null);
 		window.setLayout(new BorderLayout());
 		window.setResizable(false);
-		// La fermeture de la fenetre ne fait que la cacher. 
-		// cf Javadoc setDefaultCloseOperation
-		window.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// Ajout des deux composants à la fenetre
 		window.getContentPane().add(graphic, BorderLayout.NORTH);

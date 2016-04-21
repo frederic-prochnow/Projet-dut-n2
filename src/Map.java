@@ -250,6 +250,7 @@ public class Map {
 				plateauGraph.waitEvent(5000, false);
 				confirmationFinTour.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 			}
+			plateau.retirerMorts(jeu.getTourEquipe(),equipe1.getListe(),equipe2.getListe());
 			jeu.nextRound();
 		}
 		plateauGraph.clearConsole();
