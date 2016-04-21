@@ -7,20 +7,22 @@ public class GestionJeu {
 	private int round;
 	private int equipeVainqueur;
 	private boolean debutJeu;
+	private boolean vsOrdi;
 	
-	GestionJeu(boolean equipeDemarre){
+	GestionJeu(boolean equipeDemarre, boolean vsOrdi){
 		tourEquipe1 = equipeDemarre;
 		fini = false;
 		equipeVainqueur = -1;
 		round = 1;
 		debutJeu = true;
+		this.vsOrdi = vsOrdi;
 	}
 	
 	public int getEquipeVainqueur(){
 		return this.equipeVainqueur;
 	}
 	
-	public boolean getTourEquipe(){
+	public boolean getTourEquipe1(){
 		return tourEquipe1;
 	}
 	
@@ -55,6 +57,10 @@ public class GestionJeu {
 	
 	public void setDebutJeu(boolean set) {
 		this.debutJeu = set;
+	}
+	
+	public boolean getVsOrdi() {
+		return vsOrdi;
 	}
 	
 	/**

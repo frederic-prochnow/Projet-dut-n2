@@ -7,7 +7,7 @@ public class Personnage {
 	protected String cheminImage;
 	protected boolean equipe1;
 	protected int energie;
-	protected Point pos;
+	protected Position pos;
 	protected boolean surNavire;
 	private boolean detientClef;
 	private boolean detientTresor;
@@ -73,7 +73,8 @@ public class Personnage {
 	}
 	
 	public void setPos(Point point){
-		pos = point;
+		pos.x = point.x;
+		pos.y = point.y;
 	}
 	
 	public String getNom(){

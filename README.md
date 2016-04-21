@@ -2,6 +2,15 @@
 
 ### Version avec la souris
  
+ * (1/4) IA basique, 1 chance sur 2 de se deplacer gauche/droite OU haut/bas/  
+ A rajouter :
+ * * Continuer dans son direction de deplacement
+ * * Constitution de son propre equipe
+ * * Retour vers navire quand possede tresor
+ * * Retour vers navire quand energie est bas
+ * * Possiblité de voler/pieger/combattre
+ * * Stratégie de jeu ???
+ 
  * Choix du nombre de personnages dans le menu. Chaque personnage est associé à un élément dans
  un tableau (ex: JButton[])
  
