@@ -101,6 +101,7 @@ public class Parcelle {
 		else if(type == 11) {return "p";} // piegeur1
 		else if(type == 12) {return "G";} // guerrier2
 		else if(type == 13) {return "P";} // piegeur2
+		else if (type == 20) {return "D";} // cle prise
 		else  { return "";}
 	} 
 	
