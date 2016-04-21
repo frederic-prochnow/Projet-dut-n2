@@ -725,6 +725,17 @@ public class Ile {
 		return false;
 	}
 	
+	public boolean tenterPiege(Personnage perso){
+		if(perso.getType() == 11 || perso.getType() == 13){
+			if(!plateau[perso.getPos().x][perso.getPos().y].getEstPiege() && plateau[perso.getPos().x][perso.getPos().y].getType() <= -1){ // Si la case n'est pas déja piégé et est le sol
+				System.out.println("peut pieger");
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * On vérifie si un échange de clef ou tresor est possible a partir du personnage ou un autre membre de son equipe
 	 * @param perso l'instance du personnage qui pourrait eventuellement transferer son objet

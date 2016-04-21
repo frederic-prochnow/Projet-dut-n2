@@ -41,6 +41,9 @@ public class Plateau {
 	private boolean peutEchangerTresor;
 	private boolean dejaAjoutClef;
 	private boolean dejaAjoutTresor;
+	private boolean peutPieger;
+	private boolean dejaPeutPieger;
+	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
 	 * initialisé à null au début de la scrutation et rempli par l'événement observé 
@@ -338,6 +341,8 @@ public class Plateau {
 		ajouteVolFait = false;
 		dejaAjoutClef = false;
 		dejaAjoutTresor = false;
+		peutPieger = false;
+		dejaPeutPieger = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -360,6 +365,12 @@ public class Plateau {
 			ajouterActionVoler();
 			ajouteVolFait = true;
 		}
+		
+		if (liste.length == 1 && (selection.get(0).getType() == 11 || selection.get(0).getType() == 13) ) {
+			ajouterActionPieger();
+			peutPieger = true;
+		}
+		
 		if (liste.length == 1 && peutEchangerClef) {
 			System.out.println("peut prendre/donner clef et seul dans liste selection");
 			ajouterActionEchangerClef();
@@ -411,6 +422,20 @@ public class Plateau {
 	}
 	
 	/**
+	 * On ajoute le bouton de l'action pieger dans PersoPane
+	 */
+	private void ajouterActionPieger(){
+		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
+		JButton pieger = new JButton(piegerIcone);
+		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
+		pieger.setBackground(Color.GREEN);
+		if (!dejaPeutPieger) {
+			PersoPane.add(pieger);
+			dejaPeutPieger = true;
+		}
+	}
+	
+	/**
 	 * On desactive les boutons si on choisit deja une
 	 *
 	 */
@@ -429,6 +454,12 @@ public class Plateau {
 						ajouterActionVoler();
 						ajouteVolFait = true;
 					}
+					
+					if(!peutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
+						ajouterActionPieger();
+						peutPieger = true;
+					}
+					
 					System.out.println("deja ajout clef " + dejaAjoutClef);
 					System.out.println("deja ajout tresor " + dejaAjoutTresor);
 					System.out.println("peut echanger clef " + peutEchangerClef);
@@ -450,6 +481,10 @@ public class Plateau {
 	
 	public void setPeutVoler(boolean set) {
 		this.peutVoler = set;
+	}
+	
+	public void setPeutPieger(boolean set){
+		this.peutPieger = set;
 	}
 	
 	public void setPeutEchangerClef(boolean set) {

@@ -200,6 +200,7 @@ public class Map {
 				plateauGraph.ajouterSelectionPersos(presentsEquipe);
 
 				plateauGraph.setPeutVoler(plateau.tenterVol(temp));
+				plateauGraph.setPeutPieger(plateau.tenterPiege(temp));
 				plateauGraph.setPeutEchangerClef(plateau.peutEchanger(temp, true, equipe1, equipe2));
 				plateauGraph.setPeutEchangerTresor(plateau.peutEchanger(temp, false, equipe1, equipe2));
 				

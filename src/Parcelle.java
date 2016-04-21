@@ -11,6 +11,7 @@ public class Parcelle {
 	//private boolean cleEquipe1 = false;
 	//private boolean cleEquipe2 = false;
 	private boolean estCompte = false;
+	private boolean estPiege = false;
 	
 
 	/**
@@ -33,6 +34,14 @@ public class Parcelle {
 	 */
 	public int getType(){
 		return this.type;
+	}
+	
+	public boolean getEstPiege(){
+		return estPiege;
+	}
+	
+	public void setEstPiege(boolean b){
+		estPiege = b;
 	}
 	
 	public void setType(int x){
