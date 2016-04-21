@@ -43,6 +43,7 @@ public class Plateau {
 	private boolean dejaAjoutTresor;
 	private boolean peutPieger;
 	private boolean dejaPeutPieger;
+	private boolean annulerChoix;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -343,6 +344,7 @@ public class Plateau {
 		dejaAjoutTresor = false;
 		peutPieger = false;
 		dejaPeutPieger = false;
+		annulerChoix = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -378,6 +380,14 @@ public class Plateau {
 		if (liste.length == 1 && peutEchangerTresor) {
 			System.out.println("peut prendre/donner tresor et seul dans liste selection");
 			ajouterActionEchangerTresor();
+		}
+		if (liste.length != 0) {
+			ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
+			JButton annuler = new JButton(annulerIcone);
+			annuler.setBackground(sable);
+			annuler.setActionCommand("annuler");
+			annuler.addActionListener(new Action());
+			PersoPane.add(annuler);
 		}
 	}
 	/**
@@ -442,37 +452,45 @@ public class Plateau {
 	private class Action implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for (int i=0;i<liste.length;i++) {
-				// si ce n'est psa le bouton appuyé, on le desactive
-				if (!("perso_"+i).equals(e.getActionCommand())) {
-					liste[i].setEnabled(false);
-					liste[i].setBackground(Color.LIGHT_GRAY);
-				} else {
-					liste[i].setBackground(sable);
-					persoPrecis = i;
-					if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
-						ajouterActionVoler();
-						ajouteVolFait = true;
-					}
-					
-					if(!peutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
-						ajouterActionPieger();
-						peutPieger = true;
-					}
-					
-					System.out.println("deja ajout clef " + dejaAjoutClef);
-					System.out.println("deja ajout tresor " + dejaAjoutTresor);
-					System.out.println("peut echanger clef " + peutEchangerClef);
-					System.out.println("peut echanger tresor " + peutEchangerTresor);
-					if (peutEchangerClef && !dejaAjoutClef) {
-						ajouterActionEchangerClef();
-					}
-					if (peutEchangerTresor && ! dejaAjoutTresor) {
-						ajouterActionEchangerTresor();
+			if (e.getActionCommand().equals("annuler")) {
+				annulerChoix = true;
+			} else {
+				for (int i=0;i<liste.length;i++) {
+					// si ce n'est psa le bouton appuyé, on le desactive
+					if (!("perso_"+i).equals(e.getActionCommand())) {
+						liste[i].setEnabled(false);
+						liste[i].setBackground(Color.LIGHT_GRAY);
+					} else {
+						liste[i].setBackground(sable);
+						persoPrecis = i;
+						if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
+							ajouterActionVoler();
+							ajouteVolFait = true;
+						}
+						
+						if(!peutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
+							ajouterActionPieger();
+							peutPieger = true;
+						}
+						
+						System.out.println("deja ajout clef " + dejaAjoutClef);
+						System.out.println("deja ajout tresor " + dejaAjoutTresor);
+						System.out.println("peut echanger clef " + peutEchangerClef);
+						System.out.println("peut echanger tresor " + peutEchangerTresor);
+						if (peutEchangerClef && !dejaAjoutClef) {
+							ajouterActionEchangerClef();
+						}
+						if (peutEchangerTresor && ! dejaAjoutTresor) {
+							ajouterActionEchangerTresor();
+						}
 					}
 				}
 			}
 		}		
+	}
+	
+	public boolean getAnnulerChoix() {
+		return annulerChoix;
 	}
 	
 	public boolean getPeutVoler() {

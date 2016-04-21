@@ -206,11 +206,15 @@ public class Map {
 				plateauGraph.setPeutEchangerClef(actions.peutEchanger(temp, true, equipe1, equipe2, plateau));
 				plateauGraph.setPeutEchangerTresor(actions.peutEchanger(temp, false, equipe1, equipe2, plateau));
 				
-				while (persoSelec == -1) {
-					plateauGraph.waitEvent(5000,true);
+				while (persoSelec == -1 && !plateauGraph.getAnnulerChoix()) {
+					plateauGraph.waitEvent(1000,true);
 					persoSelec = plateauGraph.getPersoPrecis();
 				}
-				personnnageSelectionne = presentsEquipe.get(persoSelec);
+				if (plateauGraph.getAnnulerChoix()) {
+					personnnageSelectionne = new Personnage("personne selectionne", true, 0, new Position(-1,-1), -1);
+				} else {
+					personnnageSelectionne = presentsEquipe.get(persoSelec);
+				}
 			} else {
 				personnnageSelectionne = presentsEquipe.get(0);
 				plateauGraph.setPeutVoler(actions.tenterVol(personnnageSelectionne, plateau));
@@ -222,7 +226,7 @@ public class Map {
 			plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 			
-			while (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) {
+			while ( (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) && !plateauGraph.getAnnulerChoix()) {
 				plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 				plateauGraph.clearConsole();
 				plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe());
@@ -231,7 +235,7 @@ public class Map {
 					plateauGraph.recover();
 				}
 				plateauGraph.println("Cliquez sur la case ou vous voulez qu'il aille");
-				plateauGraph.waitEvent(5000,false);
+				plateauGraph.waitEvent(1000,false);
 				choixDeplacementPosition.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 				
 				if (!choixDeplacementPosition.getLocation().equals(new Point(-1, -1))) {
@@ -245,7 +249,7 @@ public class Map {
 			plateau.updateEnergie(jeu.getTourEquipe(), equipe1.getListe(), equipe2.getListe(), plateauGraph);
 			System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 			refresh(plateau, plateauGraph,jeu.getTourEquipe(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
-			while (confirmationFinTour.equals(new Position(-1, -1)) && !jeu.getEstFini()) {
+			while (confirmationFinTour.equals(new Position(-1, -1)) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix()) {
 				plateauGraph.clearConsole();
 				plateauGraph.recover();
 				plateauGraph.println("L'", jeu.getTourEquipe(),"a fini son tour");
@@ -254,7 +258,9 @@ public class Map {
 				confirmationFinTour.setLocation(plateauGraph.getX(plateauGraph.getCurrentEvent()), plateauGraph.getY(plateauGraph.getCurrentEvent()));
 			}
 			plateau.retirerMorts(jeu.getTourEquipe(),equipe1.getListe(),equipe2.getListe());
-			jeu.nextRound();
+			if (!plateauGraph.getAnnulerChoix()) {
+				jeu.nextRound();
+			}
 		}
 		plateauGraph.clearConsole();
 		plateauGraph.println(jeu.toString());
