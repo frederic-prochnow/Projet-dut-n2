@@ -18,10 +18,8 @@ public class Map {
 		/* DECLARATION DES VARIABLES */
 		String[] img = { "images/sable.png", "images/1.explorateur.png", "images/1.voleur.png", "images/1.navire.png",
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
-				"images/coffre.png", "images/cle.jpg", "images/mer.png", "images/1.explorateur.png", "images/1.explorateur.png" ,
-				"images/1.explorateur.png" , "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png",
-				"images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png", "images/1.explorateur.png",
-				"images/cle_prise.jpg" };
+				"images/coffre.png", "images/cle.jpg", "images/mer.png", "images/1.explorateur.png", "images/1.piegeur.png" 
+				, "images/1.explorateur.png" , "images/2.piegeur.png", "images/pieger.png"};
 		Menu menu = new Menu();
 		menu.affichage();
 		while (!menu.getConfirme()) {

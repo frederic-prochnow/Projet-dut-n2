@@ -424,7 +424,7 @@ public class Plateau {
 	 * On ajoute le bouton de l'action pieger dans PersoPane
 	 */
 	private void ajouterActionPieger(){
-		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
+		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
 		JButton pieger = new JButton(piegerIcone);
 		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
 		pieger.setBackground(Color.GREEN);

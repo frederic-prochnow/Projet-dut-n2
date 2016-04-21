@@ -33,16 +33,16 @@ public class Personnage {
 			this.cheminImage = "images/1.voleur.png";
 		} else if (type == 3) {
 			this.cheminImage = "images/2.explorateur.png";
-		} else if (type == 4) {
+		} else if (type == 4) { 
 			this.cheminImage = "images/2.voleur.png";
 		} else if (type == 10) {
 			this.cheminImage = "images/2.voleur.png";
 		} else if (type == 11) {
-			this.cheminImage = "images/2.voleur.png";
+			this.cheminImage = "images/1.piegeur.png";
 		} else if (type == 12) {
 			this.cheminImage = "images/2.voleur.png";
 		} else if (type == 13) {
-			this.cheminImage = "images/2.voleur.png";
+			this.cheminImage = "images/2.piegeur.png";
 		}
 		
 		
