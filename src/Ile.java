@@ -560,6 +560,8 @@ public class Ile {
 					plateau[destination.x][destination.y].setType(7); // on revele le coffre
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
+						plateauGraph.waitClicPersoPane(1500);
+						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.save();

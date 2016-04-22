@@ -122,6 +122,7 @@ public class Parcelle {
 		else if(type == 13) {return "P";} // piegeur2
 		else if (type == 14) {return "T";} // trap
 		else if (type == 15) {return "D";}  // cle prise
+		else if (type == 16) {return "Co";} // coffre ouvert
 		else  { return "";}
 	} 
 	

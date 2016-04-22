@@ -61,7 +61,7 @@ class GraphicPane extends JPanel {
 		this.setPreferredSize(getGraphicSize());
 	}
 	private void showText(Graphics g, String msg, Rectangle r) {	
-		g.setColor(Color.BLACK) ;
+		g.setColor(Color.LIGHT_GRAY) ;
 		g.setFont(new Font("Arial", Font.BOLD, 14)) ;
 		yText = 0;
 		for (String line : msg.split("\n")) {
