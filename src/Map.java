@@ -259,6 +259,7 @@ public class Map {
 						plateauGraph.recover();
 					}
 					plateauGraph.waitEvent(5000,false, true);
+					// un clic interrompt waitEvent, ensuite, soit il a appuyé sur pieger soit un endroit pour y se deplacer
 					if (plateauGraph.veutPieger()) {
 						System.out.println("veut pieger " + plateauGraph.veutPieger());
 						actions.pieger(personnnageSelectionne, plateau, jeu.getTourEquipe1());
@@ -304,9 +305,9 @@ public class Map {
 	private void tourOrdinateur() {
 		Random r = new Random();
 		int nSelection = r.nextInt(equipe2.getListe().size());
-		Personnage persoSelectionne = equipe2.getListe().get(nSelection);
-		System.out.println("Le perso " + persoSelectionne.nom + " est à " + persoSelectionne.getPos());
-		Position deplacementPos = new Position(persoSelectionne.getPos());
+		Personnage persoChoisi = equipe2.getListe().get(nSelection);
+		System.out.println("Le perso " + persoChoisi.nom + " est à " + persoChoisi.getPos());
+		Position deplacementPos = new Position(persoChoisi.getPos());
 		boolean deplacementValide = false;
 		
 		int xOuY;
@@ -320,31 +321,31 @@ public class Map {
 				while (nSelection2 == nSelection) {
 					nSelection2 = r.nextInt(equipe2.getListe().size());
 				}
-				persoSelectionne = equipe2.getListe().get(r.nextInt(equipe2.getListe().size()));
+				persoChoisi = equipe2.getListe().get(r.nextInt(equipe2.getListe().size()));
 			}
 			// Si le personnage ne s'est pas encore déplacé ou avec 50% des chances il se deplace selon 50% des chances selon les x ou les y
-			if (persoSelectionne.getDirectionDeplacement().equals(new Position(-1, -1)) || r.nextInt(2) == 0) {
+			if (persoChoisi.getDirectionDeplacement().equals(new Position(-1, -1)) || r.nextInt(2) == 0) {
 				xOuY = r.nextInt(2);
 				deplacement = (r.nextInt(2) * 2) -1; // Soit -1 ou 1
 				if (xOuY == 0) {
-					deplacementPos.setLocation(persoSelectionne.getPos().additionner(new Position(deplacement, 0)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoSelectionne, plateauGraph);
+					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(deplacement, 0)));
+					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph);
 				} else {
-					deplacementPos.setLocation(persoSelectionne.getPos().additionner(new Position(0, deplacement)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoSelectionne, plateauGraph);
+					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(0, deplacement)));
+					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph);
 				}
 				if (!deplacementValide) {
-					deplacementPos.setLocation(persoSelectionne.getPos());
+					deplacementPos.setLocation(persoChoisi.getPos());
 				}
 			} else {
-				deplacementValide = plateau.deplacerV2Amorce(persoSelectionne.getPos().additionner(persoSelectionne.getDirectionDeplacement()) , persoSelectionne, plateauGraph);
+				deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()) , persoChoisi, plateauGraph);
 				if (deplacementValide) {
-					System.out.println("s'est deplace dans la mm direction : " + persoSelectionne.getDirectionDeplacement());
+					System.out.println("s'est deplace dans la mm direction : " + persoChoisi.getDirectionDeplacement());
 				}
 			}
 			essaisDeplacements++;
 		}
-		System.out.println("Le perso " + persoSelectionne.nom + " est maintenant à " + persoSelectionne.getPos());
+		System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
 		plateau.retirerMorts(jeu.getTourEquipe1(),equipe1.getListe(),equipe2.getListe());
 	}
 
