@@ -46,21 +46,22 @@ public class Actions {
 			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
 				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
 					if ( (ile.getPlateau()[i][j].getEquipe1() && perso.getEquipe2()) || (ile.getPlateau()[i][j].getEquipe2() && perso.getEquipe1()) ) {
-						System.out.println("alentour equipe 1 " + ile.getPlateau()[i][j].getEquipe1());
-						System.out.println("voleur equipe 1 " + perso.getEquipe1());
 						return true;
 					}
 				}
 			}
 		}
-		System.out.println("il peut PAS voler");
 		return false;
 	}
-	
-	public boolean tenterPiege(Personnage perso, Ile ile){
+	/**
+	 * 
+	 * @param perso le personnage qui serait possible de pieger
+	 * @param ile le plateau de jeu
+	 * @return si un piege est possible
+	 */
+	public boolean peutTenterPiege(Personnage perso, Ile ile){
 		if(perso.getType() == 11 || perso.getType() == 13){
-			if(!ile.getPlateau()[perso.getPos().x][perso.getPos().y].getEstVide()){ // Si la case n'est pas déja piégé et est le sol
-				System.out.println("peut pieger");
+			if(!ile.getPlateau()[perso.getPos().x][perso.getPos().y].getEstVide()){ // Si la case n'est pas du tout occupé
 				return true;
 			}
 		}

@@ -487,7 +487,6 @@ public class Plateau {
 				annulerChoix = true;
 			} else if (e.getActionCommand().equals("pieger")) {
 				veutPieger = true;
-				faitAction = true;
 			} else {
 				for (int i=0;i<liste.length;i++) {
 					// si ce n'est psa le bouton appuyé, on le desactive

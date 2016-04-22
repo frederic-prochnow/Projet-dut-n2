@@ -28,6 +28,7 @@ public class Map {
 	Plateau plateauGraph;
 	GestionJeu jeu;
 	boolean faitAction;
+	Actions actions;
 	
 	public void jouer() {
 	
@@ -44,7 +45,7 @@ public class Map {
 		plateau = new Ile(menu.getTaille(), menu.getRochers());
 		plateauGraph = new Plateau(img, plateau.getSize(),true);
 		jeu = new GestionJeu(true, menu.getVersusOrdi());
-		Actions actions = new Actions();
+		actions = new Actions();
 
 
 		
@@ -223,11 +224,7 @@ public class Map {
 					plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 					plateauGraph.println("Veuillez selectionner une de ceux-cis");
 					plateauGraph.ajouterSelectionPersos(presentsEquipe);
-	
-					plateauGraph.setPeutVoler(actions.tenterVol(temp, plateau));
-					plateauGraph.setPeutPieger(actions.tenterPiege(temp, plateau));
-					plateauGraph.setPeutEchangerClef(actions.peutEchanger(temp, true, equipe1, equipe2, plateau));
-					plateauGraph.setPeutEchangerTresor(actions.peutEchanger(temp, false, equipe1, equipe2, plateau));
+					setActionsPossibles(temp, equipe1, equipe2, plateau);
 					
 					while (persoSelec == -1 && !plateauGraph.getAnnulerChoix()) {
 						plateauGraph.waitEvent(1000,true, false);
@@ -240,17 +237,14 @@ public class Map {
 					}
 				} else {
 					personnnageSelectionne = presentsEquipe.get(0);
-					plateauGraph.setPeutVoler(actions.tenterVol(personnnageSelectionne, plateau));
-					plateauGraph.setPeutPieger(actions.tenterPiege(personnnageSelectionne, plateau));
-					plateauGraph.setPeutEchangerClef(actions.peutEchanger(personnnageSelectionne, true, equipe1, equipe2, plateau));
-					plateauGraph.setPeutEchangerTresor(actions.peutEchanger(personnnageSelectionne, false, equipe1, equipe2, plateau));
+					setActionsPossibles(personnnageSelectionne, equipe1, equipe2, plateau);
 					plateauGraph.ajouterSelectionPersos(presentsEquipe);
 				}
 				
 				plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 				System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 				
-				while ( (!deplacementValide && !plateauGraph.getFaitAction()) || plateauGraph.getAnnulerChoix()) {
+				while ( (!deplacementValide && !plateauGraph.getFaitAction()) && !plateauGraph.getAnnulerChoix()) {
 					plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
@@ -262,6 +256,7 @@ public class Map {
 					// un clic interrompt waitEvent, ensuite, soit il a appuyé sur pieger soit un endroit pour y se deplacer
 					if (plateauGraph.veutPieger()) {
 						System.out.println("veut pieger " + plateauGraph.veutPieger());
+						plateauGraph.setFaitAction(true);
 						actions.pieger(personnnageSelectionne, plateau, jeu.getTourEquipe1());
 					}
 					if (!plateauGraph.getFaitAction()) {
@@ -300,6 +295,14 @@ public class Map {
 		}
 		plateauGraph.clearConsole();
 		plateauGraph.println(jeu.toString());
+	}
+
+	private void setActionsPossibles(Personnage perso, Equipe equipe1, Equipe equipe2, Ile plateau) {
+		plateauGraph.setPeutVoler(actions.tenterVol(perso, plateau));
+		plateauGraph.setPeutPieger(actions.peutTenterPiege(perso, plateau));
+		plateauGraph.setPeutEchangerClef(actions.peutEchanger(perso, true, equipe1, equipe2, plateau));
+		plateauGraph.setPeutEchangerTresor(actions.peutEchanger(perso, false, equipe1, equipe2, plateau));
+		
 	}
 
 	private void tourOrdinateur() {
