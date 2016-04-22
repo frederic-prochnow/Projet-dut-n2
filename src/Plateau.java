@@ -451,7 +451,7 @@ public class Plateau {
 	 * @param type le type qu'on veut afficher
 	 */
 	public void refreshCase(Position destination, int type) {
-		graphic.refreshCase(destination, type);
+		graphic.refreshCase(destination, type+2);
 	}
 	
 	/**

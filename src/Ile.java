@@ -560,7 +560,8 @@ public class Ile {
 					plateau[destination.x][destination.y].setType(7); // on revele le coffre
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
-						plateauGraph.waitClicPersoPane(1500);
+						plateauGraph.refreshCase(destination, 7);
+						plateauGraph.waitClicPersoPane(750);
 						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");
@@ -572,8 +573,8 @@ public class Ile {
 					System.out.println("Peut soulever le rocher et il y a la cle en dessous");
 					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
 					plateauGraph.save();
-					plateauGraph.refreshCase(destination, 8+2);
-					plateauGraph.waitClicPersoPane(1500);
+					plateauGraph.refreshCase(destination, 8);
+					plateauGraph.waitClicPersoPane(750);
 					plateau[destination.x][destination.y].setType(15);
 					clef.setPosition(new Position(-1,-1));
 					perso.setDetientClef(true);
