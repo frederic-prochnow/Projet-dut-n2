@@ -391,8 +391,13 @@ public class Ile {
 		for (int h = (x-1);h<=(x+1);h++) {
 			for (int k = (y-1);k<=(y+1);k++) {
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
+				if (equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE2()) {
+					tab[h][k] = (-1+2);
+				} else if (!equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE1()) {
+					tab[h][k] = (-1+2);
+				}
 				tab[h][k] = ((plateau[h][k].getType())+2);
-				if (plateau[h][k].getEstPiege() && plateau[h][k].getType() == -1) {
+				if ( (plateau[h][k].getEstpiegeE1() || plateau[h][k].getEstpiegeE2())  && plateau[h][k].getType() == -1) {
 					plateau[h][k].setType(14);
 					System.out.println("piege");
 				}

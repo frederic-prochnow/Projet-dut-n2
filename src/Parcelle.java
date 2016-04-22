@@ -11,7 +11,8 @@ public class Parcelle {
 	//private boolean cleEquipe1 = false;
 	//private boolean cleEquipe2 = false;
 	private boolean estCompte = false;
-	private boolean estPiege = false;
+	private boolean estPiegeE1;
+	private boolean estPiegeE2;
 	
 
 	/**
@@ -26,6 +27,8 @@ public class Parcelle {
 		} else {
 			this.type = -1;
 		}
+		estPiegeE1 = false;
+		estPiegeE2 = false;
 	}
 	
 	/**
@@ -36,12 +39,20 @@ public class Parcelle {
 		return this.type;
 	}
 	
-	public boolean getEstPiege(){
-		return estPiege;
+	public void setEstpiegeE1(boolean b) {
+		estPiegeE1 = b;
 	}
 	
-	public void setEstPiege(boolean b){
-		estPiege = b;
+	public void setEstpiegeE2(boolean b) {
+		estPiegeE2 = b;
+	}
+	
+	public boolean getEstpiegeE1() {
+		return estPiegeE1;
+	}
+	
+	public boolean getEstpiegeE2() {
+		return estPiegeE2;
 	}
 	
 	public void setType(int x){
@@ -105,7 +116,8 @@ public class Parcelle {
 		else if(type == 11) {return "p";} // piegeur1
 		else if(type == 12) {return "G";} // guerrier2
 		else if(type == 13) {return "P";} // piegeur2
-		else if (type == 14) {return "D";}  // cle prise
+		else if (type == 14) {return "T";} // trap
+		else if (type == 15) {return "D";}  // cle prise
 		else  { return "";}
 	} 
 	
