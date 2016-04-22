@@ -59,12 +59,17 @@ public class Actions {
 	
 	public boolean tenterPiege(Personnage perso, Ile ile){
 		if(perso.getType() == 11 || perso.getType() == 13){
-			if(!ile.getPlateau()[perso.getPos().x][perso.getPos().y].getEstPiege() && ile.getPlateau()[perso.getPos().x][perso.getPos().y].getType() <= -1){ // Si la case n'est pas déja piégé et est le sol
+			if(!ile.getPlateau()[perso.getPos().x][perso.getPos().y].getEstPiege() && !ile.getPlateau()[perso.getPos().x][perso.getPos().y].estNavire() ){ // Si la case n'est pas déja piégé et est le sol
 				System.out.println("peut pieger");
 				return true;
 			}
 		}
 		
 		return false;
+	}
+
+	public void pieger(Personnage personnnageSelectionne, Ile plateau) {
+		plateau.getPlateau()[personnnageSelectionne.getPos().x][personnnageSelectionne.getPos().y].setEstPiege(true);
+		
 	}
 }

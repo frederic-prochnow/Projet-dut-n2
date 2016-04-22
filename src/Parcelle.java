@@ -71,6 +71,10 @@ public class Parcelle {
 		return false;
 	}
 	
+	public boolean estNavire() {
+		return this.type == 1 || this.type == 4;
+	}
+	
 	/**
 	 * Fonction d'affichage TEXTUEL de la parcelle en fonction de son type
 	 * <br>0 pour explorateur équipe 1

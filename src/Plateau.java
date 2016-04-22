@@ -45,6 +45,8 @@ public class Plateau {
 	private boolean dejaPeutPieger;
 	private boolean annulerChoix;
 	private JButton annuler;
+	private boolean veutPieger;
+	private boolean faitAction;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -234,6 +236,7 @@ public class Plateau {
 	 * Attends (au maximum timeout ms) l'apparition d'une entrée (souris ou clavier).
 	 * 
 	 * @param timeout La durée maximale d'attente.
+	 * @param paneSelectionPrecis si on attend un clic dans PersoPane
 	 * @return L'événement observé si il y en a eu un, <i>null</i> sinon.
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/InputEvent.html">java.awt.event.InputEvent</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html">java.awt.event.MouseEvent</a>
@@ -262,6 +265,19 @@ public class Plateau {
 			}
 		}
 		return currentEvent ;
+	}
+	
+	public void waitClicPersoPane(int timeout) {
+		int time = 0;
+		prepareWaitEvent(true);
+		while ((mouse == null) && (time < timeout)) {
+			try {
+				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			time += 100 ;
+		}
 	}
 	/**
 	 * Attends (indéfiniment) un événement clavier ou souris. 
@@ -344,6 +360,8 @@ public class Plateau {
 		dejaAjoutClef = false;
 		dejaAjoutTresor = false;
 		peutPieger = false;
+		veutPieger = false;
+		faitAction = false;
 		dejaPeutPieger = false;
 		annulerChoix = false;
 		PersoPane.removeAll();
@@ -436,6 +454,8 @@ public class Plateau {
 		JButton pieger = new JButton(piegerIcone);
 		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
 		pieger.setBackground(Color.GREEN);
+		pieger.setActionCommand("pieger");
+		pieger.addActionListener(new Action());
 		if (!dejaPeutPieger) {
 			PersoPane.add(pieger);
 			dejaPeutPieger = true;
@@ -451,7 +471,11 @@ public class Plateau {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("annuler")) {
 				annulerChoix = true;
+			} else if (e.getActionCommand().equals("pieger")) {
+				veutPieger = true;
+				faitAction = true;
 			} else {
+				System.out.println("a appuye sur un perso");
 				for (int i=0;i<liste.length;i++) {
 					// si ce n'est psa le bouton appuyé, on le desactive
 					if (!("perso_"+i).equals(e.getActionCommand())) {
@@ -484,6 +508,18 @@ public class Plateau {
 				}
 			}
 		}		
+	}
+	
+	public boolean veutPieger() {
+		return veutPieger;
+	}
+	
+	public boolean getFaitAction() {
+		return faitAction;
+	}
+	
+	public void setFaitAction(boolean b) {
+		faitAction = b;
 	}
 	
 	public boolean getAnnulerChoix() {
