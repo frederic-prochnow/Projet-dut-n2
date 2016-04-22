@@ -190,7 +190,7 @@ public class Map {
 						plateauGraph.println("Ce personnage n'a plus d'énergie, veuillez séléctionner un autre");
 					}
 					plateauGraph.println("Cliquez sur le personnage que vous voulez deplacer");
-					plateauGraph.waitEvent(5000,false);
+					plateauGraph.waitEvent(5000,false, false);
 					// on met persoSelection a x,y du clic de la souris
 					persoSelectionPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 					
@@ -229,7 +229,7 @@ public class Map {
 					plateauGraph.setPeutEchangerTresor(actions.peutEchanger(temp, false, equipe1, equipe2, plateau));
 					
 					while (persoSelec == -1 && !plateauGraph.getAnnulerChoix()) {
-						plateauGraph.waitEvent(1000,true);
+						plateauGraph.waitEvent(1000,true, false);
 						persoSelec = plateauGraph.getPersoPrecis();
 					}
 					if (plateauGraph.getAnnulerChoix()) {
@@ -257,7 +257,7 @@ public class Map {
 					if (deplacementInvalide) {
 						plateauGraph.recover();
 					}
-					plateauGraph.waitClicPersoPane(5000);
+					plateauGraph.waitEvent(5000,false, true);
 					if (plateauGraph.veutPieger()) {
 						System.out.println("veut pieger " + plateauGraph.veutPieger());
 						actions.pieger(personnnageSelectionne, plateau);
@@ -266,7 +266,6 @@ public class Map {
 					
 					if (!plateauGraph.getFaitAction()) {
 						plateauGraph.println("Cliquez sur la case ou vous voulez qu'il aille");
-						plateauGraph.waitEvent(5000,false);
 						choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 						System.out.println("choix deplacement pos = " + choixDeplacementPosition);
 						
@@ -286,7 +285,7 @@ public class Map {
 					plateauGraph.recover();
 					plateauGraph.println("L'", jeu.getTourEquipe1(),"a fini son tour");
 					plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
-					plateauGraph.waitEvent(5000, false);
+					plateauGraph.waitEvent(5000, false, false);
 					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
 				}
 				plateau.retirerMorts(jeu.getTourEquipe1(),equipe1.getListe(),equipe2.getListe());

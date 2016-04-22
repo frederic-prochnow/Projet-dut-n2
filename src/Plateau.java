@@ -47,6 +47,7 @@ public class Plateau {
 	private JButton annuler;
 	private boolean veutPieger;
 	private boolean faitAction;
+	private boolean clicBouton;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -225,12 +226,13 @@ public class Plateau {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
 		persoPrecis = -1;
-		if (paneSelectionPrecis) {
-			PersoPane.requestFocusInWindow() ;
-		} else {
-			window.requestFocusInWindow() ;
-		}
+		clicBouton = false;
 		affichage() ;	// Remet à jour l'affichage (peut être optimisé)
+		if (paneSelectionPrecis) {
+			PersoPane.requestFocusInWindow();
+		} else {
+			window.requestFocusInWindow();
+		}
 	}
 	/**
 	 * Attends (au maximum timeout ms) l'apparition d'une entrée (souris ou clavier).
@@ -242,7 +244,7 @@ public class Plateau {
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html">java.awt.event.MouseEvent</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html">java.awt.event.KeyEvent</a>
 	 */
-	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis) {
+	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis, boolean waitAction) {
 		int time = 0 ;
 		prepareWaitEvent(paneSelectionPrecis) ;
 		if (paneSelectionPrecis) {
@@ -254,8 +256,18 @@ public class Plateau {
 				}
 				time += 100 ;
 			}
-		} else {
+		} else if (!paneSelectionPrecis && !waitAction){
 			while ((currentEvent == null) && (time < timeout)) {
+				try {
+					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				time += 100 ;
+			}
+		}
+		if (waitAction) {
+			while (!clicBouton && currentEvent == null && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -469,6 +481,7 @@ public class Plateau {
 	private class Action implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			clicBouton = true;
 			if (e.getActionCommand().equals("annuler")) {
 				annulerChoix = true;
 			} else if (e.getActionCommand().equals("pieger")) {
