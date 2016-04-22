@@ -249,7 +249,7 @@ public class Map {
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
 					plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
-					if (deplacementValide) {
+					if (!deplacementValide) {
 						plateauGraph.recover();
 					}
 					plateauGraph.waitEvent(5000,false, true);
@@ -265,7 +265,7 @@ public class Map {
 						System.out.println("choix deplacement pos = " + choixDeplacementPosition);
 						
 						if (!choixDeplacementPosition.getLocation().equals(new Point(-1, -1))) {
-							deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph);
+							deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph, jeu.getTourEquipe1());
 							plateauGraph.setFaitAction(deplacementValide);
 						}
 					}
@@ -332,16 +332,16 @@ public class Map {
 				deplacement = (r.nextInt(2) * 2) -1; // Soit -1 ou 1
 				if (xOuY == 0) {
 					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(deplacement, 0)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph);
+					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, jeu.getTourEquipe1());
 				} else {
 					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(0, deplacement)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph);
+					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, jeu.getTourEquipe1());
 				}
 				if (!deplacementValide) {
 					deplacementPos.setLocation(persoChoisi.getPos());
 				}
 			} else {
-				deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()) , persoChoisi, plateauGraph);
+				deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()) , persoChoisi, plateauGraph, jeu.getTourEquipe1());
 				if (deplacementValide) {
 					System.out.println("s'est deplace dans la mm direction : " + persoChoisi.getDirectionDeplacement());
 				}

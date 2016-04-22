@@ -1,4 +1,5 @@
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -490,32 +491,32 @@ public class Ile {
 	 * 
 	 * @return boolean
 	 */
-	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph) {
+	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
 		// Cas thoeriquement valides
 		if (destination.x == perso.getPos().x+1 && destination.y == perso.getPos().y) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
 		else if (destination.x == perso.getPos().x-1 && destination.y == perso.getPos().y) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
 		else if (destination.y == perso.getPos().y+1 && destination.x == perso.getPos().x) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
 		else if (destination.y == perso.getPos().y-1 && destination.x == perso.getPos().x) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
 		if (perso instanceof Voleur) {
 			if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y+1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
 			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y+1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
 			else if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y-1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
 			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y-1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
 		}
 		return false;
@@ -532,7 +533,7 @@ public class Ile {
 	 * @param perso L'instance du personnage, sert a verifier s'il peut soulever les rochers
 	 * @return boolean si le deplacement est bien valide selon le personnage
 	 */
-	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
+	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
 		plateauGraph.clearConsole();
 		plateauGraph.clearSave();
 		if (estVide(destination)) {
@@ -569,6 +570,8 @@ public class Ile {
 					System.out.println("Peut soulever le rocher et il y a la cle en dessous");
 					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
 					plateauGraph.save();
+					plateauGraph.refreshCase(destination, 8+2);
+					plateauGraph.waitClicPersoPane(1500);
 					plateau[destination.x][destination.y].setType(15);
 					clef.setPosition(new Position(-1,-1));
 					perso.setDetientClef(true);

@@ -446,6 +446,15 @@ public class Plateau {
 		}
 	}
 	/**
+	 * Permet de rappeler graphic.Component apres avoir modifié temporairement le type d'une cellule
+	 * @param destination la case qu'on veut temporairement changer
+	 * @param type le type qu'on veut afficher
+	 */
+	public void refreshCase(Position destination, int type) {
+		graphic.refreshCase(destination, type);
+	}
+	
+	/**
 	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
 	 */
 	private void ajouterActionEchangerTresor() {
@@ -705,4 +714,5 @@ public class Plateau {
 	public void clearSave() {
 		console.clearSave();
 	}
+
 }

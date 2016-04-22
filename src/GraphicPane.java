@@ -137,6 +137,11 @@ class GraphicPane extends JPanel {
 			this.showText(g, ERR_NOT_INIT_MSG) ;
 		}
 	}
+	
+	public void refreshCase(Position cell, int type) {
+		jeu[cell.x][cell.y] = type;
+		repaint();
+	}
 	public void setSize() {
 		highlight = new boolean[nbLig][nbCol] ;
 		highlightColor = new Color[nbLig][nbCol] ;
