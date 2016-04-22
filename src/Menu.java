@@ -47,8 +47,10 @@ public class Menu {
 	private Dimension screenSize;
 	private int maxHeight;
 
-	private JPanel texteJouer1;
-	private JPanel texteJouer2;
+	private JPanel texteJoueur1;
+	private JLabel nomJoueur1;
+	private JPanel texteJoueur2;
+	private JLabel nomJoueur2;
 	private JPanel descJoueur1;
 	private JPanel nbPersos1;
 	private JPanel descJoueur2;
@@ -100,7 +102,7 @@ public class Menu {
 		
 		nbPersoSelected1 = 1;
 		nbPersoSelected2 = 1;
-		maxPerso = 3;
+		maxPerso = 4;
 		
 		// Choix type de jeu
 		humain = new JButton("1 v 1");
@@ -141,21 +143,23 @@ public class Menu {
 		choix.add(rochersLabel);
 		choix.add(rochersField);
 		
-		texteJouer1 = new JPanel();
-		texteJouer1.add(new JLabel("Joueur 1"));
-		texteJouer2 = new JPanel();
-		texteJouer2.add(new JLabel("Joueur 2"));
+		texteJoueur1 = new JPanel();
+		nomJoueur1 = new JLabel("Joueur 1");
+		texteJoueur1.add(nomJoueur1);
+		texteJoueur2 = new JPanel();
+		nomJoueur2 = new JLabel("Joueur 2");
+		texteJoueur2.add(nomJoueur2);
 		
 		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 2;
 		c.insets = new Insets(5, 10, 0, 0);
-		frame.add(texteJouer1,c);
+		frame.add(texteJoueur1,c);
 		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 2;
 		c.insets = new Insets(5, 0, 0, 5);
-		frame.add(texteJouer2,c);
+		frame.add(texteJoueur2,c);
 		
 		// JButton et JTextField des types de persos
 
@@ -297,13 +301,25 @@ public class Menu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ("1v1".equals(e.getActionCommand()) ) {
-				humain.setEnabled(false);
-				ordi.setEnabled(false);
 				versusOrdi = false;
+				for (int i=boutonMoins.length/2;i<boutonMoins.length;i++) {
+					boutonMoins[i].setEnabled(true);
+					boutonPlus[i].setEnabled(true);
+					input[i].setText("" + 0);
+					input[i].setEditable(true);
+				}
+				nomJoueur2.setText("Joueur 2");
+				input[0].setText("" + 1);
+				input[4].setText("" + 1);
 			} else if ("ordi".equals(e.getActionCommand())) {
-				humain.setEnabled(false);
-				ordi.setEnabled(false);
 				versusOrdi = true;
+				for (int i=boutonMoins.length/2;i<boutonMoins.length;i++) {
+					boutonMoins[i].setEnabled(false);
+					boutonPlus[i].setEnabled(false);
+					input[i].setText("" + 1);
+					input[i].setEditable(false);
+				}
+				nomJoueur2.setText("Ordinateur");
 			} else if ("valider".equals(e.getActionCommand())) {
 				choixValides = true;
 				taille = tailleField.getText();
