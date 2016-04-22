@@ -44,6 +44,7 @@ public class Plateau {
 	private boolean peutPieger;
 	private boolean dejaPeutPieger;
 	private boolean annulerChoix;
+	private JButton annuler;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -287,9 +288,9 @@ public class Plateau {
 	 * @param event L'évenement souris capturé.
 	 * @return le numéro de la colonne ciblée (0 à taille-1)
 	 */
-	public int getX(MouseEvent event) {
-		if (event != null) {
-			return graphic.getX(event) ;
+	public int getX() {
+		if (mouse != null) {
+			return graphic.getX(mouse) ;
 		}
 		return -1;
 	}
@@ -302,9 +303,9 @@ public class Plateau {
 	 * @param event L'évenement souris capturé.
 	 * @return le numéro de la colonne ciblée (0 à taille-1)
 	 */
-	public int getY(MouseEvent event) { 	
-		if (event != null) {
-			return graphic.getY(event) ;
+	public int getY() { 	
+		if (mouse != null) {
+			return graphic.getY(mouse) ;
 		}
 		return -1;
 	}
@@ -379,7 +380,7 @@ public class Plateau {
 		}
 		if (liste.length != 0) {
 			ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
-			JButton annuler = new JButton(annulerIcone);
+			annuler = new JButton(annulerIcone);
 			annuler.setBackground(sable);
 			annuler.setActionCommand("annuler");
 			annuler.addActionListener(new Action());
@@ -487,6 +488,11 @@ public class Plateau {
 	
 	public boolean getAnnulerChoix() {
 		return annulerChoix;
+	}
+	
+	public void disableAnnuler() {
+		annuler.setEnabled(false);
+		annuler.setBackground(Color.LIGHT_GRAY);
 	}
 	
 	public boolean getPeutVoler() {

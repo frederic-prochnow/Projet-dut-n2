@@ -483,32 +483,32 @@ public class Ile {
 	 * 
 	 * @return boolean
 	 */
-	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
+	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph) {
 		// Cas thoeriquement valides
-		if (destination.x == posActuel.x+1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		if (destination.x == perso.getPos().x+1 && destination.y == perso.getPos().y) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 		}
-		else if (destination.x == posActuel.x-1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.x == perso.getPos().x-1 && destination.y == perso.getPos().y) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 		}
-		else if (destination.y == posActuel.y+1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.y == perso.getPos().y+1 && destination.x == perso.getPos().x) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 		}
-		else if (destination.y == posActuel.y-1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.y == perso.getPos().y-1 && destination.x == perso.getPos().x) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 		}
 		if (perso instanceof Voleur) {
-			if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y+1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 			}
-			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y+1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 			}
-			else if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y-1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y-1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 			}
-			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y-1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y-1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph);
 			}
 		}
 		return false;
