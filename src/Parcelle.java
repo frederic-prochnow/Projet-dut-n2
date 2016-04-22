@@ -55,6 +55,10 @@ public class Parcelle {
 		return estPiegeE2;
 	}
 	
+	public boolean getEstVide() {
+		return this.type == -1 && !estPiegeE1 && !estPiegeE2 && !estNavire();
+	}
+	
 	public void setType(int x){
 		this.type = x;
 	}

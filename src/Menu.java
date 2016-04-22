@@ -344,7 +344,7 @@ public class Menu {
 				}
 				
 				if(nbPersoSelected1 != maxPerso || nbPersoSelected2 != maxPerso){
-					JOptionPane.showMessageDialog(null, "Il doit y avoir 3 personnages dans chaques équipes");
+					JOptionPane.showMessageDialog(null, "Il doit y avoir " + maxPerso +  " personnages dans chaques équipes");
 					choixValides = false;
 				}
 				

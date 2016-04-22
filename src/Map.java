@@ -149,7 +149,7 @@ public class Map {
 		int persoSelec = -1;
 		
 		boolean bonneSelectionEquipe = true; 
-		boolean deplacementInvalide = false;
+		boolean deplacementValide = false;
 		boolean pasEnergie = false;
 		
 		
@@ -172,10 +172,11 @@ public class Map {
 			choixDeplacementPosition.setLocation(-1, -1);
 			presentsEquipe.clear();
 			plateauGraph.ajouterSelectionPersos(new ArrayList<Personnage>());
-			deplacementInvalide = false;
+			deplacementValide = false;
 			confirmationFinTour.setLocation(-1, -1);
 			persoSelec = -1;
 			plateauGraph.setPeutVoler(false);
+			plateauGraph.setFaitAction(false);
 			
 			if ( (jeu.getVsOrdi() && jeu.getTourEquipe1()) || !jeu.getVsOrdi()) {
 				// ici on clique sur une case d'un de notre personnage
@@ -249,32 +250,29 @@ public class Map {
 				plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 				System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 				
-				while ( (choixDeplacementPosition.getLocation().equals(new Point(-1, -1)) || deplacementInvalide) && !plateauGraph.getAnnulerChoix() && !plateauGraph.getFaitAction()) {
+				while ( (!deplacementValide && !plateauGraph.getFaitAction()) || plateauGraph.getAnnulerChoix()) {
 					plateauGraph.setHighlight(persoSelectionPosition.x, persoSelectionPosition.y, Color.CYAN);
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
 					plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
-					if (deplacementInvalide) {
+					if (deplacementValide) {
 						plateauGraph.recover();
 					}
 					plateauGraph.waitEvent(5000,false, true);
 					if (plateauGraph.veutPieger()) {
 						System.out.println("veut pieger " + plateauGraph.veutPieger());
-						actions.pieger(personnnageSelectionne, plateau);
+						actions.pieger(personnnageSelectionne, plateau, jeu.getTourEquipe1());
 					}
-					System.out.println("fini");
-					
 					if (!plateauGraph.getFaitAction()) {
 						plateauGraph.println("Cliquez sur la case ou vous voulez qu'il aille");
 						choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 						System.out.println("choix deplacement pos = " + choixDeplacementPosition);
 						
 						if (!choixDeplacementPosition.getLocation().equals(new Point(-1, -1))) {
-							deplacementInvalide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph);
-							plateauGraph.setFaitAction(deplacementInvalide);
+							deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph);
+							plateauGraph.setFaitAction(deplacementValide);
 						}
 					}
-					System.out.println("un action fait = " + plateauGraph.getFaitAction());
 				}
 				plateauGraph.disableAnnuler();
 				plateau.updateEnergie(jeu.getTourEquipe1(), equipe1.getListe(), equipe2.getListe(), plateauGraph);

@@ -247,6 +247,7 @@ public class Plateau {
 	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis, boolean waitAction) {
 		int time = 0 ;
 		prepareWaitEvent(paneSelectionPrecis) ;
+		mouse = null;
 		if (paneSelectionPrecis) {
 			while ((persoPrecis == -1) && (time < timeout)) {
 				try {
@@ -257,7 +258,7 @@ public class Plateau {
 				time += 100 ;
 			}
 		} else if (!paneSelectionPrecis && !waitAction){
-			while ((currentEvent == null) && (time < timeout)) {
+			while ((mouse == null) && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -267,7 +268,7 @@ public class Plateau {
 			}
 		}
 		if (waitAction) {
-			while (!clicBouton && currentEvent == null && (time < timeout)) {
+			while (!clicBouton && mouse == null && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -276,7 +277,7 @@ public class Plateau {
 				time += 100 ;
 			}
 		}
-		return currentEvent ;
+		return mouse ;
 	}
 	
 	public void waitClicPersoPane(int timeout) {
@@ -317,6 +318,11 @@ public class Plateau {
 	 * @return le numéro de la colonne ciblée (0 à taille-1)
 	 */
 	public int getX() {
+		if (mouse == null) {
+			System.out.println("mouse is null");
+		} else {
+			System.out.println("mouse is not null");
+		}
 		if (mouse != null) {
 			return graphic.getX(mouse) ;
 		}
@@ -488,7 +494,6 @@ public class Plateau {
 				veutPieger = true;
 				faitAction = true;
 			} else {
-				System.out.println("a appuye sur un perso");
 				for (int i=0;i<liste.length;i++) {
 					// si ce n'est psa le bouton appuyé, on le desactive
 					if (!("perso_"+i).equals(e.getActionCommand())) {
@@ -506,11 +511,6 @@ public class Plateau {
 							ajouterActionPieger();
 							peutPieger = true;
 						}
-						
-						System.out.println("deja ajout clef " + dejaAjoutClef);
-						System.out.println("deja ajout tresor " + dejaAjoutTresor);
-						System.out.println("peut echanger clef " + peutEchangerClef);
-						System.out.println("peut echanger tresor " + peutEchangerTresor);
 						if (peutEchangerClef && !dejaAjoutClef) {
 							ajouterActionEchangerClef();
 						}

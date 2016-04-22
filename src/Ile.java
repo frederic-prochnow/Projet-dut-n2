@@ -395,12 +395,10 @@ public class Ile {
 					tab[h][k] = (-1+2);
 				} else if (!equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE1()) {
 					tab[h][k] = (-1+2);
-				}
+				} else {
 				tab[h][k] = ((plateau[h][k].getType())+2);
-				if ( (plateau[h][k].getEstpiegeE1() || plateau[h][k].getEstpiegeE2())  && plateau[h][k].getType() == -1) {
-					plateau[h][k].setType(14);
-					System.out.println("piege");
 				}
+				
 				plateauGraph.resetHighlight(h, k);
 			
 				if (equipeCourante) {
@@ -544,6 +542,9 @@ public class Ile {
 				getNavire(perso.getEquipe1()).retirePerso();
 			} else { // Sur sol
 				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+				}
 			}
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
@@ -614,6 +615,9 @@ public class Ile {
 				perso.setPos(destination.getLocation());
 				perso.perdEnergie(1);
 				perso.setSurNavire(true);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+				}
 			}
 		} else {
 			System.out.println("Ne peut pas se deplacer ici");
