@@ -318,11 +318,6 @@ public class Plateau {
 	 * @return le numéro de la colonne ciblée (0 à taille-1)
 	 */
 	public int getX() {
-		if (mouse == null) {
-			System.out.println("mouse is null");
-		} else {
-			System.out.println("mouse is not null");
-		}
 		if (mouse != null) {
 			return graphic.getX(mouse) ;
 		}
