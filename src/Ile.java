@@ -1,5 +1,7 @@
+/**
+ * Importation
+ */
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -7,14 +9,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.JOptionPane;
-
 /**
- * Classe Ile Cette classe permet la creation d'une ele
- * 
+ * Classe Ile Cette classe permet la creation d'une cle
  * @author Team J3
- * 
  */
 public class Ile {
 
@@ -778,13 +776,10 @@ public class Ile {
 		return navireEquipe2;
 	}
 	
+	/**
+	 * Retourne le plateau
+	 * @return plateau
 	public Parcelle[][] getPlateau() {
 		return this.plateau;
 	}
-
-	
-
-
-	
-
 }
