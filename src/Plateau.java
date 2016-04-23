@@ -684,8 +684,10 @@ public class Plateau {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				waitTime = 0;
-				changerSelectionPerso();
+				if (!confirmeSelection) {
+					waitTime = 0;
+					changerSelectionPerso();
+				}
 				break;
 			case KeyEvent.VK_ENTER:
 				if (persoPrecis != -1) {
