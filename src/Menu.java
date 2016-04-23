@@ -1,3 +1,6 @@
+/**
+ * Importation
+ */
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,7 +10,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,35 +20,34 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
+/**
+ * Class Menu
+ * Gestion du menu de demarrage du jeu
+ */
 public class Menu {
-
+	/**
+	 * Attribut du jeu
+	 */
 	private JFrame frame;
 	private JPanel typeJeuPanel;
 	private JPanel choix;
 	private JPanel confirmeManuel;
-	
 	private JButton humain;
 	private JButton ordi;
 	private boolean versusOrdi;
-	
 	private JLabel tailleLabel;
 	private JTextField tailleField;
 	private JLabel rochersLabel;
 	private JTextField rochersField;
 	private String taille;
 	private String rochers;
-	
 	private JButton validerButton;
 	private boolean confirme;
 	private boolean choixValides;
-	
 	private JPanel messagePane;
 	private JLabel messages;
-	
 	private Dimension screenSize;
 	private int maxHeight;
-
 	private JPanel texteJoueur1;
 	private JLabel nomJoueur1;
 	private JPanel texteJoueur2;
@@ -55,16 +56,13 @@ public class Menu {
 	private JPanel nbPersos1;
 	private JPanel descJoueur2;
 	private JPanel nbPersos2;
-	
 	private JPanel[] inputPersos;
 	private JButton[] boutonMoins;
 	private JButton[] boutonPlus;
 	private JTextField[] input;	
-	
 	private int maxPerso; // Nombre perso max par equipe
 	private int nbPersoSelected1; // Equipe 1
 	private int nbPersoSelected2; // Equipe 2
-	
 	private JButton boutonPlacement;
 	private boolean choixManuel;
 	
@@ -485,13 +483,16 @@ public class Menu {
 		return versusOrdi;
 	}
 	/**
-	 * 
+	 * Confirmation
 	 * @return si le joueur a confirme ses choix de jeu
 	 */
 	public boolean getConfirme() {
 		return confirme;
 	}
-	
+	/**
+	 * Temps de verification
+	 * @param time out
+	 */
 	public void waitValidation(int timeout) {
 		frame.requestFocusInWindow();
 		int time = 0;
@@ -515,6 +516,9 @@ public class Menu {
 		return Integer.valueOf(input[i].getText());
 	}
 	
+	/**
+	 * Gestion du choix manuel
+	 */
 	public boolean getChoixManuel() {
 		return this.choixManuel;
 	}
