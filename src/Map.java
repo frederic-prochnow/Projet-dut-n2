@@ -1,12 +1,13 @@
+/**
+ * Importation
+ */
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javafx.geometry.Pos;
 import sun.net.www.content.text.plain;
-
 /**
  * Class Map Class de test et application des classes Ile et Parcelle
  * 
@@ -30,6 +31,9 @@ public class Map {
 	boolean faitAction;
 	Actions actions;
 	
+	/**
+	 * Fonction pour jouer avec le jeu
+	 */
 	public void jouer() {
 	
 		/* DECLARATION DES VARIABLES */
@@ -311,6 +315,13 @@ public class Map {
 		plateauGraph.println(jeu.toString());
 	}
 
+	/**
+	 * Action Possibles dans le jeu en fonction du personnage et de l equipe
+	 * @param personnage concernee
+	 * @param equipe 1
+	 * @param equipe 2
+	 * @param le plateau de jeu
+	 */
 	private void setActionsPossibles(Personnage perso, Equipe equipe1, Equipe equipe2, Ile plateau) {
 		plateauGraph.setPeutVoler(actions.tenterVol(perso, plateau));
 		plateauGraph.setPeutPieger(actions.peutTenterPiege(perso, plateau));
@@ -319,6 +330,9 @@ public class Map {
 		
 	}
 
+	/**
+	 * Gestion de manche d un ordinateur
+	 */
 	private void tourOrdinateur() {
 		Random r = new Random();
 		int nSelection = r.nextInt(equipe2.getListe().size());
@@ -366,7 +380,16 @@ public class Map {
 		plateau.retirerMorts(jeu.getTourEquipe1(),equipe1.getListe(),equipe2.getListe());
 	}
 
-	/* permet de rafraichir l'affichage apres chaque action */
+	/**
+	* Permet de rafraichir l'affichage apres chaque action 
+	* @param Plateau de jeu
+	* @param Plateau graphique du jeu
+	* @param equipe en cour de jeu
+	* @param temps restant
+	* @param boolean de debut
+	* @param liste des personnages de l equipe 1
+	* @param liste des personnages de l equipe 2
+	*/
 	public void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, int waitTime, boolean debut, List<Personnage> equipe1, List<Personnage> equipe2) {
 		refresh(plateau, plateauGraph, equipeCourante, debut, equipe1, equipe2);
 		try {
@@ -374,7 +397,15 @@ public class Map {
 		} catch (Exception ie) {
 		}
 	}
-	
+	/**
+	 * Rafraichissement du jeu
+	 * @param plateau de jeu
+	 * @param plateau graphique du jeu
+	 * @param equipe en cour de jeu
+	 * @param booleen de debut
+	 * @param liste des personnages de l equipe 1
+	 * @param liste des personnages de l equipe 2
+	 */
 	public void refresh(Ile plateau, Plateau plateauGraph, boolean equipeCourante, boolean debut, List<Personnage> equipe1, List<Personnage> equipe2) {
 		plateauGraph.setJeu(plateau.getImagesCorrespondants(equipeCourante, plateauGraph, equipe1, equipe2), debut);
 		plateauGraph.affichage(); // Affichage graphique
