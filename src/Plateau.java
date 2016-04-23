@@ -1,4 +1,6 @@
-
+/**
+ * Importation
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +13,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,9 +24,12 @@ import javax.swing.WindowConstants;
  * sur lequel sont disposés des images représentant les éléments du jeu
  * Les images sont toutes de même taille et carrées. Optionellement, on peut y associer 
  * une zone d'affichage de texte et caturer les entrées (souris / clavier) de l'utilisateur.
- * @author M2103-Team
+ * @author Team J3
  */
 public class Plateau {
+	/**
+	 * Attribut
+	 */
 	private static boolean defaultVisibility = true ;
 	private static final long serialVersionUID = 1L;
 	private JFrame window ;
@@ -283,7 +287,10 @@ public class Plateau {
 		}
 		return mouse ;
 	}
-	
+	/**
+	 * Attente dans le clic sur le personnage
+	 * @param temps d attente
+	 */
 	public void waitClicPersoPane(int timeout) {
 		int time = 0;
 		prepareWaitEvent(true);
@@ -559,19 +566,29 @@ public class Plateau {
 			}
 		}		
 	}
-	
+	/**
+	 * Verification de la confirmation de selection
+	 * @return booleen
+	 */
 	public boolean getConfirmeSelection() {
 		return confirmeSelection;
 	}
-	
+	/**
+	 * Configuration de la confirmation de selection
+	 */
 	public void setConfirmeSelection(boolean b) {
 		confirmeSelection = b;
 	}
-	
+	/**
+	 * Retourne la selection de personnage
+	 * @return selection
+	 */
 	public boolean getASelectionnePerso() {
 		return aSelectionnePerso;
 	}
-	
+	/**
+	 * Changement de la selection du personnage
+	 */
 	private void changerSelectionPerso() {
 		for (int i=0; i<liste.length;i++) {
 			liste[i].setBackground(sable);
@@ -586,10 +603,16 @@ public class Plateau {
 		tempPersoSelectionne = listePersos.get(persoPrecis);
 		refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
 	}
-	
+	/**
+	 * Class Keys
+	 * @author Team J3
+	 */
 	private class Keys implements KeyListener {
 
-		@Override
+		/**
+		 * Gestion des clee utilise
+		 * @Override
+		 */
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
@@ -612,57 +635,97 @@ public class Plateau {
 			
 		}
 
-		@Override
+		/**
+		 * Gestion des clee relachee
+		 * @param evenement
+		 * @Override
+		 */
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
+		/**
+		 * Gestion des clee tapee
+		 * @param evenement
+		 * @Override
+		 */
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
 			
 		}
 		
 	}
-	
+	/**
+	 * Vouloir de pieger
+	 * @return possibilite
+	 */
 	public boolean veutPieger() {
 		return veutPieger;
 	}
 	
+	/**
+	 * Retourne si action en cours realise
+	 * @return booleen
+	 */
 	public boolean getFaitAction() {
 		return faitAction;
 	}
-	
+	/**
+	 * Configuration du booleen en gestion de l action realise
+	 * @param booleen
+	 */
 	public void setFaitAction(boolean b) {
 		faitAction = b;
 	}
 	
+	/**
+	 * Annuler son choix
+	 * @return annulation
+	 */
 	public boolean getAnnulerChoix() {
 		return annulerChoix;
 	}
 	
+	/**
+	 * Desactiver annulation
+	 */
 	public void disableAnnuler() {
 		annuler.setEnabled(false);
 		annuler.setBackground(Color.LIGHT_GRAY);
 	}
-	
+	/**
+	 * Peut voler ?
+	 * @return booleen
+	 */
 	public boolean getPeutVoler() {
 		return this.peutVoler;
 	}
-	
+	/**
+	 * Configuration du pouvoir de voler
+	 * @param booleen
+	 */
 	public void setPeutVoler(boolean set) {
 		this.peutVoler = set;
 	}
-	
+	/**
+	 * Configuration du pouvoir de pieger
+	 * @param booleen
+	 */
 	public void setPeutPieger(boolean set){
 		this.peutPieger = set;
 	}
-	
+	/**
+	 * Configuration du pouvoir d echanger la clee
+	 * @param booleen
+	 */
 	public void setPeutEchangerClef(boolean set) {
 		this.peutEchangerClef = set;
 	}
-	
+	/**
+	 * Configuration du pouvoir d echanger tresor
+	 * @param booleen
+	 */
 	public void setPeutEchangerTresor(boolean set) {
 		this.peutEchangerTresor = set;
 	}
@@ -681,33 +744,60 @@ public class Plateau {
 			console.println(message) ;
 		}
 	}
-	
+	/**
+	 * Affiche un message dans la partie texte du plateau.
+	 * Si le plateau a été construit sans zone texte, cette méthode est sans effet.
+	 * Cela provoque aussi le déplacement du scroll vers l'extrémité basse de façon 
+	 * à rendre le texte ajouté visible. On ajoute automatiquement une fin de ligne 
+	 * de telle sorte que le message est seul sur sa ligne.
+	 * @param message Le message à afficher.
+	 */
 	public void print(String message) {
 		if (console != null) {
 			console.print(message) ;
 		}
 	}
-	
+	/**
+	 * Afficage de message
+	 * @param message
+	 * @param equipe
+	 * @param message
+	 */
 	public void print(String message, boolean equipe, String message2) {
 		print(message, equipe);
 		console.print(" " + message2);
 	}
-	
+	/**
+	 * Afficage de message
+	 * @param message
+	 * @param equipe
+	 * @param message
+	 */
 	public void println(String message, boolean equipe, String message2) {
 		println(message, equipe);
 		console.print(" " + message2);
 	}
-		
+	/**
+	 * Afficage de message
+	 * @param message
+	 * @param equipe
+	 */	
 	public void print(String message, boolean equipe) {
 		console.print(message);
 		console.printEquipe(equipe);
 	}
-	
+	/**
+	 * Afficage de message
+	 * @param message
+	 * @param equipe
+	 */
 	public void println(String message, boolean equipe) {
 		console.println(message);
 		console.printEquipe(equipe);
 	}
-	
+	/**
+	 * Nettoyage de la console
+	 */
 	public void clearConsole() {
 		console.clear();
 	}
@@ -803,14 +893,21 @@ public class Plateau {
 		return images ;
 	}
 	
+	/**
+	 * Sauvegarde
+	 */
 	public void save() {
 		console.save();
 	}
-	
+	/**
+	 * Restauration
+	 */
 	public void recover() {
 		console.recover();
 	}
-	
+	/**
+	 * Nettoyage de sauvegarde
+	 */
 	public void clearSave() {
 		console.clearSave();
 	}
