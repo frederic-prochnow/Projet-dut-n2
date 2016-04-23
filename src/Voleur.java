@@ -1,5 +1,12 @@
+/**
+ * Class Voleur
+ * Gestion des Voleur
+ * @author Team J3
+ */
 public class Voleur extends Personnage{
-
+	/**
+	 * Attribut
+	 */
 	boolean cleVolee;
 	
 	/**
@@ -14,11 +21,16 @@ public class Voleur extends Personnage{
 		super(nom,equipe,energie,p,type);
 		this.cleVolee=false;
 	}
-	
+	/**
+	 * Configuration de clee volee
+	 */
 	public void setCleVolee(){
 		this.cleVolee=true;
 	}
-	
+	/**
+	 * Verification de clee volee
+	 * @return booleen
+	 */
 	public boolean getCleVolee() {
 		return this.cleVolee;
 	}
