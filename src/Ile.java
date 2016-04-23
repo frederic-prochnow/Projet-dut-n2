@@ -121,7 +121,7 @@ public class Ile {
 		coffre = new Coffre(new Position(x, y));
 		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
-		System.out.println(x + " " + y);
+		System.out.println("coffre " + x + " " + y);
 
 		// CLE
 		int xCle, yCle;
@@ -134,7 +134,7 @@ public class Ile {
 		clef = new Clef(new Position(xCle, yCle));
 		plateau[xCle][yCle].setType(6);
 		plateau[xCle][yCle].setEstCompte(true);
-		System.out.println(xCle + " " + yCle);
+		System.out.println("cle " + xCle + " " + yCle);
 
 		// ROCHERS
 		int xR, yR;
@@ -559,7 +559,7 @@ public class Ile {
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
 						plateauGraph.refreshCase(destination, 7);
-						plateauGraph.waitClicPersoPane(750);
+						plateauGraph.waitEvent(750, false);
 						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");
@@ -572,7 +572,7 @@ public class Ile {
 					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
 					plateauGraph.save();
 					plateauGraph.refreshCase(destination, 8);
-					plateauGraph.waitClicPersoPane(750);
+					plateauGraph.waitEvent(750, false);
 					plateau[destination.x][destination.y].setType(15);
 					clef.setPosition(new Position(-1,-1));
 					perso.setDetientClef(true);

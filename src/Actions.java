@@ -62,11 +62,10 @@ public class Actions {
 	 */
 	public boolean peutTenterPiege(Personnage perso, Ile ile){
 		if(perso.getType() == 11 || perso.getType() == 13){
-			if(!ile.getPlateau()[perso.getPos().x][perso.getPos().y].getEstVide()){ // Si la case n'est pas du tout occupé
+			if (ile.getPlateau()[perso.getPos().x][perso.getPos().y].getType() == perso.getType() ) { // Si la case n'est pas du tout occupé
 				return true;
 			}
 		}
-		
 		return false;
 	}
 

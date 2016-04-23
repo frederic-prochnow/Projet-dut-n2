@@ -46,12 +46,12 @@ public class Plateau {
 	private boolean dejaAjoutClef;
 	private boolean dejaAjoutTresor;
 	private boolean peutPieger;
-	private boolean dejaPeutPieger;
+	private boolean dejaAjoutPieger;
 	private boolean annulerChoix;
 	private JButton annuler;
 	private boolean veutPieger;
 	private boolean faitAction;
-	private boolean clicBouton;
+	private boolean clicAction;
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
 	private List<Personnage> listePersos;
@@ -60,6 +60,13 @@ public class Plateau {
 	private boolean peutSeDeplacer;
 	private boolean veutDeplacer;
 	private Position directionDeplacement;
+	private boolean confirmeSelectionPane;
+	private int waitTime;
+	private boolean confirmeFinTour;
+	private JButton pieger;
+	private JButton voler;
+	private JButton echangerClef;
+	private JButton echangerTresor;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -153,6 +160,7 @@ public class Plateau {
 		PersoPane.setLayout(new GridLayout(2,3));
 		PersoPane.setPreferredSize(new Dimension(200, 100));
 		PersoPane.addKeyListener(new Keys());
+		window.addKeyListener(new Keys());
 		liste = null;
 		peutVoler = false;
 		sable = new Color(239, 228, 176);
@@ -237,7 +245,7 @@ public class Plateau {
 	private void prepareWaitEvent(boolean paneSelectionPrecis) {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
-		clicBouton = false;
+		clicAction = false;
 		affichage() ;	// Remet à jour l'affichage (peut être optimisé)
 		if (paneSelectionPrecis) {
 			PersoPane.requestFocusInWindow();
@@ -249,18 +257,18 @@ public class Plateau {
 	 * Attends (au maximum timeout ms) l'apparition d'une entrée (souris ou clavier).
 	 * 
 	 * @param timeout La durée maximale d'attente.
-	 * @param paneSelectionPrecis si on attend un clic dans PersoPane
+	 * @param paneSelectionPrecis si on attend un clic dans PersoPane ou dans window
 	 * @return L'événement observé si il y en a eu un, <i>null</i> sinon.
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/InputEvent.html">java.awt.event.InputEvent</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html">java.awt.event.MouseEvent</a>
 	 * @see <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html">java.awt.event.KeyEvent</a>
 	 */
-	public InputEvent waitEvent(int timeout, boolean paneSelectionPrecis, boolean waitAction) {
+	public InputEvent waitEvent(int timeout, boolean selectionPrecis) {
 		int time = 0 ;
-		prepareWaitEvent(paneSelectionPrecis) ;
+		prepareWaitEvent(selectionPrecis) ;
 		mouse = null;
-		if (paneSelectionPrecis) {
-			while ((persoPrecis == -1) && (time < timeout)) {
+		if (selectionPrecis) {
+			while ((persoPrecis == -1) && !annulerChoix && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -268,18 +276,8 @@ public class Plateau {
 				}
 				time += 100 ;
 			}
-		} else if (!paneSelectionPrecis && !waitAction){
-			while ((mouse == null) && (time < timeout)) {
-				try {
-					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				time += 100 ;
-			}
-		}
-		if (waitAction) {
-			while (!clicBouton && mouse == null && (time < timeout)) {
+		} else {
+			while (mouse == null && !confirmeFinTour && !annulerChoix && (time < timeout)) {
 				try {
 					Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 				} catch (InterruptedException e) {
@@ -291,29 +289,13 @@ public class Plateau {
 		return mouse ;
 	}
 	/**
-	 * Attente de clic sur le personnage
-	 * @param temps d attente
-	 */
-	public void waitClicPersoPane(int timeout) {
-		int time = 0;
-		prepareWaitEvent(true);
-		while ((mouse == null) && (time < timeout)) {
-			try {
-				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			time += 100 ;
-		}
-	}
-	/**
-	 * Attente de deplacement
+	 * Attente de deplacement ou de clic sur un bouton d'action
 	 * @param timeout
 	 */
-	public void waitDeplacement(int timeout) {
+	public void waitDeplacementOuAction(int timeout) {
 		int time = 0;
 		prepareWaitEvent(true);
-		while ( !veutDeplacer  && mouse == null && (time < timeout)) {
+		while ( !annulerChoix && !clicAction && !veutDeplacer  && mouse == null && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -328,15 +310,15 @@ public class Plateau {
 	 * @param timeout
 	 */
 	public void waitSelectionPerso(int timeout) {
-		int time = 0;
+		waitTime = 0;
 		prepareWaitEvent(true);
-		while ( !confirmeSelection && mouse == null && (time < timeout)) {
+		while ( !annulerChoix && !confirmeSelection && !confirmeSelectionPane && mouse == null && (waitTime < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			time += 100 ;
+			waitTime += 100 ;
 		}
 	}
 	/**
@@ -420,14 +402,13 @@ public class Plateau {
 		ajouteVolFait = false;
 		dejaAjoutClef = false;
 		dejaAjoutTresor = false;
-		peutPieger = false;
+		dejaAjoutPieger = false;
 		veutPieger = false;
 		faitAction = false;
-		dejaPeutPieger = false;
+		dejaAjoutPieger = false;
 		annulerChoix = false;
 		persoPrecis = -1;
 		oldHighlight = new Position(-1,-1);
-		confirmeSelection = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -443,22 +424,8 @@ public class Plateau {
 		}
 		if (liste.length == 1) {
 			liste[0].setBackground(sable);
-		}
-		if (liste.length == 1 && (selection.get(0).getType() == 1 || selection.get(0).getType() == 4)) {
-			ajouterActionVoler();
-			ajouteVolFait = true;
-		}
-		
-		if (liste.length == 1 && (selection.get(0).getType() == 11 || selection.get(0).getType() == 13) ) {
-			ajouterActionPieger();
-			peutPieger = true;
-		}
-		
-		if (liste.length == 1 && peutEchangerClef) {
-			ajouterActionEchangerClef();
-		}
-		if (liste.length == 1 && peutEchangerTresor) {
-			ajouterActionEchangerTresor();
+			tempPersoSelectionne = selection.get(0);
+			actionsSiListeUnique();
 		}
 		if (liste.length != 0) {
 			ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
@@ -469,12 +436,30 @@ public class Plateau {
 			PersoPane.add(annuler);
 		}
 	}
+	
+	public void actionsSiListeUnique() {
+		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
+			ajouterActionVoler();
+			ajouteVolFait = true;
+		}
+		if (tempPersoSelectionne.getType() == 11 || tempPersoSelectionne.getType() == 13) {
+			ajouterActionPieger();
+			dejaAjoutPieger = true;
+		}
+		if (peutEchangerClef) {
+			ajouterActionEchangerClef();
+		}
+		if (peutEchangerTresor) {
+			ajouterActionEchangerTresor();
+		}
+	}
+	
 	/**
 	 * On ajoute le bouton de l'action voler. Ensuite, selon si un vol est possible, le bouton est vert ou gris
 	 */
 	private void ajouterActionVoler() {
 		ImageIcon volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
-		JButton voler = new JButton(volerIcone);
+		voler = new JButton(volerIcone);
 		voler.setPreferredSize(new Dimension(volerIcone.getIconWidth(), volerIcone.getIconHeight()));
 		PersoPane.add(voler);
 		if (peutVoler) {
@@ -488,7 +473,7 @@ public class Plateau {
 	 */
 	private void ajouterActionEchangerClef() {
 		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
-		JButton echangerClef = new JButton(clefIcone);
+		echangerClef = new JButton(clefIcone);
 		echangerClef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
 		echangerClef.setBackground(Color.GREEN);
 		if (!dejaAjoutClef) {
@@ -502,7 +487,7 @@ public class Plateau {
 	 */
 	private void ajouterActionEchangerTresor() {
 		ImageIcon tresorIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
-		JButton echangerTresor = new JButton(tresorIcone);
+		echangerTresor = new JButton(tresorIcone);
 		echangerTresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
 		echangerTresor.setBackground(Color.GREEN);
 		if (!dejaAjoutTresor) {
@@ -516,14 +501,20 @@ public class Plateau {
 	 */
 	private void ajouterActionPieger(){
 		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
-		JButton pieger = new JButton(piegerIcone);
+		pieger = new JButton(piegerIcone);
 		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
 		pieger.setBackground(Color.GREEN);
 		pieger.setActionCommand("pieger");
 		pieger.addActionListener(new Action());
-		if (!dejaPeutPieger) {
+		if (!dejaAjoutPieger) {
 			PersoPane.add(pieger);
-			dejaPeutPieger = true;
+			dejaAjoutPieger = true;
+		}
+		if (peutPieger) {
+			pieger.setBackground(Color.GREEN);
+		} else {
+			pieger.setEnabled(false);
+			pieger.setBackground(Color.LIGHT_GRAY);
 		}
 	}
 	/**
@@ -550,11 +541,11 @@ public class Plateau {
 	private class Action implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			clicBouton = true;
 			if (e.getActionCommand().equals("annuler")) {
 				annulerChoix = true;
 			} else if (e.getActionCommand().equals("pieger")) {
 				veutPieger = true;
+				clicAction = true;
 			} else {
 				for (int i=0;i<liste.length;i++) {
 					// si ce n'est psa le bouton appuyé, on le desactive
@@ -562,17 +553,17 @@ public class Plateau {
 						liste[i].setEnabled(false);
 						liste[i].setBackground(Color.LIGHT_GRAY);
 					} else {
-						confirmeSelection = true;
+						confirmeSelectionPane = true;
+						tempPersoSelectionne = listePersos.get(i);
 						liste[i].setBackground(sable);
 						persoPrecis = i;
 						if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
 							ajouterActionVoler();
 							ajouteVolFait = true;
 						}
-						
-						if(!peutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
+						if(!dejaAjoutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
 							ajouterActionPieger();
-							peutPieger = true;
+							dejaAjoutPieger = true;
 						}
 						if (peutEchangerClef && !dejaAjoutClef) {
 							ajouterActionEchangerClef();
@@ -586,6 +577,14 @@ public class Plateau {
 		}		
 	}
 	
+	
+	public boolean getConfirmeSelectionPane() {
+		return confirmeSelectionPane;
+	}
+	
+	public void setConfirmeSelectionPane(boolean b) {
+		confirmeSelectionPane = b;
+	}
 	public boolean getVeutDeplacer() {
 		return veutDeplacer;
 	}
@@ -619,6 +618,14 @@ public class Plateau {
 		confirmeSelection = b;
 		peutSeDeplacer = true;
 		directionDeplacement = new Position(-1,-1);
+		if (b) {
+			for (int i=0;i<liste.length;i++) {
+				if (i != persoPrecis) {
+					liste[i].setEnabled(false);
+					liste[i].setBackground(Color.LIGHT_GRAY);
+				}
+			}
+		}
 	}
 	/**
 	 * Retourne la selection de personnage
@@ -627,6 +634,26 @@ public class Plateau {
 	public boolean getASelectionnePerso() {
 		return aSelectionnePerso;
 	}
+	
+	public Personnage getTempPersoSelec() {
+		if (tempPersoSelectionne != null) {
+			return tempPersoSelectionne;
+		}
+		return new Personnage("pas de temp", true, 0, new Position(-1,-1), -1);
+	}
+	
+	public void setTempPersoSelec(Personnage perso) {
+		tempPersoSelectionne = perso;
+	}
+	
+	public boolean getConfirmeFinTour() {
+		return confirmeFinTour;
+	}
+	
+	public void setConfirmeFinTour(boolean b) {
+		confirmeFinTour = b;
+	}
+	
 	/**
 	 * Changement de la selection du personnage
 	 */
@@ -657,18 +684,28 @@ public class Plateau {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
+				waitTime = 0;
 				changerSelectionPerso();
 				break;
 			case KeyEvent.VK_ENTER:
 				if (persoPrecis != -1) {
 					setConfirmeSelection(true);
+					confirmeFinTour = true;
 				}
 				break;
 			case KeyEvent.VK_SPACE:
 				if (persoPrecis != -1) {
 					setConfirmeSelection(true);
+					confirmeFinTour = true;
 				}
 				break;
+			case KeyEvent.VK_X:
+				annulerChoix = true;
+				break;
+			case KeyEvent.VK_ESCAPE:
+				annulerChoix = true;
+				break;
+				
 			default:
 				break;
 			}
@@ -753,9 +790,25 @@ public class Plateau {
 	/**
 	 * Desactiver annulation
 	 */
-	public void disableAnnuler() {
+	public void disableAnnulerEtActions() {
 		annuler.setEnabled(false);
 		annuler.setBackground(Color.LIGHT_GRAY);
+		if (pieger != null) {
+			pieger.setEnabled(false);
+			pieger.setBackground(Color.LIGHT_GRAY);
+		}
+		if (voler != null) {
+		voler.setEnabled(false);
+		voler.setBackground(Color.LIGHT_GRAY);
+		}
+		if (echangerClef != null) {
+		echangerClef.setEnabled(false);
+		echangerClef.setBackground(Color.LIGHT_GRAY);
+		}
+		if (echangerTresor != null) {
+		echangerTresor.setEnabled(false);
+		echangerTresor.setBackground(Color.LIGHT_GRAY);
+		}
 	}
 	/**
 	 * Peut voler ?
@@ -900,6 +953,12 @@ public class Plateau {
 	public void resetHighlight(int x, int y) {
 		if (graphic != null) {
 			graphic.resetHighlight(x, y);
+		}
+	}
+	
+	public void resetHighlight(Position dest) {
+		if (graphic != null && !dest.getNulle()) {
+			graphic.resetHighlight(dest.x, dest.y);
 		}
 	}
 	/**
