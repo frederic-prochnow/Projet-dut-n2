@@ -1,6 +1,16 @@
+/**
+ * Importation
+ */
 import java.awt.Point;
-
+/**
+ * Class Personnage
+ * Gestion des personnages
+ * @author Team J3
+ */
 public class Personnage {
+	/**
+	 * Attribut
+	 */
 	protected String nom;
 	protected char symboleNom;
 	protected int type; // Même que dans parcelle
@@ -58,32 +68,58 @@ public class Personnage {
 		}
 	}
 	
+	/**
+	 * Retourne le type de personnage
+	 * @return type
+	 */
 	public int getType(){
 		return this.type;
 	}
 	
+	/**
+	 * Retourne le chemin
+	 * @return chemin
+	 */
 	public String getCheminImage() {
 		return this.cheminImage;
 	}
 	
+	/**
+	 * Perdition d energie
+	 * @param energie
+	 */
 	public void perdEnergie(int energie){
 		this.energie -= energie;
 	}
 	
+	/**
+	 * Retourne la position du personnage
+	 * @return position
+	 */
 	public Position getPos(){
 		return pos;
 	}
-	
+	/**
+	 * Configuration de la position
+	 * @param point
+	 */
 	public void setPos(Point point){
 		pos.x = point.x;
 		pos.y = point.y;
 	}
 	
+	/**
+	 * Retourne le nom du personnage
+	 * @return nom
+	 */
 	public String getNom(){
 		return nom;
 	}
 	
-	// retourne le type du navire selon le personnage
+	/**
+	 * Retourne le type du navire selon le personnage
+	 * @return type
+	 */
 	public int getNavireType(){
 		if(equipe1){
 			return 2;
@@ -92,13 +128,24 @@ public class Personnage {
 		}
 	}
 	
+	/**
+	 * Retourne le symbole du personnage
+	 * @return symbole
+	 */
 	public char getSymbole(){
 		return symboleNom;
 	}
-	
+	/**
+	 * Retourne si  l equipe 1
+	 * @return equipe 1
+	 */
 	public boolean getEquipe1(){
 		return equipe1;
 	}
+	/**
+	 * Retourne si  l equipe 2
+	 * @return equipe 1
+	 */
 	public boolean getEquipe2() {
 		if (getEquipe1()) {
 			return false;
@@ -106,36 +153,69 @@ public class Personnage {
 		return true;
 	}
 	
+	/**
+	 * Retourne le niveau d energie du personnage
+	 * @return energie
+	 */
 	public int getEnergie(){
 		return energie;
 	}
+	
+	/**
+	 * Configuration de l energie
+	 * @param energue
+	 */
 	public void setEnergie(int setEnergie) {
 		this.energie = setEnergie;
 	}
 	
+	/**
+	 * Verification de presence sur navire
+	 * @return booleen
+	 */
 	public boolean getSurNavire(){
 		return this.surNavire;
 	}
-	
+	/**
+	 * Configuration de presence sur navire
+	 * @param booleen
+	 */
 	public void setSurNavire(boolean b){
 		this.surNavire = b;
 	}
 	
+	/**
+	 * Verification de detention de clee
+	 * @return booleen
+	 */
 	public boolean getDetientClef(){
 		return this.detientClef;
 	}
-	
+	/**
+	 * Configuration de detention de clee
+	 * @param booleen
+	 */
 	public void setDetientClef(boolean set) {
 		this.detientClef = set;
 	}
-	
+	/**
+	 * Verification de detention de Tresor
+	 * @return booleen
+	 */
 	public boolean getDetientTresor(){
 		return this.detientTresor;
 	}
-	
+	/**
+	 * Configuration de detention de tresor
+	 * @param booleen
+	 */
 	public void setDetientTresor(boolean set){
 		this.detientTresor = set;
 	}
+	/**
+	 * Fonction d affichae toString
+	 * @return message
+	 */
 	public String toString(){
 		if (equipe1) {
 			return nom+" de l'équipe 1 possede "+energie+" points d'energie.";
@@ -147,21 +227,41 @@ public class Personnage {
 	Object[] actionsMulti = { "haut", "bas", "gauche", "droite", "haut gauche", "haut droite", "bas gauche",
 	"bas droite" };
 	
+	/**
+	 * Selection choix de deplacement
+	 * @return choix
+	 */
 	public int choixDeplacement(){
 		return -1;
 	}
 	
+	/**
+	 * Obtention de position
+	 * @return position
+	 */
 	public Position getDernierTag() {
 		return this.dernierTag;
 	}
-	
+	/**
+	 * Configuration de position
+	 * @param coordonnee x
+	 * @param coordonnee y
+	 */
 	public void setDernierTag(int x, int y) {
 		this.dernierTag.setLocation(x, y);
 	}
 	
+	/**
+	 * Obtention direction de deplacement
+	 * @return direction
+	 */
 	public Position getDirectionDeplacement() {
 		return this.directionDeplacement;
 	}
+	/**
+	 * Configuration direction de deplacement
+	 * @param psoition
+	 */
 	public void setDirectionDeplacement(Position p) {
 		this.directionDeplacement.setLocation(p);
 	}
