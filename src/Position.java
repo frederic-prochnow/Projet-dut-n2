@@ -14,7 +14,6 @@ public class Position extends Point{
 	 * Attribut
 	 */
 	private List<Personnage> persosPresents;
-	private boolean plusdEnergie;
 	/**
 	 * Constructeur de la classe
 	 * @param coordonnee x
@@ -23,7 +22,6 @@ public class Position extends Point{
 	public Position(int x,int y){
 		super(x,y);
 		persosPresents = new ArrayList<>();
-		plusdEnergie = true;
 	}
 	/** Constructeur de la classe
 	 * @param point
@@ -31,24 +29,18 @@ public class Position extends Point{
 	public Position(Point point){
 		super(point);
 		persosPresents = new ArrayList<>();
-		plusdEnergie = true;
 	}
 	/**
 	 * on parcour les personnages de l'equipe voulue, et on verifie si l'un
 	 * au moins a la meme position que celle selectionnee
 	 * @param Liste de personnage
-	 * @param plateau
 	 * @return booleen
 	 */
-	public boolean pointValide(List<Personnage> equipe, Plateau plateauGraph) {
+	public boolean pointValide(List<Personnage> equipe) {
 		Personnage temp;
-		plusdEnergie = true;
 		for (int i=0;i<equipe.size();i++) {
 			temp = equipe.get(i);
 			if (temp.getPos().equals(this)) {
-				if (temp.getEnergie() > 0) {
-					plusdEnergie = false;
-				}
 				return true;
 			}
 		}
@@ -70,14 +62,6 @@ public class Position extends Point{
 			}
 		}
 		return persosPresents;
-	}
-	/**
-	 * Fin de carburant !
-	 * Plus d energie 
-	 * @return manque d energie
-	 */
-	public boolean getEnergieInvalide() {
-		return plusdEnergie;
 	}
 	/**
 	 * Localisation de l element

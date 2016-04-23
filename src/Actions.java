@@ -18,13 +18,7 @@ public class Actions {
 	 * @param chercheClef si on veut savoir s'il peut echanger sa clef ou echanger son tresor
 	 * @return si un echange est possible
 	 */
-	public boolean peutEchanger(Personnage perso, boolean chercheClef, Equipe equipe1, Equipe equipe2, Ile ile) {
-		Equipe tempEquipe;
-		if (perso.getEquipe1()) {
-			tempEquipe = equipe1;
-		} else {
-			tempEquipe = equipe2;
-		}
+	public boolean peutEchanger(Personnage perso, boolean chercheClef, Equipe tempEquipe, Ile ile) {
 		for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
 			for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
 				if ( (ile.getPlateau()[i][j].getEquipe1() && perso.getEquipe1()) || (ile.getPlateau()[i][j].getEquipe2() && perso.getEquipe2()) ) {
