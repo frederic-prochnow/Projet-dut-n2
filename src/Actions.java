@@ -1,6 +1,13 @@
-
+/**
+ * Class Actions
+ * Classe de gestion des Actions
+ * @author Team J3
+ */
 public class Actions {
 	
+	/**
+	 * Constructeur de la Classe
+	 */
 	public Actions() {
 		
 	}
@@ -69,6 +76,12 @@ public class Actions {
 		return false;
 	}
 
+	/**
+	 * Fonction qui permet de pièger un personnage
+	 * @param personnageselectionne qui va etre pieger
+	 * @param ile le plateau de jeu
+	 * @param tourE1 booleen
+	 */
 	public void pieger(Personnage personnnageSelectionne, Ile plateau, boolean tourE1) {
 		if (tourE1) {
 			plateau.getPlateau()[personnnageSelectionne.getPos().x][personnnageSelectionne.getPos().y].setEstpiegeE1(true);
