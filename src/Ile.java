@@ -547,7 +547,7 @@ public class Ile {
 			}
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
-			perso.perdEnergie(1);
+			perso.perdEnergie(100);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 		} else if (estRocher(destination)) {
 			if (perso instanceof Explorateur) {

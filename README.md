@@ -2,7 +2,7 @@
 
 ### Version avec la souris
 
- * #### (3/3) Jeu avec le clavier :
+ * #### (2/3) Jeu avec le clavier :
    ###### Déja fait :
  * * On peut selectionner le personnage voulue avec la touche 'A'
  * * Ce personnage est highlight dynamiquement dans le Plateau et PersoPane

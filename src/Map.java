@@ -253,7 +253,6 @@ public class Map {
 					plateauGraph.setConfirmeSelectionPane(false);
 					System.out.println("temp pos = " + temp.getPos());
 					setActionsPossibles(temp, tempEquipe, plateau);
-					plateauGraph.actionsSiListeUnique();
 					
 					while (!plateauGraph.getConfirmeSelectionPane() && !plateauGraph.getAnnulerChoix()) {
 						plateauGraph.waitEvent(1000,true);
