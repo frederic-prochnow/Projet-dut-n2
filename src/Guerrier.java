@@ -1,3 +1,8 @@
+/**
+ * Class guerrier
+ * Classe de gestion des guerriers
+ * @author Team J3
+ */
 public class Guerrier extends Personnage{
 	/**
 	 * Constructeur de Guerrier
