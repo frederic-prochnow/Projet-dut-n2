@@ -779,6 +779,7 @@ public class Ile {
 	/**
 	 * Retourne le plateau
 	 * @return plateau
+	 */
 	public Parcelle[][] getPlateau() {
 		return this.plateau;
 	}

@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javafx.geometry.Pos;
+import javax.geometry.Pos;
 import sun.net.www.content.text.plain;
 /**
  * Class Map Class de test et application des classes Ile et Parcelle
