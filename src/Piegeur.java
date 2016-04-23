@@ -1,3 +1,7 @@
+/**
+ * Class Piegeur
+ * Gestion des piegeur
+ */
 public class Piegeur extends Personnage{
 	/**
 	 * Constructeur de Piegeur
