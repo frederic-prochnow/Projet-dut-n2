@@ -48,6 +48,11 @@ public class Plateau {
 	private boolean veutPieger;
 	private boolean faitAction;
 	private boolean clicBouton;
+	private boolean aSelectionnePerso;
+	private boolean confirmeSelection;
+	private List<Personnage> listePersos;
+	private Personnage tempPersoSelectionne;
+	private Position oldHighlight;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -139,9 +144,9 @@ public class Plateau {
 		console = null ;
 		PersoPane = new JPanel();
 		PersoPane.setLayout(new GridLayout(2,3));
-		PersoPane.setPreferredSize(new Dimension(120, 100));
+		PersoPane.setPreferredSize(new Dimension(200, 100));
+		PersoPane.addKeyListener(new Keys());
 		liste = null;
-		persoPrecis = -1;
 		peutVoler = false;
 		sable = new Color(239, 228, 176);
 
@@ -225,7 +230,6 @@ public class Plateau {
 	private void prepareWaitEvent(boolean paneSelectionPrecis) {
 		currentEvent = null ;	// Annule tous les événements antérieurs
 		mouse = null;
-		persoPrecis = -1;
 		clicBouton = false;
 		affichage() ;	// Remet à jour l'affichage (peut être optimisé)
 		if (paneSelectionPrecis) {
@@ -284,6 +288,23 @@ public class Plateau {
 		int time = 0;
 		prepareWaitEvent(true);
 		while ((mouse == null) && (time < timeout)) {
+			try {
+				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			time += 100 ;
+		}
+	}
+	/**
+	 * Wait tant qu'on a pas selectionne de personnage par le biais d'un clic  n'importe où OU qu'on a pas confirmé
+	 * sa séléction en appuyant sur entree une fois qu'on a selectionne un perso en appuyant sur 'A'
+	 * @param timeout
+	 */
+	public void waitSelectionPerso(int timeout) {
+		int time = 0;
+		prepareWaitEvent(true);
+		while ( !confirmeSelection && mouse == null && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -369,6 +390,7 @@ public class Plateau {
 	 * @param selection
 	 */
 	public void ajouterSelectionPersos(List<Personnage> selection) {
+		listePersos = selection;
 		ajouteVolFait = false;
 		dejaAjoutClef = false;
 		dejaAjoutTresor = false;
@@ -377,6 +399,9 @@ public class Plateau {
 		faitAction = false;
 		dejaPeutPieger = false;
 		annulerChoix = false;
+		persoPrecis = -1;
+		oldHighlight = new Position(-1,-1);
+		confirmeSelection = false;
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
 		for (int i=0;i<liste.length;i++) {
@@ -445,14 +470,6 @@ public class Plateau {
 			dejaAjoutClef = true;
 		}
 	}
-	/**
-	 * Permet de rappeler graphic.Component apres avoir modifié temporairement le type d'une cellule
-	 * @param destination la case qu'on veut temporairement changer
-	 * @param type le type qu'on veut afficher
-	 */
-	public void refreshCase(Position destination, int type) {
-		graphic.refreshCase(destination, type+2);
-	}
 	
 	/**
 	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
@@ -483,6 +500,22 @@ public class Plateau {
 			dejaPeutPieger = true;
 		}
 	}
+	/**
+	 * Permet de rappeler graphic.Component apres avoir modifié temporairement le type d'une cellule
+	 * @param destination la case qu'on veut temporairement changer
+	 * @param type le type qu'on veut afficher
+	 */
+	public void refreshCase(Position destination, int type) {
+		graphic.refreshCase(destination, type+2);
+	}
+	
+	public void refreshCaseHighlight(Position dest, Color color) {
+		if (!oldHighlight.equals(new Position(-1,-1))) {
+			graphic.resetHighlight(oldHighlight);
+		}
+		oldHighlight = dest;
+		graphic.refreshCaseHighlight(dest, color);
+	}
 	
 	/**
 	 * On desactive les boutons si on choisit deja une
@@ -503,6 +536,7 @@ public class Plateau {
 						liste[i].setEnabled(false);
 						liste[i].setBackground(Color.LIGHT_GRAY);
 					} else {
+						confirmeSelection = true;
 						liste[i].setBackground(sable);
 						persoPrecis = i;
 						if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
@@ -524,6 +558,72 @@ public class Plateau {
 				}
 			}
 		}		
+	}
+	
+	public boolean getConfirmeSelection() {
+		return confirmeSelection;
+	}
+	
+	public void setConfirmeSelection(boolean b) {
+		confirmeSelection = b;
+	}
+	
+	public boolean getASelectionnePerso() {
+		return aSelectionnePerso;
+	}
+	
+	private void changerSelectionPerso() {
+		for (int i=0; i<liste.length;i++) {
+			liste[i].setBackground(sable);
+		}
+		if (persoPrecis < liste.length-1) {
+			persoPrecis++;
+			liste[persoPrecis].setBackground(Color.GREEN);
+		} else if (persoPrecis == liste.length-1) {
+			persoPrecis = 0;
+			liste[persoPrecis].setBackground(Color.GREEN);
+		}
+		tempPersoSelectionne = listePersos.get(persoPrecis);
+		refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
+	}
+	
+	private class Keys implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_A:
+				changerSelectionPerso();
+				break;
+			case KeyEvent.VK_ENTER:
+				if (persoPrecis != -1) {
+					confirmeSelection = true;
+				}
+				break;
+			case KeyEvent.VK_SPACE:
+				if (persoPrecis != -1) {
+					confirmeSelection = true;
+				}
+				break;
+
+			default:
+				break;
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 	
 	public boolean veutPieger() {
@@ -714,5 +814,6 @@ public class Plateau {
 	public void clearSave() {
 		console.clearSave();
 	}
+
 
 }

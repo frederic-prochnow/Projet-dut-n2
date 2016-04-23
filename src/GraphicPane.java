@@ -142,6 +142,14 @@ class GraphicPane extends JPanel {
 		jeu[cell.x][cell.y] = type;
 		repaint();
 	}
+	
+	public void refreshCaseHighlight(Position dest, Color color) {
+		highlight[dest.y][dest.x] = true;
+		highlightColor[dest.y][dest.x] = color;
+		repaint();
+		
+	}
+	
 	public void setSize() {
 		highlight = new boolean[nbLig][nbCol] ;
 		highlightColor = new Color[nbLig][nbCol] ;
@@ -164,6 +172,11 @@ class GraphicPane extends JPanel {
 	public void resetHighlight(int x, int y) {
 		if (highlight != null) {
 			highlight[y][x] = false ;
+		}
+	}
+	public void resetHighlight(Position dest) {
+		if (highlight != null) {
+			highlight[dest.y][dest.x] = false ;
 		}
 	}
 	public boolean isHighlight(int x, int y) {
@@ -226,5 +239,6 @@ class GraphicPane extends JPanel {
 	 * @return le tableau d'entiers
 	 */
 	public int[][] getJeu(){return jeu;}
+	
 
 }

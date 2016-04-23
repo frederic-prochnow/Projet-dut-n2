@@ -2,6 +2,17 @@
 
 ### Version avec la souris
  
+ * #### (1/3) Jeu avec le clavier :
+   ##### Déja fait :
+ * * On peut selectionner le personnage voulue avec la touche 'A'
+ * * Ce personnage est highlight dynamiquement dans le Plateau et PersoPane
+ * * Tous les personnages de l'équipe sont affichés dès le tour de l'équipe pour visualiser quels personnages
+ il peut directement selectionner avec la touche 'A'
+ * * Le joueur doit appuyer sur 'Entree' pour confirmer le choix de la touche 'A'
+   ##### A faire :
+ * * Selection hybride : selectionner avec clavier et souris en temps
+ * * Choisir sa direction avec le clavier
+ 
  * #### (1/4) IA basique, 1 chance sur 2 de se deplacer gauche/droite OU haut/bas/  
    ###### Déja fait :
 * * Continuer dans son direction de deplacement
