@@ -57,6 +57,9 @@ public class Plateau {
 	private List<Personnage> listePersos;
 	private Personnage tempPersoSelectionne;
 	private Position oldHighlight;
+	private boolean peutSeDeplacer;
+	private boolean veutDeplacer;
+	private Position directionDeplacement;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -288,13 +291,29 @@ public class Plateau {
 		return mouse ;
 	}
 	/**
-	 * Attente dans le clic sur le personnage
+	 * Attente de clic sur le personnage
 	 * @param temps d attente
 	 */
 	public void waitClicPersoPane(int timeout) {
 		int time = 0;
 		prepareWaitEvent(true);
 		while ((mouse == null) && (time < timeout)) {
+			try {
+				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			time += 100 ;
+		}
+	}
+	/**
+	 * Attente de deplacement
+	 * @param timeout
+	 */
+	public void waitDeplacement(int timeout) {
+		int time = 0;
+		prepareWaitEvent(true);
+		while ( !veutDeplacer  && mouse == null && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -566,6 +585,26 @@ public class Plateau {
 			}
 		}		
 	}
+	
+	public boolean getVeutDeplacer() {
+		return veutDeplacer;
+	}
+	
+	public void setVeutDeplacer(boolean b) {
+		veutDeplacer = b;
+	}
+	
+	public Position getDirectionDeplacement() {
+		return directionDeplacement;
+	}
+	
+	public boolean getDirectionDeplacementNulle() {
+		return directionDeplacement.equals(new Position(-1, -1));
+	}
+	
+	public void setDirectionDeplacement(Position pos) {
+		directionDeplacement.setLocation(pos);
+	}
 	/**
 	 * Verification de la confirmation de selection
 	 * @return booleen
@@ -578,6 +617,8 @@ public class Plateau {
 	 */
 	public void setConfirmeSelection(boolean b) {
 		confirmeSelection = b;
+		peutSeDeplacer = true;
+		directionDeplacement = new Position(-1,-1);
 	}
 	/**
 	 * Retourne la selection de personnage
@@ -620,17 +661,39 @@ public class Plateau {
 				break;
 			case KeyEvent.VK_ENTER:
 				if (persoPrecis != -1) {
-					confirmeSelection = true;
+					setConfirmeSelection(true);
 				}
 				break;
 			case KeyEvent.VK_SPACE:
 				if (persoPrecis != -1) {
-					confirmeSelection = true;
+					setConfirmeSelection(true);
 				}
 				break;
-
 			default:
 				break;
+			}
+			if (peutSeDeplacer) {
+				switch ( e.getKeyCode()) {
+				case KeyEvent.VK_Z:
+					directionDeplacement.setLocation(0, -1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_S:
+					directionDeplacement.setLocation(0, +1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_D:
+					directionDeplacement.setLocation(+1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_Q:
+					directionDeplacement.setLocation(-1, 0);
+					veutDeplacer = true;
+					break;
+	
+				default:
+					break;
+				}
 			}
 			
 		}

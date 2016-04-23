@@ -640,7 +640,7 @@ public class Ile {
 	 * @param equipe2 liste des personnages de l'équipe 2
 	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
 	 */
-	public void updateEnergie(boolean tourEquipe, List<Personnage> tempEquipe, Plateau plateauGraph) {
+	public void updateEnergie(List<Personnage> tempEquipe, Plateau plateauGraph) {
 		Personnage temp;
 		plateauGraph.clearText();
 		for (int x=1;x<plateau[0].length-1;x++) {
@@ -667,7 +667,7 @@ public class Ile {
 	 * @param equipe2 liste des personnages de l'équipe 2
 	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
 	 */
-	public void bonusEnergie(boolean tourEquipe, List<Personnage> tempEquipe, Plateau plateauGraph) {
+	public void bonusEnergie(List<Personnage> tempEquipe, Plateau plateauGraph) {
 		Personnage temp;
 		for (Iterator<Personnage> perso = tempEquipe.iterator();perso.hasNext();) {
 			temp = perso.next();
@@ -686,14 +686,8 @@ public class Ile {
 	 * @param equipe1 la liste des personnages de l'équipe 1
 	 * @param equipe2 la liste des personnages de l'équipe 2
 	 */
-	public void retirerMorts(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2) {
+	public void retirerMorts(List<Personnage> tempEquipe) {
 		Personnage tempPerso;
-		List<Personnage> tempEquipe = new ArrayList<>();
-		if (tourEquipe) {
-			tempEquipe = equipe1;
-		} else {
-			tempEquipe = equipe2;
-		}
 		for (int i=0; i<tempEquipe.size();i++) {
 			tempPerso = tempEquipe.get(i);
 			if (tempPerso.getEnergie() <= 0) {

@@ -86,5 +86,9 @@ public class Position extends Point{
 		return new Position(this.x+p.x, this.y+p.y);
 	}
 	
+	public boolean getNulle() {
+		return this.equals(new Position(-1,-1));
+	}
+	
 }
 
