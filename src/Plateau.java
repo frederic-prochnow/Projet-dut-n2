@@ -69,6 +69,12 @@ public class Plateau {
 	private int selectionListe;
 	private boolean dejaAjoutAnnuler;
 	private int savePerso;
+	private JButton attaquer;
+	private ImageIcon attaquerIcone;
+	private boolean dejaAjoutAttaquer;
+	private boolean veutAttaquer;
+	private boolean veutVoler;
+	private boolean peutAttaquer;
 	
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
@@ -203,6 +209,15 @@ public class Plateau {
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
 		listeBoutons = new JButton[10];
+		
+		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
+		attaquer = new JButton(attaquerIcone);
+		attaquer.setPreferredSize(new Dimension(attaquerIcone.getIconWidth(), attaquerIcone.getIconHeight()));
+		attaquer.setActionCommand("attaquer");
+		attaquer.addActionListener(new Action());
+		
+		listeBoutons = new JButton[10];
+		
 		capaciteListe = 0;
 		
 		// Caractéristiques initiales pour la fenetre.
@@ -500,6 +515,16 @@ public class Plateau {
 			ajouterActionPieger();
 			dejaAjoutPieger = true;
 		}
+		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
+			capaciteListe++;
+			ajouterActionVoler();
+			dejaAjoutVol = true;
+		}
+		if (tempPersoSelectionne.getType() == 10 || tempPersoSelectionne.getType() == 12) {
+			capaciteListe++;
+			ajouterActionAttaquer();
+			dejaAjoutAttaquer = true;
+		}
 		if (peutEchangerClef) {
 			capaciteListe++;
 			ajouterActionEchangerClef();
@@ -512,6 +537,21 @@ public class Plateau {
 		ajouterAnnuler();
 		PersoPane.repaint();
 		window.repaint();
+	}
+		
+	private void ajouterActionAttaquer() {
+		if (!dejaAjoutAttaquer) {
+			PersoPane.add(attaquer);
+			listeBoutons[capaciteListe] = attaquer;
+			dejaAjoutAttaquer = true;
+		}
+		if (!peutAttaquer) {
+			attaquer.setEnabled(false);
+			attaquer.setBackground(Color.LIGHT_GRAY);
+		} else {
+			attaquer.setEnabled(true);
+			attaquer.setBackground(sable);
+		}
 	}
 	
 	/**
@@ -605,7 +645,13 @@ public class Plateau {
 			} else if (e.getActionCommand().equals("pieger")) {
 				veutPieger = true;
 				clicAction = true;
-			} else if (e.getActionCommand().equals("echangerClef")) {
+			} else if (e.getActionCommand().equals("voler")) {
+				veutVoler = true;
+				clicAction = true;
+			} else if (e.getActionCommand().equals("attaquer")) {
+				veutAttaquer = true;
+				clicAction = true;
+			}else if (e.getActionCommand().equals("echangerClef")) {
 				veutEchangerClef = true;
 				clicAction = true;
 			} else if (e.getActionCommand().equals("echangerTresor")) {
@@ -771,6 +817,12 @@ public class Plateau {
 			if (listeBoutons[selectionListe].getActionCommand().equals("pieger")) {
 				veutPieger = true;
 				clicAction = true;
+			} else if (listeBoutons[selectionListe].equals("voler")) {
+				veutVoler = true;
+				clicAction = true;
+			} else if (listeBoutons[selectionListe].equals("attaquer")) {
+				veutAttaquer = true;
+				clicAction = true;
 			} else if (listeBoutons[selectionListe].equals("echangerClef")) {
 				veutEchangerClef = true;
 				clicAction = true;
@@ -880,6 +932,14 @@ public class Plateau {
 		return veutPieger;
 	}
 	
+	public boolean veutVoler() {
+		return veutVoler;
+	}
+	
+	public boolean veutAttaquer() {
+		return veutAttaquer;
+	}
+	
 	/**
 	 * Retourne si action en cours realise
 	 * @return booleen
@@ -925,6 +985,10 @@ public class Plateau {
 	 */
 	public void setPeutVoler(boolean set) {
 		this.peutVoler = set;
+	}
+	
+	public void setPeutAttaquer(boolean set) {
+		this.peutAttaquer = set;
 	}
 	/**
 	 * Configuration du pouvoir de pieger

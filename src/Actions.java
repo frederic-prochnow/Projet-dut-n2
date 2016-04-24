@@ -95,7 +95,7 @@ public class Actions {
 	 * @param perso pour connaitre sa position
 	 * @return si tentative possible
 	 */
-	public boolean tenterVol(Personnage perso, Ile ile) {
+	public boolean peutVoler(Personnage perso, Ile ile) {
 		if (perso.getType() == 1 || perso.getType() == 4) {
 			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
 				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
@@ -134,6 +134,21 @@ public class Actions {
 		} else {
 			plateau.getPlateau()[personnnageSelectionne.getPos().x][personnnageSelectionne.getPos().y].setEstpiegeE2(true);
 		}
+		
+	}
+
+	public boolean peutAttaquer(Personnage perso, Ile plateau) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void attaquer(Personnage personnnageSelectionne, Ile plateau, boolean tourEquipe1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void voler(Personnage personnnageSelectionne, Ile plateau, boolean tourEquipe1) {
+		// TODO Auto-generated method stub
 		
 	}
 }

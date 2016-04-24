@@ -345,6 +345,10 @@ public class Map {
 	private void executerAction() {
 		if (plateauGraph.veutPieger()) {
 			actions.pieger(personnnageSelectionne, plateau, jeu.getTourEquipe1());
+		} else if (plateauGraph.veutAttaquer()) {
+			actions.attaquer(personnnageSelectionne, plateau, jeu.getTourEquipe1());
+		} else if (plateauGraph.veutVoler()) {
+			actions.voler(personnnageSelectionne, plateau, jeu.getTourEquipe1());
 		} else if (plateauGraph.getVeutEchangerClef()) {
 			actions.echangerClef(personnnageSelectionne, tempEquipe, plateauGraph);
 		} else if (plateauGraph.getVeutEchangerTresor()) {
@@ -363,10 +367,11 @@ public class Map {
 	 */
 	private void setActionsPossibles(Personnage perso, Equipe tempEquipe, Ile plateau) {
 		if (perso != null) {
-			plateauGraph.setPeutVoler(actions.tenterVol(perso, plateau));
+			plateauGraph.setPeutVoler(actions.peutVoler(perso, plateau));
 			plateauGraph.setPeutPieger(actions.peutTenterPiege(perso, plateau));
 			plateauGraph.setPeutEchangerClef(actions.peutEchanger(perso, true, tempEquipe, plateau));
 			plateauGraph.setPeutEchangerTresor(actions.peutEchanger(perso, false, tempEquipe, plateau));
+			plateauGraph.setPeutAttaquer(actions.peutAttaquer(perso, plateau));
 		} else {
 			plateauGraph.setPeutVoler(false);
 			plateauGraph.setPeutPieger(false);
