@@ -49,11 +49,11 @@ public class Personnage {
 		} else if (type == 4) { 
 			this.cheminImage = "images/2.voleur.png";
 		} else if (type == 10) {
-			this.cheminImage = "images/2.voleur.png";
+			this.cheminImage = "images/1.guerrier.png";
 		} else if (type == 11) {
 			this.cheminImage = "images/1.piegeur.png";
 		} else if (type == 12) {
-			this.cheminImage = "images/2.voleur.png";
+			this.cheminImage = "images/2.guerrier.png";
 		} else if (type == 13) {
 			this.cheminImage = "images/2.piegeur.png";
 		}
@@ -164,7 +164,7 @@ public class Personnage {
 	}
 	
 	/**
-	 * Retourne si le personnage est piegé
+	 * Retourne si le personnage est piegï¿½
 	 * @return estPiege
 	 */
 	public boolean getEstPiege(){
@@ -172,7 +172,7 @@ public class Personnage {
 	}
 	
 	/**
-	 * Set si le personnage est piegé
+	 * Set si le personnage est piegï¿½
 	 * @return estPiege
 	 */
 	public void setEstPiege(boolean b){

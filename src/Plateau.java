@@ -64,6 +64,11 @@ public class Plateau {
 	private boolean veutPieger;
 	private boolean faitAction;
 	private boolean clicAction;
+	private JButton[] listeBoutons;
+	private int capaciteListe;
+	private int selectionListe;
+	private boolean dejaAjoutAnnuler;
+	private int savePerso;
 	
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
@@ -197,6 +202,8 @@ public class Plateau {
 		echangerTresor.setPreferredSize(new Dimension(echangerTresorIcone.getIconWidth(), echangerTresorIcone.getIconHeight()));
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
+		listeBoutons = new JButton[10];
+		capaciteListe = 0;
 		
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
@@ -437,7 +444,11 @@ public class Plateau {
 		veutPieger = false;
 		faitAction = false;
 		annulerChoix = false;
+		dejaAjoutAnnuler = false;
 		persoPrecis = -1;
+		savePerso = -1;
+		selectionListe = -1;
+		capaciteListe = -1;
 		oldHighlight = new Position(-1,-1);
 		PersoPane.removeAll();
 		liste = new JButton[selection.size()];
@@ -451,18 +462,12 @@ public class Plateau {
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
+			listeBoutons[i] = liste[i];
+			capaciteListe++;
 		}
 		if (liste.length == 1) {
 			liste[0].setBackground(sable);
 			tempPersoSelectionne = selection.get(0);
-		}
-		if (liste.length != 0) {
-			ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
-			annuler = new JButton(annulerIcone);
-			annuler.setBackground(sable);
-			annuler.setActionCommand("annuler");
-			annuler.addActionListener(new Action());
-			PersoPane.add(annuler);
 		}
 	}
 	
@@ -472,22 +477,39 @@ public class Plateau {
 		dejaAjoutTresor = b;
 		dejaAjoutPieger = b;
 	}
+
+	private void ajouterAnnuler() {
+		ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
+		annuler = new JButton(annulerIcone);
+		annuler.setBackground(sable);
+		annuler.setActionCommand("annuler");
+		annuler.addActionListener(new Action());
+		PersoPane.add(annuler);
+		listeBoutons[capaciteListe] = annuler;
+		dejaAjoutAnnuler = true;
+	}
 	
 	public void actionsSiListeUnique() {
 		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
+			capaciteListe++;
 			ajouterActionVoler();
 			dejaAjoutVol = true;
 		}
 		if (tempPersoSelectionne.getType() == 11 || tempPersoSelectionne.getType() == 13) {
+			capaciteListe++;
 			ajouterActionPieger();
 			dejaAjoutPieger = true;
 		}
 		if (peutEchangerClef) {
+			capaciteListe++;
 			ajouterActionEchangerClef();
 		}
 		if (peutEchangerTresor) {
+			capaciteListe++;
 			ajouterActionEchangerTresor();
 		}
+		capaciteListe++;
+		ajouterAnnuler();
 		PersoPane.repaint();
 		window.repaint();
 	}
@@ -498,6 +520,7 @@ public class Plateau {
 	private void ajouterActionVoler() {
 		if (!dejaAjoutVol) {
 			PersoPane.add(voler);
+			listeBoutons[capaciteListe] = voler;
 			dejaAjoutVol = true;
 		}
 		if (!peutVoler) {
@@ -505,7 +528,7 @@ public class Plateau {
 			voler.setBackground(Color.LIGHT_GRAY);
 		} else {
 			voler.setEnabled(true);
-			voler.setBackground(Color.GREEN);
+			voler.setBackground(sable);
 		}
 	}
 	/**
@@ -515,6 +538,7 @@ public class Plateau {
 	private void ajouterActionPieger(){
 		if (!dejaAjoutPieger) {
 			PersoPane.add(pieger);
+			listeBoutons[capaciteListe] = pieger;
 			dejaAjoutPieger = true;
 		}
 		if (!peutPieger) {
@@ -522,7 +546,7 @@ public class Plateau {
 			pieger.setBackground(Color.LIGHT_GRAY);
 		} else {
 			pieger.setEnabled(true);
-			pieger.setBackground(Color.GREEN);
+			pieger.setBackground(sable);
 		}
 	}
 	
@@ -532,8 +556,9 @@ public class Plateau {
 	private void ajouterActionEchangerClef() {
 		if (!dejaAjoutClef) {
 			echangerClef.setEnabled(true);
-			echangerClef.setBackground(Color.GREEN);
+			echangerClef.setBackground(sable);
 			PersoPane.add(echangerClef);
+			listeBoutons[capaciteListe] = echangerClef;
 			dejaAjoutClef = true;
 		}
 	}
@@ -543,9 +568,10 @@ public class Plateau {
 	 */
 	private void ajouterActionEchangerTresor() {
 		echangerTresor.setEnabled(true);
-		echangerTresor.setBackground(Color.GREEN);
+		echangerTresor.setBackground(sable);
 		if (!dejaAjoutTresor) {
 			PersoPane.add(echangerTresor);
+			listeBoutons[capaciteListe] = echangerTresor;
 			dejaAjoutTresor = true;
 		}
 	}
@@ -698,19 +724,75 @@ public class Plateau {
 	 * Changement de la selection du personnage
 	 */
 	private void changerSelectionPerso() {
-		for (int i=0; i<liste.length;i++) {
-			liste[i].setBackground(sable);
+		for (int i=0; i<=capaciteListe;i++) {
+			if (!confirmeSelection && !confirmeSelectionPane) {
+				listeBoutons[i].setBackground(sable);
+			} else {
+				listeBoutons[i].setBackground(Color.LIGHT_GRAY);
+			}
 		}
-		if (persoPrecis < liste.length-1) {
+		// on met tj le bouton annuler et celui selectionne
+		if (savePerso != -1) {
+			listeBoutons[savePerso].setBackground(sable);
+		}
+		listeBoutons[capaciteListe].setBackground(sable);
+		
+		if (selectionListe < liste.length-1) {
 			persoPrecis++;
-			liste[persoPrecis].setBackground(Color.GREEN);
-		} else if (persoPrecis == liste.length-1) {
+			selectionListe++;
+			listeBoutons[selectionListe].setBackground(Color.GREEN);
+			// going into actions
+		} else if (selectionListe == liste.length-1 && selectionListe < capaciteListe) {
+			persoPrecis = -1;
+			selectionListe++;
+			listeBoutons[selectionListe].setBackground(Color.GREEN);
+			// finished actions
+		} else if (selectionListe == capaciteListe-1) {
+			selectionListe++;
+			listeBoutons[selectionListe].setBackground(Color.GREEN);
+			// overflow total capacity
+		} else if (selectionListe == capaciteListe){
+			selectionListe = 0;
 			persoPrecis = 0;
-			liste[persoPrecis].setBackground(Color.GREEN);
+			listeBoutons[selectionListe].setBackground(Color.GREEN);
+			// overflow
+		} else {
+			persoPrecis = 0;
+			selectionListe = 0;
+			listeBoutons[selectionListe].setBackground(Color.GREEN);
 		}
-		tempPersoSelectionne = listePersos.get(persoPrecis);
-		refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
+		if (!confirmeSelection && !confirmeSelectionPane) {
+			tempPersoSelectionne = listePersos.get(persoPrecis);
+			refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
+		}
 	}
+	private void executeEnter() {
+		if ( (confirmeSelection || confirmeSelectionPane) && (selectionListe > liste.length-1)) {
+			if (listeBoutons[selectionListe].getActionCommand().equals("pieger")) {
+				veutPieger = true;
+				clicAction = true;
+			} else if (listeBoutons[selectionListe].equals("echangerClef")) {
+				veutEchangerClef = true;
+				clicAction = true;
+			} else if (listeBoutons[selectionListe].equals("echangerTresor")) {
+				veutEchangerTresor = true;
+				clicAction = true;
+			}
+		}
+		if (confirmeSelection || confirmeSelectionPane) {
+			confirmeFinTour = true;
+		}
+		if (selectionListe == capaciteListe && dejaAjoutAnnuler) {
+			System.out.println("annuled");
+				annulerChoix = true;
+		} else if (selectionListe > liste.length) {
+			clicAction = true;
+		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix) {
+			setConfirmeSelection(true);
+			savePerso = persoPrecis;
+		}
+	}
+	
 	/**
 	 * Class Keys
 	 * @author Team J3
@@ -724,22 +806,14 @@ public class Plateau {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				if (!confirmeSelection) {
-					waitTime = 0;
-					changerSelectionPerso();
-				}
+				waitTime = 0;
+				changerSelectionPerso();
 				break;
 			case KeyEvent.VK_ENTER:
-				if (persoPrecis != -1) {
-					setConfirmeSelection(true);
-					confirmeFinTour = true;
-				}
+				executeEnter();
 				break;
 			case KeyEvent.VK_SPACE:
-				if (persoPrecis != -1) {
-					setConfirmeSelection(true);
-					confirmeFinTour = true;
-				}
+				executeEnter();
 				break;
 			case KeyEvent.VK_X:
 				annulerChoix = true;
@@ -833,23 +907,9 @@ public class Plateau {
 	 * Desactiver annulation
 	 */
 	public void disableAnnulerEtActions() {
-		annuler.setEnabled(false);
-		annuler.setBackground(Color.LIGHT_GRAY);
-		if (pieger != null) {
-			pieger.setEnabled(false);
-			pieger.setBackground(Color.LIGHT_GRAY);
-		}
-		if (voler != null) {
-		voler.setEnabled(false);
-		voler.setBackground(Color.LIGHT_GRAY);
-		}
-		if (echangerClef != null) {
-		echangerClef.setEnabled(false);
-		echangerClef.setBackground(Color.LIGHT_GRAY);
-		}
-		if (echangerTresor != null) {
-		echangerTresor.setEnabled(false);
-		echangerTresor.setBackground(Color.LIGHT_GRAY);
+		for (int i=0; i<=capaciteListe;i++) {
+			listeBoutons[i].setEnabled(false);
+			listeBoutons[i].setBackground(Color.LIGHT_GRAY);
 		}
 	}
 	/**
