@@ -395,7 +395,7 @@ public class Ile {
 				} else if (!equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE1()) {
 					tab[h][k] = (-1+2);
 				} else {
-				tab[h][k] = ((plateau[h][k].getType())+2);
+					tab[h][k] = ((plateau[h][k].getType())+2);
 				}
 				
 				plateauGraph.resetHighlight(h, k);
@@ -545,17 +545,19 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(14);
 				}
 			}
-			
-			// Si le perso est de l'équipe 2 et que le piege est posé par l'équipe 1
-			if((perso.getEquipe2() && plateau[(int)destination.getX()][(int)destination.getY()].getEstpiegeE1())){
-				System.out.println("piegé !");
-				perso.setEstPiege(true);
-			}
-			
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
 			perso.perdEnergie(1);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+		} else if (estPiege(destination, perso)) {
+			plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+			perso.perdEnergie(5);
+			System.out.println("il s'est fait piégé");
+			plateauGraph.println("Il s'est fait piégé !");
+			plateauGraph.save();
+			plateau[destination.x][destination.y].setType(perso.getType());
+			perso.setPos(destination);
+			perso.setEstPiege(true);
 		} else if (estRocher(destination)) {
 			if (perso instanceof Explorateur) {
 				if (estCoffre(destination)) {
@@ -711,6 +713,18 @@ public class Ile {
 				tempEquipe.remove(i);
 			}
 		}
+	}
+	
+	
+	public boolean estPiege(Position dest, Personnage perso) {
+		if ( plateau[dest.x][dest.y].getType() == 14) {
+			if (perso.getEquipe1()) {
+				return  plateau[dest.x][dest.y].getEstpiegeE2();
+			} else {
+				return  plateau[dest.x][dest.y].getEstpiegeE1();
+			}
+		}
+		return false;
 	}
 	
 	
