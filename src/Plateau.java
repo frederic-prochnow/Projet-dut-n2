@@ -39,34 +39,42 @@ public class Plateau {
 	private JButton[] liste;
 	private int persoPrecis;
 	private Color sable;
+	
 	private boolean peutVoler;
-	private boolean ajouteVolFait;
+	private boolean dejaAjoutVol;
 	private boolean peutEchangerClef;
 	private boolean peutEchangerTresor;
+	private boolean peutSeDeplacer;
+	private boolean veutDeplacer;
+	private boolean veutEchangerClef;
+	private boolean veutEchangerTresor;
+	
 	private boolean dejaAjoutClef;
 	private boolean dejaAjoutTresor;
 	private boolean peutPieger;
 	private boolean dejaAjoutPieger;
-	private boolean annulerChoix;
+
+	private JButton pieger;
+	private JButton voler;
+	ImageIcon volerIcone;
+	private JButton echangerClef;
+	private JButton echangerTresor;
 	private JButton annuler;
+	private boolean annulerChoix;
 	private boolean veutPieger;
 	private boolean faitAction;
 	private boolean clicAction;
+	
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
+	private boolean confirmeSelectionPane;
+	private boolean confirmeFinTour;
+	
 	private List<Personnage> listePersos;
 	private Personnage tempPersoSelectionne;
 	private Position oldHighlight;
-	private boolean peutSeDeplacer;
-	private boolean veutDeplacer;
 	private Position directionDeplacement;
-	private boolean confirmeSelectionPane;
 	private int waitTime;
-	private boolean confirmeFinTour;
-	private JButton pieger;
-	private JButton voler;
-	private JButton echangerClef;
-	private JButton echangerTresor;
 	
 	/**
 	 *  Attribut ou est enregistré un événement observé. Cet attribut est
@@ -165,6 +173,31 @@ public class Plateau {
 		peutVoler = false;
 		sable = new Color(239, 228, 176);
 
+		// Instancie les composants de PersoPane
+		volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
+		voler = new JButton(volerIcone);
+		voler.setPreferredSize(new Dimension(volerIcone.getIconWidth(), volerIcone.getIconHeight()));
+		voler.setActionCommand("voler");
+		voler.addActionListener(new Action());
+		
+		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
+		pieger = new JButton(piegerIcone);
+		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
+		pieger.setActionCommand("pieger");
+		pieger.addActionListener(new Action());
+	
+		ImageIcon echangerClefIcone = new ImageIcon(Plateau.class.getResource("images/echanger_clef.png"));
+		echangerClef = new JButton(echangerClefIcone);
+		echangerClef.setPreferredSize(new Dimension(echangerClefIcone.getIconWidth(), echangerClefIcone.getIconHeight()));
+		echangerClef.setActionCommand("echangerClef");
+		echangerClef.addActionListener(new Action());
+
+		ImageIcon echangerTresorIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
+		echangerTresor = new JButton(echangerTresorIcone);
+		echangerTresor.setPreferredSize(new Dimension(echangerTresorIcone.getIconWidth(), echangerTresorIcone.getIconHeight()));
+		echangerTresor.setActionCommand("echangerTresor");
+		echangerTresor.addActionListener(new Action());
+		
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
 		window.setLocationRelativeTo(null);
@@ -254,7 +287,7 @@ public class Plateau {
 		}
 	}
 	/**
-	 * Attends (au maximum timeout ms) l'apparition d'une entrée (souris ou clavier).
+	 * Attends (au maximum timeout ms) l'apparition d'une entrée selon selectionPrecis.
 	 * 
 	 * @param timeout La durée maximale d'attente.
 	 * @param paneSelectionPrecis si on attend un clic dans PersoPane ou dans window
@@ -267,6 +300,8 @@ public class Plateau {
 		int time = 0 ;
 		prepareWaitEvent(selectionPrecis) ;
 		mouse = null;
+		confirmeFinTour = false;
+		annulerChoix = false;
 		if (selectionPrecis) {
 			while ((persoPrecis == -1) && !annulerChoix && (time < timeout)) {
 				try {
@@ -432,7 +467,7 @@ public class Plateau {
 	}
 	
 	public void setDejaFaits(boolean b) {
-		ajouteVolFait = b;
+		dejaAjoutVol = b;
 		dejaAjoutClef = b;
 		dejaAjoutTresor = b;
 		dejaAjoutPieger = b;
@@ -441,7 +476,7 @@ public class Plateau {
 	public void actionsSiListeUnique() {
 		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
 			ajouterActionVoler();
-			ajouteVolFait = true;
+			dejaAjoutVol = true;
 		}
 		if (tempPersoSelectionne.getType() == 11 || tempPersoSelectionne.getType() == 13) {
 			ajouterActionPieger();
@@ -461,54 +496,23 @@ public class Plateau {
 	 * On ajoute le bouton de l'action voler. Ensuite, selon si un vol est possible, le bouton est vert ou gris
 	 */
 	private void ajouterActionVoler() {
-		ImageIcon volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
-		voler = new JButton(volerIcone);
-		voler.setPreferredSize(new Dimension(volerIcone.getIconWidth(), volerIcone.getIconHeight()));
-		PersoPane.add(voler);
-		if (peutVoler) {
-			voler.setBackground(Color.GREEN);
-		} else {
+		if (!dejaAjoutVol) {
+			PersoPane.add(voler);
+			dejaAjoutVol = true;
+		}
+		if (!peutVoler) {
+			voler.setEnabled(false);
 			voler.setBackground(Color.LIGHT_GRAY);
+		} else {
+			voler.setEnabled(true);
+			voler.setBackground(Color.GREEN);
 		}
 	}
-	/**
-	 * On ajoute le bouton de l'action d'échanger une clef dans PersoPane
-	 */
-	private void ajouterActionEchangerClef() {
-		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
-		echangerClef = new JButton(clefIcone);
-		echangerClef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
-		echangerClef.setBackground(Color.GREEN);
-		if (!dejaAjoutClef) {
-			PersoPane.add(echangerClef);
-			dejaAjoutClef = true;
-		}
-	}
-	
-	/**
-	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
-	 */
-	private void ajouterActionEchangerTresor() {
-		ImageIcon tresorIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
-		echangerTresor = new JButton(tresorIcone);
-		echangerTresor.setPreferredSize(new Dimension(tresorIcone.getIconWidth(), tresorIcone.getIconHeight()));
-		echangerTresor.setBackground(Color.GREEN);
-		if (!dejaAjoutTresor) {
-			PersoPane.add(echangerTresor);
-			dejaAjoutTresor = true;
-		}
-	}
-	
 	/**
 	 * On ajoute le bouton de l'action pieger dans PersoPane
 	 */
+	
 	private void ajouterActionPieger(){
-		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
-		pieger = new JButton(piegerIcone);
-		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
-		pieger.setBackground(Color.GREEN);
-		pieger.setActionCommand("pieger");
-		pieger.addActionListener(new Action());
 		if (!dejaAjoutPieger) {
 			PersoPane.add(pieger);
 			dejaAjoutPieger = true;
@@ -521,6 +525,31 @@ public class Plateau {
 			pieger.setBackground(Color.GREEN);
 		}
 	}
+	
+	/**
+	 * On ajoute le bouton de l'action d'échanger une clef dans PersoPane
+	 */
+	private void ajouterActionEchangerClef() {
+		if (!dejaAjoutClef) {
+			echangerClef.setEnabled(true);
+			echangerClef.setBackground(Color.GREEN);
+			PersoPane.add(echangerClef);
+			dejaAjoutClef = true;
+		}
+	}
+	
+	/**
+	 * On ajoute le bouton de l'action d'échanger le trésor dans PersoPane
+	 */
+	private void ajouterActionEchangerTresor() {
+		echangerTresor.setEnabled(true);
+		echangerTresor.setBackground(Color.GREEN);
+		if (!dejaAjoutTresor) {
+			PersoPane.add(echangerTresor);
+			dejaAjoutTresor = true;
+		}
+	}
+	
 	/**
 	 * Permet de rappeler graphic.Component apres avoir modifié temporairement le type d'une cellule
 	 * @param destination la case qu'on veut temporairement changer
@@ -550,6 +579,12 @@ public class Plateau {
 			} else if (e.getActionCommand().equals("pieger")) {
 				veutPieger = true;
 				clicAction = true;
+			} else if (e.getActionCommand().equals("echangerClef")) {
+				veutEchangerClef = true;
+				clicAction = true;
+			} else if (e.getActionCommand().equals("echangerTresor")) {
+				veutEchangerTresor = true;
+				clicAction = true;
 			} else {
 				for (int i=0;i<liste.length;i++) {
 					// si ce n'est psa le bouton appuyé, on le desactive
@@ -565,6 +600,18 @@ public class Plateau {
 				}
 			}
 		}		
+	}
+	
+	public boolean getClicAction () {
+		return clicAction;
+	}
+	
+	public boolean getVeutEchangerClef() {
+		return veutEchangerClef;
+	}
+	
+	public boolean getVeutEchangerTresor() {
+		return veutEchangerTresor;
 	}
 	
 	/**

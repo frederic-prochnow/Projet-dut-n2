@@ -84,7 +84,7 @@ class ConsolePane extends JScrollPane {
 	 * Restauration
 	 */
 	public void recover() {
-		if (save != null) {
+		if (save != null && !save.equals("")) {
 			println(save);
 		}
 	}

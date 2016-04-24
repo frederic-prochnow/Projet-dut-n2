@@ -47,4 +47,15 @@ public class Equipe {
 		}
 		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1);
 	}
+	
+	public Personnage getPersoSurPosition(Position pos) {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (temp.getPos().equals(new Position(pos.x, pos.y))) {
+				return temp;
+			}
+		}
+		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1);
+	}
 }

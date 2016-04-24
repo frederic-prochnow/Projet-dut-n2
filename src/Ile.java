@@ -546,15 +546,15 @@ public class Ile {
 				}
 			}
 			
-			// Si le perso est de l'équipe 2 et que le piege est posé par l'équipe 1
+			// Si le perso est de l'Ã©quipe 2 et que le piege est posÃ© par l'Ã©quipe 1
 			if((perso.getEquipe2() && plateau[(int)destination.getX()][(int)destination.getY()].getEstpiegeE1())){
-				System.out.println("piegé !");
+				System.out.println("piegÃ© !");
 				perso.setEstPiege(true);
 			}
 			
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
-			perso.perdEnergie(1);
+			perso.perdEnergie(100);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 		} else if (estRocher(destination)) {
 			if (perso instanceof Explorateur) {

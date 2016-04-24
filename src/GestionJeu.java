@@ -18,6 +18,8 @@ public class GestionJeu {
 	private int equipeVainqueur;
 	private boolean debutJeu;
 	private boolean vsOrdi;
+	private boolean mortEquipe1;
+	private boolean mortEquipe2;
 	
 	/**
 	 * Constructeur de la classe
@@ -31,6 +33,8 @@ public class GestionJeu {
 		round = 1;
 		debutJeu = true;
 		this.vsOrdi = vsOrdi;
+		mortEquipe1 = false;
+		mortEquipe2 = false;
 	}
 	
 	/**
@@ -55,16 +59,28 @@ public class GestionJeu {
 	 */
 	public boolean getEstFini(List<Personnage> equipe){
 		Personnage temp;
-		for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
-			temp = itr.next();
-			if (temp.getDetientTresor() && temp.getSurNavire()) {
-				this.fini = true;
-				if (this.round % 2 == 0 ) {
-					this.equipeVainqueur = 1;
-				} else {
-					this.equipeVainqueur = 2;
+		if (equipe.isEmpty()) {
+			this.fini = true;
+			if (this.round % 2 == 0 ) {
+				this.equipeVainqueur = 1;
+				mortEquipe2 = true;
+			} else {
+				this.equipeVainqueur = 2;
+				mortEquipe1 = true;
+			}
+			return true;
+		} else {
+			for (Iterator<Personnage> itr = equipe.iterator();itr.hasNext();) {
+				temp = itr.next();
+				if (temp.getDetientTresor() && temp.getSurNavire()) {
+					this.fini = true;
+					if (this.round % 2 == 0 ) {
+						this.equipeVainqueur = 1;
+					} else {
+						this.equipeVainqueur = 2;
+					}
+					return true;
 				}
-				return true;
 			}
 		}
 		return false;
@@ -115,11 +131,19 @@ public class GestionJeu {
 	 * @return vainqueur ou tour
 	 */
 	public String toString(){
+		String res = "";
 		if(this.fini){
-			return "Le vainqueur est l'équipe "+this.equipeVainqueur+". Avec "+this.round+" tours.";
+			res += "Le vainqueur est l'équipe "+this.equipeVainqueur+" avec "+this.round+" tours.";
+			if (mortEquipe1) {
+				res += "\nCar l'équipe 1 est morte";
+			} else if (mortEquipe2) {
+				res += "\nCar l'équipe 2 est morte";
+			}
 		}else{
-			return "Tour actuel : "+this.round;
+			res += "Tour actuel : "+this.round;
 		}
+		System.out.println(res);
+		return res;
 	}
 	
 	/**

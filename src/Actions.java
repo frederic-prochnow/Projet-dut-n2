@@ -35,6 +35,39 @@ public class Actions {
 		}
 	return false;
 	}
+	
+	public void echangerClef(Personnage perso, Equipe tempEquipe, Plateau plateaGraph) {
+		Position choixTransfert =new Position(-1, -1);
+		boolean bonChoix = false;
+		boolean choixClavier = false;
+		while (!bonChoix && !choixClavier) {
+			plateaGraph.println("Veuillez cliquer sur celui avec lequel vous voulez faire l'échange");
+			plateaGraph.waitDeplacementOuAction(5000);
+			choixTransfert.setLocation(plateaGraph.getX(), plateaGraph.getY());
+			if (perso.getDetientClef()) {
+				bonChoix = perso.getPos().estCentreDe(choixTransfert);
+			} else {
+				bonChoix = choixTransfert.estCentreDe(perso.getPos());
+			}
+		}
+		if (perso.getDetientClef()) {
+			tempEquipe.getPersoSurPosition(choixTransfert).setDetientClef(true);
+			perso.setDetientClef(false);
+		} else {
+			tempEquipe.getPersoSurPosition(choixTransfert).setDetientClef(false);
+			perso.setDetientClef(true);
+		}
+		System.out.println("perso a cle = " + perso.getDetientClef());
+		System.out.println("destination a cle = " + tempEquipe.getPersoSurPosition(choixTransfert).getDetientClef());
+	}
+	
+	public void echangerTresor(Personnage perso, Equipe tempEquipe, Plateau plateaGraph) {
+		plateaGraph.print("Veuillez cliquer sur celui auquel vous voulez transfere le tresor");
+		
+	}
+	
+	
+	
 
 	/**
 	 * On balaie l'entourage du voleur. Si il y a une personnage de l'éequipe adverse

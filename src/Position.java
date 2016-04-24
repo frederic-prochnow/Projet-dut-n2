@@ -90,5 +90,16 @@ public class Position extends Point{
 		return this.equals(new Position(-1,-1));
 	}
 	
+	public boolean estCentreDe(Position pos) {
+		for (int i=this.x-1;i<=this.x+1;i++) {
+			for (int j=this.y-1;j<=this.y+1;j++) {
+				if (!this.equals(new Position(i ,j)) && (pos.x == i && pos.y == j) )  {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 }
 
