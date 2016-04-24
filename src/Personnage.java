@@ -23,6 +23,8 @@ public class Personnage {
 	private boolean detientTresor;
 	private Position dernierTag;
 	private Position directionDeplacement;
+	private boolean estPiege;
+	private int tourNumPiege;
 
 	/**
 	 * Constructeur de Personnage
@@ -162,11 +164,43 @@ public class Personnage {
 	}
 	
 	/**
+	 * Retourne si le personnage est piegé
+	 * @return estPiege
+	 */
+	public boolean getEstPiege(){
+		return estPiege;
+	}
+	
+	/**
+	 * Set si le personnage est piegé
+	 * @return estPiege
+	 */
+	public void setEstPiege(boolean b){
+		this.estPiege = b;
+	}
+	
+	/**
 	 * Configuration de l energie
 	 * @param energue
 	 */
 	public void setEnergie(int setEnergie) {
 		this.energie = setEnergie;
+	}
+	
+	/**
+	 * Retourne si le nb de tour piege restant
+	 * @return nbTourPiege
+	 */
+	public int getNumTourPiege(){
+		return tourNumPiege;
+	}
+	
+	/**
+	 * Set le nb de tour restant piege
+	 * @return nbTourPiege
+	 */
+	public void setNumTourPiege(int nb){
+		this.tourNumPiege = nb;
 	}
 	
 	/**
