@@ -399,13 +399,8 @@ public class Plateau {
 	 */
 	public void ajouterSelectionPersos(List<Personnage> selection) {
 		listePersos = selection;
-		ajouteVolFait = false;
-		dejaAjoutClef = false;
-		dejaAjoutTresor = false;
-		dejaAjoutPieger = false;
 		veutPieger = false;
 		faitAction = false;
-		dejaAjoutPieger = false;
 		annulerChoix = false;
 		persoPrecis = -1;
 		oldHighlight = new Position(-1,-1);
@@ -425,7 +420,6 @@ public class Plateau {
 		if (liste.length == 1) {
 			liste[0].setBackground(sable);
 			tempPersoSelectionne = selection.get(0);
-			actionsSiListeUnique();
 		}
 		if (liste.length != 0) {
 			ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
@@ -435,6 +429,13 @@ public class Plateau {
 			annuler.addActionListener(new Action());
 			PersoPane.add(annuler);
 		}
+	}
+	
+	public void setDejaFaits(boolean b) {
+		ajouteVolFait = b;
+		dejaAjoutClef = b;
+		dejaAjoutTresor = b;
+		dejaAjoutPieger = b;
 	}
 	
 	public void actionsSiListeUnique() {
@@ -452,6 +453,8 @@ public class Plateau {
 		if (peutEchangerTresor) {
 			ajouterActionEchangerTresor();
 		}
+		PersoPane.repaint();
+		window.repaint();
 	}
 	
 	/**
@@ -510,11 +513,12 @@ public class Plateau {
 			PersoPane.add(pieger);
 			dejaAjoutPieger = true;
 		}
-		if (peutPieger) {
-			pieger.setBackground(Color.GREEN);
-		} else {
+		if (!peutPieger) {
 			pieger.setEnabled(false);
 			pieger.setBackground(Color.LIGHT_GRAY);
+		} else {
+			pieger.setEnabled(true);
+			pieger.setBackground(Color.GREEN);
 		}
 	}
 	/**
@@ -557,27 +561,16 @@ public class Plateau {
 						tempPersoSelectionne = listePersos.get(i);
 						liste[i].setBackground(sable);
 						persoPrecis = i;
-						if (!ajouteVolFait && (liste[i].getName().equals(""+1) || liste[i].getName().equals(""+4))) {
-							ajouterActionVoler();
-							ajouteVolFait = true;
-						}
-						if(!dejaAjoutPieger && (liste[i].getName().equals(""+11) || liste[i].getName().equals(""+13))){
-							ajouterActionPieger();
-							dejaAjoutPieger = true;
-						}
-						if (peutEchangerClef && !dejaAjoutClef) {
-							ajouterActionEchangerClef();
-						}
-						if (peutEchangerTresor && ! dejaAjoutTresor) {
-							ajouterActionEchangerTresor();
-						}
 					}
 				}
 			}
 		}		
 	}
 	
-	
+	/**
+	 * Si le joueur a confirmé sa selection en cliquant dans PersoPane
+	 * @return
+	 */
 	public boolean getConfirmeSelectionPane() {
 		return confirmeSelectionPane;
 	}
@@ -605,7 +598,7 @@ public class Plateau {
 		directionDeplacement.setLocation(pos);
 	}
 	/**
-	 * Verification de la confirmation de selection
+	 * Verification de la confirmation de selection avec le clavier
 	 * @return booleen
 	 */
 	public boolean getConfirmeSelection() {
@@ -639,7 +632,7 @@ public class Plateau {
 		if (tempPersoSelectionne != null) {
 			return tempPersoSelectionne;
 		}
-		return new Personnage("pas de temp", true, 0, new Position(-1,-1), -1);
+		return null;
 	}
 	
 	public void setTempPersoSelec(Personnage perso) {
