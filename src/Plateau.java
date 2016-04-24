@@ -458,6 +458,9 @@ public class Plateau {
 		faitAction = false;
 		annulerChoix = false;
 		dejaAjoutAnnuler = false;
+		dejaAjoutAttaquer = false;
+		dejaAjoutClef = false;
+		dejaAjoutTresor = false;
 		persoPrecis = -1;
 		savePerso = -1;
 		selectionListe = -1;
@@ -485,6 +488,7 @@ public class Plateau {
 	}
 	
 	public void setDejaFaits(boolean b) {
+		dejaAjoutAttaquer = b;
 		dejaAjoutVol = b;
 		dejaAjoutClef = b;
 		dejaAjoutTresor = b;

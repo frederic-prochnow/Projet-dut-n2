@@ -187,12 +187,10 @@ public class Map {
 			deplacementValide = false;
 			confirmationFinTour.setLocation(-1, -1);
 			persoSelec = -1;
-			plateauGraph.setPeutVoler(false);
 			plateauGraph.setFaitAction(false);
 			plateauGraph.setConfirmeSelection(false);
 			plateauGraph.setTempPersoSelec(null);
 			setActionsPossibles(plateauGraph.getTempPersoSelec(), tempEquipe, plateau);
-			plateauGraph.setDejaFaits(false);
 			plateauGraph.setAttendFinTour(false);
 			
 			if ( (jeu.getVsOrdi() && jeu.getTourEquipe1()) || !jeu.getVsOrdi()) {
@@ -271,6 +269,7 @@ public class Map {
 							persoSelectionPosition.setLocation(personnnageSelectionne.getPos());
 						}
 						setActionsPossibles(personnnageSelectionne, tempEquipe, plateau);
+						plateauGraph.setDejaFaits(false);
 						plateauGraph.actionsSiListeUnique();
 					}
 				}
