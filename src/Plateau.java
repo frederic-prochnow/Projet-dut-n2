@@ -206,11 +206,11 @@ public class Plateau {
 		pieger.setActionCommand("pieger");
 		pieger.addActionListener(new Action());
 		
-		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.png"));
-		clef = new JButton(piegerIcone);
+		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
+		clef = new JButton(clefIcone);
 		clef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
 		
-		ImageIcon coffreIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
+		ImageIcon coffreIcone = new ImageIcon(Plateau.class.getResource("images/tresor.png"));
 		coffre = new JButton(coffreIcone);
 		coffre.setPreferredSize(new Dimension(coffreIcone.getIconWidth(), coffreIcone.getIconHeight()));
 		

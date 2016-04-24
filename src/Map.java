@@ -382,6 +382,8 @@ public class Map {
 			plateauGraph.setPeutEchangerClef(false);
 			plateauGraph.setPeutEchangerTresor(false);
 			plateauGraph.setPeutAttaquer(false);
+			plateauGraph.setDetientClef(false);
+			plateauGraph.setDetientCoffre(false);
 		}
 	}
 
