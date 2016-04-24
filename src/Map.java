@@ -377,6 +377,7 @@ public class Map {
 			plateauGraph.setPeutPieger(false);
 			plateauGraph.setPeutEchangerClef(false);
 			plateauGraph.setPeutEchangerTresor(false);
+			plateauGraph.setPeutAttaquer(false);
 		}
 	}
 
