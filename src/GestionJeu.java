@@ -20,6 +20,7 @@ public class GestionJeu {
 	private boolean vsOrdi;
 	private boolean mortEquipe1;
 	private boolean mortEquipe2;
+	String res;
 	
 	/**
 	 * Constructeur de la classe
@@ -35,6 +36,7 @@ public class GestionJeu {
 		this.vsOrdi = vsOrdi;
 		mortEquipe1 = false;
 		mortEquipe2 = false;
+		res = "";
 	}
 	
 	/**
@@ -59,6 +61,7 @@ public class GestionJeu {
 	 */
 	public boolean getEstFini(List<Personnage> equipe){
 		Personnage temp;
+		res = "";
 		if (equipe.isEmpty()) {
 			this.fini = true;
 			if (this.round % 2 == 0 ) {
@@ -76,8 +79,10 @@ public class GestionJeu {
 					this.fini = true;
 					if (this.round % 2 == 0 ) {
 						this.equipeVainqueur = 1;
+						res += "L'équipe 1 a ramené le trésor à leur navire\n";
 					} else {
 						this.equipeVainqueur = 2;
+						res += "L'équipe 2 a ramené le trésor à leur navire\n";
 					}
 					return true;
 				}
@@ -131,7 +136,6 @@ public class GestionJeu {
 	 * @return vainqueur ou tour
 	 */
 	public String toString(){
-		String res = "";
 		if(this.fini){
 			res += "Le vainqueur est l'équipe "+this.equipeVainqueur+" avec "+this.round+" tours.";
 			if (mortEquipe1) {
