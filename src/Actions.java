@@ -138,13 +138,23 @@ public class Actions {
 	}
 
 	public boolean peutAttaquer(Personnage perso, Ile plateau) {
-		// TODO Auto-generated method stub
+		System.out.println("attaquer");
+		if (perso.getType() == 10 || perso.getType() == 12) {
+			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
+				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
+					if ( (plateau.getPlateau()[i][j].getEquipe1() && perso.getEquipe2()) || (plateau.getPlateau()[i][j].getEquipe2() && perso.getEquipe1()) ) {
+						System.out.println("peut attaquer");
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 
-	public void attaquer(Personnage personnnageSelectionne, Ile plateau, boolean tourEquipe1) {
+	public void attaquer(Personnage personnageSelectionne, Ile plateau, boolean tourEquipe1) {
 		// TODO Auto-generated method stub
-		
+		personnageSelectionne.perdEnergie(20);
 	}
 
 	public void voler(Personnage personnnageSelectionne, Ile plateau, boolean tourEquipe1) {
