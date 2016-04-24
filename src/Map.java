@@ -347,14 +347,15 @@ public class Map {
 		if (plateauGraph.veutPieger()) {
 			actions.pieger(personnnageSelectionne, plateau, jeu.getTourEquipe1());
 		} else if (plateauGraph.veutAttaquer()) {
-			actions.attaquer(personnnageSelectionne, plateau, jeu.getTourEquipe1());
+			actions.attaquer(personnnageSelectionne, plateauGraph, equipe1, equipe2);
 		} else if (plateauGraph.veutVoler()) {
-			actions.voler(personnnageSelectionne, plateau, jeu.getTourEquipe1());
+			actions.voler(personnnageSelectionne, plateauGraph, equipe1, equipe2);
 		} else if (plateauGraph.getVeutEchangerClef()) {
 			actions.echangerClef(personnnageSelectionne, tempEquipe, plateauGraph);
 		} else if (plateauGraph.getVeutEchangerTresor()) {
 			actions.echangerTresor(personnnageSelectionne, tempEquipe, plateauGraph);
 		}
+		
 		plateauGraph.setFaitAction(true);
 		deplacementValide = true;
 	}
@@ -373,6 +374,8 @@ public class Map {
 			plateauGraph.setPeutEchangerClef(actions.peutEchanger(perso, true, tempEquipe, plateau));
 			plateauGraph.setPeutEchangerTresor(actions.peutEchanger(perso, false, tempEquipe, plateau));
 			plateauGraph.setPeutAttaquer(actions.peutAttaquer(perso, plateau));
+			plateauGraph.setDetientClef(personnnageSelectionne.getDetientClef());
+			plateauGraph.setDetientCoffre(personnnageSelectionne.getDetientTresor());
 		} else {
 			plateauGraph.setPeutVoler(false);
 			plateauGraph.setPeutPieger(false);

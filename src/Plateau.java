@@ -56,7 +56,13 @@ public class Plateau {
 
 	private JButton pieger;
 	private JButton voler;
-	ImageIcon volerIcone;
+	private JButton coffre;
+	private JButton clef;
+	private ImageIcon volerIcone;
+	private ImageIcon clefIcone;
+	private ImageIcon coffreIcone;
+	private boolean dejaAjoutClefIcon;
+	private boolean dejaAjoutCoffre;
 	private JButton echangerClef;
 	private JButton echangerTresor;
 	private JButton annuler;
@@ -75,6 +81,8 @@ public class Plateau {
 	private boolean veutAttaquer;
 	private boolean veutVoler;
 	private boolean peutAttaquer;
+	private boolean detientClef;
+	private boolean detientCoffre;
 	
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
@@ -197,7 +205,15 @@ public class Plateau {
 		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
 		pieger.setActionCommand("pieger");
 		pieger.addActionListener(new Action());
-	
+		
+		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.png"));
+		clef = new JButton(piegerIcone);
+		clef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
+		
+		ImageIcon coffreIcone = new ImageIcon(Plateau.class.getResource("images/coffre.png"));
+		coffre = new JButton(coffreIcone);
+		coffre.setPreferredSize(new Dimension(coffreIcone.getIconWidth(), coffreIcone.getIconHeight()));
+		
 		ImageIcon echangerClefIcone = new ImageIcon(Plateau.class.getResource("images/echanger_clef.png"));
 		echangerClef = new JButton(echangerClefIcone);
 		echangerClef.setPreferredSize(new Dimension(echangerClefIcone.getIconWidth(), echangerClefIcone.getIconHeight()));
@@ -532,9 +548,48 @@ public class Plateau {
 		if (peutEchangerTresor) {
 			ajouterActionEchangerTresor();
 		}
+		
+		if(detientClef){
+			ajouterClef();
+		}
+		
+		if(detientCoffre){
+			ajouterCoffre();
+		}
+		
 		ajouterAnnuler();
 		PersoPane.repaint();
 		window.repaint();
+	}
+	
+	private void ajouterClef(){
+		if (!dejaAjoutClef) {
+			PersoPane.add(clef);
+			capaciteListe++;
+			dejaAjoutClef = true;
+		}
+		if (!detientClef) {
+			clef.setEnabled(false);
+			clef.setBackground(Color.LIGHT_GRAY);
+		} else {
+			clef.setEnabled(true);
+			clef.setBackground(sable);
+		}
+	}
+	
+	private void ajouterCoffre(){
+		if (!dejaAjoutCoffre) {
+			PersoPane.add(coffre);
+			capaciteListe++;
+			dejaAjoutCoffre = true;
+		}
+		if (!detientCoffre) {
+			coffre.setEnabled(false);
+			coffre.setBackground(Color.LIGHT_GRAY);
+		} else {
+			coffre.setEnabled(true);
+			coffre.setBackground(sable);
+		}
 	}
 		
 	private void ajouterActionAttaquer() {
@@ -1210,6 +1265,16 @@ public class Plateau {
 	 */
 	public void clearSave() {
 		console.clearSave();
+	}
+
+	public void setDetientClef(boolean detientClef2) {
+		// TODO Auto-generated method stub
+		detientClef = detientClef2;
+	}
+
+	public void setDetientCoffre(boolean detientTresor) {
+		// TODO Auto-generated method stub
+		detientCoffre = detientTresor;
 	}
 
 

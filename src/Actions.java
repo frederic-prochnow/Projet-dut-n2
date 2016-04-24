@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Class Actions
  * Classe de gestion des Actions
@@ -152,13 +154,87 @@ public class Actions {
 		return false;
 	}
 
-	public void attaquer(Personnage personnageSelectionne, Ile plateau, boolean tourEquipe1) {
+	public void attaquer(Personnage personnageSelectionne, Plateau plateaugraph, Equipe equipe1, Equipe equipe2) {
 		// TODO Auto-generated method stub
-		personnageSelectionne.perdEnergie(20);
+		Position choixTransfert =new Position(-1, -1);
+		boolean bonChoix = false;
+		boolean bonChoixEquipe = false;
+		boolean choixClavier = false;
+		while (!bonChoix && !bonChoixEquipe && !choixClavier) {
+			plateaugraph.println("Veuillez cliquer sur celui avec lequel vous voulez faire l'Ã©change");
+			plateaugraph.waitDeplacementOuAction(5000);
+			choixTransfert.setLocation(plateaugraph.getX(), plateaugraph.getY());
+			if (personnageSelectionne.getEquipe1()) {
+				bonChoixEquipe = choixTransfert.pointValide(equipe2.getListe());
+				bonChoix = personnageSelectionne.getPos().estCentreDe(choixTransfert);
+			}else if(personnageSelectionne.getEquipe2()) {
+				bonChoixEquipe = choixTransfert.pointValide(equipe1.getListe());
+				bonChoix = personnageSelectionne.getPos().estCentreDe(choixTransfert);
+			}	
+		}
+		
+		if(personnageSelectionne.getEquipe1()){
+			choixTransfert.getPersosSurPosition(equipe2.getListe()).get(0).perdEnergie(20);
+		}else if(personnageSelectionne.getEquipe2()){
+			choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).perdEnergie(20);
+		}
+		
+		plateaugraph.println("Un joueur a été attaqué");
+		plateaugraph.save();
+		
 	}
 
-	public void voler(Personnage personnnageSelectionne, Ile plateau, boolean tourEquipe1) {
+	public void voler(Personnage personnageSelectionne, Plateau plateaugraph, Equipe equipe1, Equipe equipe2) {
 		// TODO Auto-generated method stub
+		Position choixTransfert =new Position(-1, -1);
+		boolean bonChoix = false;
+		boolean bonChoixEquipe = false;
+		boolean choixClavier = false;
+		boolean aVoler = false;
+		Random chanceVole = new Random();
+		while (!bonChoix && !bonChoixEquipe && !choixClavier) {
+			plateaugraph.println("Veuillez cliquer sur celui avec lequel vous voulez voler");
+			plateaugraph.waitDeplacementOuAction(5000);
+			choixTransfert.setLocation(plateaugraph.getX(), plateaugraph.getY());
+			if (personnageSelectionne.getEquipe1()) {
+				bonChoixEquipe = choixTransfert.pointValide(equipe2.getListe());
+				bonChoix = personnageSelectionne.getPos().estCentreDe(choixTransfert);
+			}else if(personnageSelectionne.getEquipe2()) {
+				bonChoixEquipe = choixTransfert.pointValide(equipe1.getListe());
+				bonChoix = personnageSelectionne.getPos().estCentreDe(choixTransfert);
+			}	
+		}
 		
+		if(chanceVole.nextInt() >= 0.5){
+			if(personnageSelectionne.getEquipe1()){
+				if(choixTransfert.getPersosSurPosition(equipe2.getListe()).get(0).getDetientClef()){
+					choixTransfert.getPersosSurPosition(equipe2.getListe()).get(0).setDetientClef(false);
+					personnageSelectionne.setDetientClef(true);
+					aVoler = true;
+				}else if(choixTransfert.getPersosSurPosition(equipe2.getListe()).get(0).getDetientTresor()){
+					choixTransfert.getPersosSurPosition(equipe2.getListe()).get(0).setDetientTresor(false);
+					personnageSelectionne.setDetientTresor(true);
+					aVoler = true;
+				}
+			}else if(personnageSelectionne.getEquipe2()){
+				if(choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).getDetientClef()){
+					choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).setDetientClef(false);
+					personnageSelectionne.setDetientClef(true);
+					aVoler = true;
+				}else if(choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).getDetientTresor()){
+					choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).setDetientTresor(false);
+					personnageSelectionne.setDetientTresor(true);
+					aVoler = true;
+				}
+			}
+		}
+		
+		if(!aVoler){
+			plateaugraph.println("Vous avez echoué le vole");
+		}else{
+			plateaugraph.println("Vous avez voler le joueur");
+		}
+		
+		plateaugraph.save();
 	}
 }
