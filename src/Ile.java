@@ -566,7 +566,9 @@ public class Ile {
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
 						plateauGraph.refreshCase(destination, 7);
-						plateauGraph.waitEvent(750, false);
+						plateauGraph.waitEvent(600, false);
+						plateauGraph.refreshCase(destination, 17);
+						plateauGraph.waitEvent(600, false);
 						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");

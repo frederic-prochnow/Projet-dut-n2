@@ -52,7 +52,7 @@ public class Map {
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
 				"images/coffre.png", "images/cle.jpg", "images/mer4.png", "images/1.explorateur.png", "images/1.piegeur.png" 
 				, "images/1.explorateur.png" , "images/2.piegeur.png", "images/pieger.png", "images/cle_prise.jpg",
-				"images/coffre_ouvert.png"};
+				"images/coffre_ouvert.png", "images/coffre_ouvert_tresor.png"};
 		Menu menu = new Menu();
 		menu.affichage();
 		while (!menu.getConfirme()) {
