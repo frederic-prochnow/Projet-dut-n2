@@ -80,6 +80,7 @@ public class Plateau {
 	private boolean confirmeSelection;
 	private boolean confirmeSelectionPane;
 	private boolean confirmeFinTour;
+	private boolean attendFinTour;
 	
 	private List<Personnage> listePersos;
 	private Personnage tempPersoSelectionne;
@@ -208,7 +209,6 @@ public class Plateau {
 		echangerTresor.setPreferredSize(new Dimension(echangerTresorIcone.getIconWidth(), echangerTresorIcone.getIconHeight()));
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
-		listeBoutons = new JButton[10];
 		
 		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
 		attaquer = new JButton(attaquerIcone);
@@ -217,8 +217,6 @@ public class Plateau {
 		attaquer.addActionListener(new Action());
 		
 		listeBoutons = new JButton[10];
-		
-		capaciteListe = 0;
 		
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
@@ -477,8 +475,8 @@ public class Plateau {
 			liste[i].addActionListener(new Action());
 			liste[i].setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
 			PersoPane.add(liste[i]);
-			listeBoutons[i] = liste[i];
 			capaciteListe++;
+			listeBoutons[i] = liste[i];
 		}
 		if (liste.length == 1) {
 			liste[0].setBackground(sable);
@@ -499,41 +497,37 @@ public class Plateau {
 		annuler.setBackground(sable);
 		annuler.setActionCommand("annuler");
 		annuler.addActionListener(new Action());
-		PersoPane.add(annuler);
-		listeBoutons[capaciteListe] = annuler;
-		dejaAjoutAnnuler = true;
+		if (!dejaAjoutAnnuler) {
+			capaciteListe++;
+			PersoPane.add(annuler);
+			listeBoutons[capaciteListe] = annuler;
+			dejaAjoutAnnuler = true;
+		}
 	}
 	
 	public void actionsSiListeUnique() {
 		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
-			capaciteListe++;
 			ajouterActionVoler();
 			dejaAjoutVol = true;
 		}
 		if (tempPersoSelectionne.getType() == 11 || tempPersoSelectionne.getType() == 13) {
-			capaciteListe++;
 			ajouterActionPieger();
 			dejaAjoutPieger = true;
 		}
 		if (tempPersoSelectionne.getType() == 1 || tempPersoSelectionne.getType() == 4) {
-			capaciteListe++;
 			ajouterActionVoler();
 			dejaAjoutVol = true;
 		}
 		if (tempPersoSelectionne.getType() == 10 || tempPersoSelectionne.getType() == 12) {
-			capaciteListe++;
 			ajouterActionAttaquer();
 			dejaAjoutAttaquer = true;
 		}
 		if (peutEchangerClef) {
-			capaciteListe++;
 			ajouterActionEchangerClef();
 		}
 		if (peutEchangerTresor) {
-			capaciteListe++;
 			ajouterActionEchangerTresor();
 		}
-		capaciteListe++;
 		ajouterAnnuler();
 		PersoPane.repaint();
 		window.repaint();
@@ -542,6 +536,7 @@ public class Plateau {
 	private void ajouterActionAttaquer() {
 		if (!dejaAjoutAttaquer) {
 			PersoPane.add(attaquer);
+			capaciteListe++;
 			listeBoutons[capaciteListe] = attaquer;
 			dejaAjoutAttaquer = true;
 		}
@@ -560,6 +555,7 @@ public class Plateau {
 	private void ajouterActionVoler() {
 		if (!dejaAjoutVol) {
 			PersoPane.add(voler);
+			capaciteListe++;
 			listeBoutons[capaciteListe] = voler;
 			dejaAjoutVol = true;
 		}
@@ -578,6 +574,7 @@ public class Plateau {
 	private void ajouterActionPieger(){
 		if (!dejaAjoutPieger) {
 			PersoPane.add(pieger);
+			capaciteListe++;
 			listeBoutons[capaciteListe] = pieger;
 			dejaAjoutPieger = true;
 		}
@@ -598,6 +595,7 @@ public class Plateau {
 			echangerClef.setEnabled(true);
 			echangerClef.setBackground(sable);
 			PersoPane.add(echangerClef);
+			capaciteListe++;
 			listeBoutons[capaciteListe] = echangerClef;
 			dejaAjoutClef = true;
 		}
@@ -672,6 +670,14 @@ public class Plateau {
 				}
 			}
 		}		
+	}
+	
+	public void setAttendFinTour(boolean set) {
+		attendFinTour = set;
+	}
+	
+	public boolean getAttendFinTour() {
+		return attendFinTour;
 	}
 	
 	public boolean getClicAction () {
@@ -858,8 +864,10 @@ public class Plateau {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				waitTime = 0;
-				changerSelectionPerso();
+				if (!attendFinTour) {
+					waitTime = 0;
+					changerSelectionPerso();
+				}
 				break;
 			case KeyEvent.VK_ENTER:
 				executeEnter();

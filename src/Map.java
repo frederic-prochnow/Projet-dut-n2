@@ -193,6 +193,7 @@ public class Map {
 			plateauGraph.setTempPersoSelec(null);
 			setActionsPossibles(plateauGraph.getTempPersoSelec(), tempEquipe, plateau);
 			plateauGraph.setDejaFaits(false);
+			plateauGraph.setAttendFinTour(false);
 			
 			if ( (jeu.getVsOrdi() && jeu.getTourEquipe1()) || !jeu.getVsOrdi()) {
 				
@@ -316,6 +317,7 @@ public class Map {
 				System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 				refresh(plateau, plateauGraph,jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 				plateauGraph.setConfirmeFinTour(false);
+				plateauGraph.setAttendFinTour(true);
 				
 				while (( confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix()) {
 					plateauGraph.clearConsole();
