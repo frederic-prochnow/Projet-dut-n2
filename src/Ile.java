@@ -545,6 +545,10 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(14);
 				}
 			}
+			if (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2()) {
+				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+			}
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
 			perso.perdEnergie(1);
@@ -558,6 +562,7 @@ public class Ile {
 			plateau[destination.x][destination.y].setType(perso.getType());
 			perso.setPos(destination);
 			perso.setEstPiege(true);
+			perso.setNumTourPiege(2);
 		} else if (estRocher(destination)) {
 			if (perso instanceof Explorateur) {
 				if (estCoffre(destination)) {
@@ -631,10 +636,15 @@ public class Ile {
 				perso.perdEnergie(1);
 				perso.setSurNavire(true);
 				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
-					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
 				}
 			}
 		} else {
+			System.out.println("le type est " + plateau[destination.x][destination.y].getType());
+			System.out.println("piege e1 = " + plateau[destination.x][destination.y].getEstpiegeE1());
+			System.out.println("piege e2 = " + plateau[destination.x][destination.y].getEstpiegeE2());
 			System.out.println("Ne peut pas se deplacer ici");
 			plateauGraph.println("Ne peut pas se deplacer ici");
 			plateauGraph.save();
@@ -717,14 +727,11 @@ public class Ile {
 	
 	
 	public boolean estPiege(Position dest, Personnage perso) {
-		if ( plateau[dest.x][dest.y].getType() == 14) {
-			if (perso.getEquipe1()) {
-				return  plateau[dest.x][dest.y].getEstpiegeE2();
-			} else {
-				return  plateau[dest.x][dest.y].getEstpiegeE1();
-			}
+		if (perso.getEquipe1()) {
+			return  plateau[dest.x][dest.y].getEstpiegeE2();
+		} else {
+			return  plateau[dest.x][dest.y].getEstpiegeE1();
 		}
-		return false;
 	}
 	
 	

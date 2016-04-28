@@ -496,6 +496,10 @@ public class Plateau {
 			PersoPane.add(liste[i]);
 			capaciteListe++;
 			listeBoutons[i] = liste[i];
+			if (selection.get(i).getEstPiege()) {
+				liste[i].setEnabled(false);
+				liste[i].setBackground(Color.LIGHT_GRAY);
+			}
 		}
 		if (liste.length == 1) {
 			liste[0].setBackground(sable);
@@ -836,7 +840,7 @@ public class Plateau {
 	 */
 	private void changerSelectionPerso() {
 		for (int i=0; i<=capaciteListe;i++) {
-			if (!confirmeSelection && !confirmeSelectionPane) {
+			if (!confirmeSelection && !confirmeSelectionPane && !listePersos.get(i).getEstPiege()) {
 				listeBoutons[i].setBackground(sable);
 			} else {
 				listeBoutons[i].setBackground(Color.LIGHT_GRAY);
@@ -878,6 +882,7 @@ public class Plateau {
 		}
 	}
 	private void executeEnter() {
+		// les actions
 		if ( (confirmeSelection || confirmeSelectionPane) && (selectionListe > liste.length-1)) {
 			if (listeBoutons[selectionListe].getActionCommand().equals("pieger")) {
 				veutPieger = true;
@@ -896,15 +901,19 @@ public class Plateau {
 				clicAction = true;
 			}
 		}
+		// fin tour
 		if (confirmeSelection || confirmeSelectionPane) {
 			confirmeFinTour = true;
 		}
+		// annuler
 		if (selectionListe == capaciteListe && dejaAjoutAnnuler) {
 			System.out.println("annuled");
 				annulerChoix = true;
+		// action
 		} else if (selectionListe > liste.length) {
 			clicAction = true;
-		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix) {
+		// personnage
+		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix && !listePersos.get(persoPrecis).getEstPiege()) {
 			setConfirmeSelection(true);
 			savePerso = persoPrecis;
 		}

@@ -326,7 +326,7 @@ public class Map {
 					plateauGraph.waitEvent(5000, false);
 					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
 				}
-				
+				tempEquipe.finPiege();
 				plateau.retirerMorts(tempEquipe.getListe());
 				if (!plateauGraph.getAnnulerChoix()) {
 					jeu.nextRound();

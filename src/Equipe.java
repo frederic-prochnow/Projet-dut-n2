@@ -58,4 +58,17 @@ public class Equipe {
 		}
 		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1);
 	}
+	
+	public void finPiege() {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (temp.getNumTourPiege() > 0) {
+				temp.setNumTourPiege(temp.getNumTourPiege() - 1);
+			}
+			if (temp.getNumTourPiege() == 0) {
+				temp.setEstPiege(false);
+			}
+		}
+	}
 }
