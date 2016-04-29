@@ -226,7 +226,7 @@ public class Plateau {
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
 		
-		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
+		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/attaquer.png"));
 		attaquer = new JButton(attaquerIcone);
 		attaquer.setPreferredSize(new Dimension(attaquerIcone.getIconWidth(), attaquerIcone.getIconHeight()));
 		attaquer.setActionCommand("attaquer");

@@ -212,7 +212,7 @@ public class Map {
 					plateauGraph.println("Cliquez sur le personnage que vous voulez deplacer");
 					plateauGraph.setConfirmeSelection(false);
 					plateauGraph.setConfirmeSelectionPane(false);
-					plateauGraph.waitSelectionPerso(10000);
+					plateauGraph.waitSelectionPerso(5000);
 					
 					// si on a confirmé sa séléction par le clavier, la selection est forcément correcte ou clique dans persopane
 					if (plateauGraph.getConfirmeSelection() || plateauGraph.getConfirmeSelectionPane()) {
