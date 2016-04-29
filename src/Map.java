@@ -221,8 +221,6 @@ public class Map {
 						// on met persoSelection a x,y du clic de la souris
 						persoSelectionPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 					}
-
-					System.out.println("persoselecPos = " + persoSelectionPosition);
 					
 					// verifie si le joueur a bien selectionne un perso de son equipe SEULEMENT s'il a cliqué
 					if (!persoSelectionPosition.getNulle()) {

@@ -372,7 +372,6 @@ public class Ile {
 			copy(tab, tabIconesGraphiqueEquipe2);
 		}
 		hideAllTraps(tab, equipeCourante);
-		plateauGraph.affichage();
 		return tab;
 	}
 	
