@@ -283,6 +283,7 @@ public class Plateau {
 	 * Si la fenêtre était cachée, elle redevient visible.
 	 */
 	public void affichage(){ 
+		graphic.repaint();
 		window.setVisible(true);	// Révèle la fenêtre.
 		window.repaint(); 			// Délégué à Swing (appelle indirectement graphic.paintComponent via Swing)
 	}

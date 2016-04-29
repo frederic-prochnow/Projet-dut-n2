@@ -174,6 +174,7 @@ public class Map {
 				tempEquipe = equipe2;
 			}
 			plateauGraph.clearHighlight();
+			plateauGraph.affichage();
 			plateau.bonusEnergie(tempEquipe.getListe(), plateauGraph);
 			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
 			refresh(plateau, plateauGraph,jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
@@ -216,10 +217,12 @@ public class Map {
 					// si on a confirmé sa séléction par le clavier, la selection est forcément correcte ou clique dans persopane
 					if (plateauGraph.getConfirmeSelection() || plateauGraph.getConfirmeSelectionPane()) {
 						bonneSelectionEquipe = true;
-					} else if (!plateauGraph.getConfirmeSelection()){
+					} else if (!plateauGraph.getConfirmeSelection() && !plateauGraph.getConfirmeSelectionPane()){
 						// on met persoSelection a x,y du clic de la souris
 						persoSelectionPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 					}
+
+					System.out.println("persoselecPos = " + persoSelectionPosition);
 					
 					// verifie si le joueur a bien selectionne un perso de son equipe SEULEMENT s'il a cliqué
 					if (!persoSelectionPosition.getNulle()) {
@@ -325,8 +328,8 @@ public class Map {
 					plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
 					plateauGraph.waitEvent(5000, false);
 					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
+					tempEquipe.finPiege();
 				}
-				tempEquipe.finPiege();
 				plateau.retirerMorts(tempEquipe.getListe());
 				if (!plateauGraph.getAnnulerChoix()) {
 					jeu.nextRound();

@@ -340,10 +340,10 @@ public class Ile {
 		// Le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
 		for (int i = 1; i < plateau[0].length-1; i++) {
 			for (int j = 1; j < plateau[1].length-1; j++) {
-				if (equipeCourante && brouillardEquipe1[i][j] == 0) {
+				if (equipeCourante && brouillardEquipe1[i][j] == 0 && !plateau[i][j].getEstpiegeE2()) {
 						tab[i][j] = tabIconesGraphiqueEquipe1[i][j];
 						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
-				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0) {
+				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0 && !plateau[i][j].getEstpiegeE1()) {
 						tab[i][j] = tabIconesGraphiqueEquipe2[i][j];
 						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
 				}
@@ -371,8 +371,24 @@ public class Ile {
 		} else {
 			copy(tab, tabIconesGraphiqueEquipe2);
 		}
+		hideAllTraps(tab, equipeCourante);
+		plateauGraph.affichage();
 		return tab;
 	}
+	
+	public void hideAllTraps(int[][] tab, boolean equipeCourante) {
+		for (int i=1;i<tab[0].length-2;i++) {
+			for (int j=1;j<tab[0].length-2;j++) {
+				 if (equipeCourante && plateau[i][j].getEstpiegeE2() && plateau[i][j].getType() == 14){
+					 tab[i][j] = 1;
+				 }
+				 if (!equipeCourante &&  plateau[i][j].getEstpiegeE1() && plateau[i][j].getType() == 14) {
+					 tab[i][j] = 1;
+				 }
+			} 
+		}
+	}
+	
 	/**
 	 * Affecte les vrais valeurs a tabIconesGraphiques de x-1 à x+1 pour y-1 à y+1.
 	 * Clear le highlight de ces cases
@@ -391,9 +407,9 @@ public class Ile {
 			for (int k = (y-1);k<=(y+1);k++) {
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
 				if (equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE2()) {
-					tab[h][k] = (-1+2);
+					tab[h][k] = 1;
 				} else if (!equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE1()) {
-					tab[h][k] = (-1+2);
+					tab[h][k] = 1;
 				} else {
 					tab[h][k] = ((plateau[h][k].getType())+2);
 				}
@@ -545,9 +561,12 @@ public class Ile {
 					plateau[perso.getPos().x][perso.getPos().y].setType(14);
 				}
 			}
-			if (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2()) {
+			// il quite apres avoir ete piege (regler si cest lui qui a posé le piege)
+			if ( (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() && perso.getEquipe2() ) 
+					|| (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() && perso.getEquipe1()) ) {
 				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
 				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
 			}
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());

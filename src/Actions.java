@@ -140,7 +140,6 @@ public class Actions {
 	}
 
 	public boolean peutAttaquer(Personnage perso, Ile plateau) {
-		System.out.println("attaquer");
 		if (perso.getType() == 10 || perso.getType() == 12) {
 			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
 				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
@@ -179,7 +178,7 @@ public class Actions {
 			choixTransfert.getPersosSurPosition(equipe1.getListe()).get(0).perdEnergie(20);
 		}
 		
-		plateaugraph.println("Un joueur a été attaqué");
+		plateaugraph.println("Un joueur a Ã©tÃ© attaquÃ©");
 		plateaugraph.save();
 		
 	}
@@ -230,7 +229,7 @@ public class Actions {
 		}
 		
 		if(!aVoler){
-			plateaugraph.println("Vous avez echoué le vole");
+			plateaugraph.println("Vous avez echouÃ© le vole");
 		}else{
 			plateaugraph.println("Vous avez voler le joueur");
 		}
