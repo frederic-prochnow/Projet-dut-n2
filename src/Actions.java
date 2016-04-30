@@ -117,7 +117,7 @@ public class Actions {
 	 */
 	public boolean peutTenterPiege(Personnage perso, Ile ile){
 		if(perso.getType() == 11 || perso.getType() == 13){
-			if (ile.getPlateau()[perso.getPos().x][perso.getPos().y].getType() == perso.getType() ) { // Si la case n'est pas du tout occupé
+			if (parcelle(perso.getPos(), ile).getType() == perso.getType() && !parcelle(perso.getPos(), ile).getEstpiegeE1() && !parcelle(perso.getPos(), ile).getEstpiegeE2()) { // Si la case n'est pas du tout occupé
 				return true;
 			}
 		}
@@ -235,5 +235,9 @@ public class Actions {
 		}
 		
 		plateaugraph.save();
+	}
+	
+	private Parcelle parcelle(Position pos, Ile ile) {
+		return ile.getPlateau()[pos.x][pos.y];
 	}
 }
