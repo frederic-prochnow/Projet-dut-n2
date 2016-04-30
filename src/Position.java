@@ -40,7 +40,7 @@ public class Position extends Point{
 		Personnage temp;
 		for (int i=0;i<equipe.size();i++) {
 			temp = equipe.get(i);
-			if (temp.getPos().equals(this) && !temp.getEstPiege()) {
+			if (temp.getPos().equals(this) && !temp.getEstPiege() && temp.getPointsMouvement() > 0) {
 				return true;
 			}
 		}

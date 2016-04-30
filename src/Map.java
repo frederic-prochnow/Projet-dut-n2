@@ -41,6 +41,7 @@ public class Map {
 	boolean bonneSelectionEquipePreced = true; 
 	boolean bonneSelectionEquipe = false; 
 	boolean deplacementValide = false;
+	boolean changerEquipe = false;
 	
 	/**
 	 * Fonction pour jouer avec le jeu
@@ -70,7 +71,7 @@ public class Map {
 		int i = 0;
 		for(Explorateur e : listExplo1){
 			i++;
-			e = new Explorateur("explorateur1-"+i, true, 100, plateau.getPos(2), 0);
+			e = new Explorateur("explorateur1-"+i, true, 100, plateau.getPos(2), 0, 3);
 			equipe1.getListe().add(e);
 			totalE1++;
 		}
@@ -80,7 +81,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listVoleur1){
 			i++;
-			e = new Voleur("voleur1-"+i, true, 100, plateau.getPos(2), 1);
+			e = new Voleur("voleur1-"+i, true, 100, plateau.getPos(2), 1, 3);
 			equipe1.getListe().add(e);
 			totalE1++;
 		}
@@ -90,7 +91,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listGuerrier1){
 			i++;
-			e = new Guerrier("guerrier1-"+i, true, 100, plateau.getPos(2), 10);
+			e = new Guerrier("guerrier1-"+i, true, 100, plateau.getPos(2), 10, 2);
 			equipe1.getListe().add(e);
 			totalE1++;
 		}
@@ -100,7 +101,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listPiegeur1){
 			i++;
-			e = new Piegeur("piegeur1-"+i, true, 100, plateau.getPos(2), 11);
+			e = new Piegeur("piegeur1-"+i, true, 100, plateau.getPos(2), 11, 2);
 			equipe1.getListe().add(e);
 			totalE1++;
 		}
@@ -110,7 +111,7 @@ public class Map {
 		i = 0;
 		for(Explorateur e : listExplo2){
 			i++;
-			e = new Explorateur("explorateur2-"+i, false, 100, plateau.getPos(5), 3);
+			e = new Explorateur("explorateur2-"+i, false, 100, plateau.getPos(5), 3, 3);
 			equipe2.getListe().add(e);
 			totalE2++;
 		}
@@ -120,7 +121,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listVoleur2){
 			i++;
-			e = new Voleur("voleur2-"+i, false, 100, plateau.getPos(5), 4);
+			e = new Voleur("voleur2-"+i, false, 100, plateau.getPos(5), 4, 3);
 			equipe2.getListe().add(e);
 			totalE2++;
 		}
@@ -130,7 +131,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listGuerrier2){
 			i++;
-			e = new Guerrier("guerrier2-"+i, false, 100, plateau.getPos(5), 12);
+			e = new Guerrier("guerrier2-"+i, false, 100, plateau.getPos(5), 12, 2);
 			equipe2.getListe().add(e);
 			totalE2++;
 		}
@@ -140,7 +141,7 @@ public class Map {
 		i = 0;
 		for(Personnage e : listPiegeur2){
 			i++;
-			e = new Piegeur("piegeur2-"+i, false, 100, plateau.getPos(5), 13);
+			e = new Piegeur("piegeur2-"+i, false, 100, plateau.getPos(5), 13, 2);
 			equipe2.getListe().add(e);
 			totalE2++;
 		}
@@ -161,7 +162,7 @@ public class Map {
 			
 			/* Initialisations du plateau en fonction de l'équipe et des selections divers */
 			
-			if (!jeu.getDebutJeu()) {
+			if (!jeu.getDebutJeu() && changerEquipe) {
 				plateauGraph.println("A l'equipe suivante");
 				System.out.println("A l'equipe suivante");
 			} else {
@@ -178,7 +179,8 @@ public class Map {
 			plateau.bonusEnergie(tempEquipe.getListe(), plateauGraph);
 			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
 			refresh(plateau, plateauGraph,jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
-					
+			
+			changerEquipe = false;
 			bonneSelectionEquipe = false;
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
@@ -210,9 +212,13 @@ public class Map {
 					// ici on ajoute tous les persos de l'équipe pour selectionner au clavier
 					plateauGraph.ajouterSelectionPersos(tempEquipe.getListe());
 					plateauGraph.println("Cliquez sur le personnage que vous voulez deplacer");
+					plateauGraph.setFaitAction(false);
+					plateauGraph.setAttendFinTour(false);
 					plateauGraph.setConfirmeSelection(false);
 					plateauGraph.setConfirmeSelectionPane(false);
+					persoSelectionPosition.setLocation(-1, -1);
 					plateauGraph.waitSelectionPerso(5000);
+
 					
 					// si on a confirmé sa séléction par le clavier, la selection est forcément correcte ou clique dans persopane
 					if (plateauGraph.getConfirmeSelection() || plateauGraph.getConfirmeSelectionPane()) {
@@ -240,7 +246,7 @@ public class Map {
 				// ceci ne s'éxécute que si on a cliqué sur une position sinon la selection 
 				// de personnage est deja fait si le clavier est utilisé
 				if ( presentsEquipe.size() > 1) {
-					Personnage temp = new Personnage("temp plusieurs", jeu.getTourEquipe1(), 100, new Position(persoSelectionPosition), 0);
+					Personnage temp = new Personnage("temp plusieurs", jeu.getTourEquipe1(), 100, new Position(persoSelectionPosition), 0, 0);
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
 					plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
@@ -255,7 +261,8 @@ public class Map {
 						persoSelec = plateauGraph.getPersoPrecis();
 					}
 					if (plateauGraph.getAnnulerChoix()) {
-						personnnageSelectionne = new Personnage("personne selectionne", true, 0, new Position(-1,-1), -1);
+						personnnageSelectionne = new Personnage("personne selectionne", true, 0, new Position(-1,-1), -1, 0);
+						bonneSelectionEquipePreced = true;
 					} else {
 						personnnageSelectionne = presentsEquipe.get(persoSelec);
 					}
@@ -298,7 +305,8 @@ public class Map {
 						plateauGraph.println("Cliquez sur la case où vous voulez qu'il se déplace");
 						choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 						
-						// on set son choix de deplacement selon la souris ou selon le clavier
+						// choixDeplacementPosition est mis directment par le clic de la souris ou le clavier
+						// le deplacementValide est fait a partir de celui la
 						if (!choixDeplacementPosition.getNulle()) {
 							plateauGraph.setDirectionDeplacement(choixDeplacementPosition.differenceCoordonnees(persoSelectionPosition));
 						} else if (!plateauGraph.getDirectionDeplacementNulle()){
@@ -310,6 +318,7 @@ public class Map {
 							plateauGraph.setFaitAction(deplacementValide);
 						}
 					}
+					personnnageSelectionne.setAJoue(deplacementValide);
 				}
 				
 				plateauGraph.disableAnnulerEtActions();
@@ -319,7 +328,7 @@ public class Map {
 				plateauGraph.setConfirmeFinTour(false);
 				plateauGraph.setAttendFinTour(true);
 				
-				while (( confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix()) {
+				while (( confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) {
 					plateauGraph.clearConsole();
 					plateauGraph.recover();
 					plateauGraph.println("L'", jeu.getTourEquipe1(),"a fini son tour");
@@ -329,8 +338,11 @@ public class Map {
 					tempEquipe.finPiege();
 				}
 				plateau.retirerMorts(tempEquipe.getListe());
-				if (!plateauGraph.getAnnulerChoix()) {
+				
+				if (!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) {
 					jeu.nextRound();
+					tempEquipe.resetFinTour();
+					changerEquipe = true;
 				}
 				
 			} else {
@@ -375,8 +387,8 @@ public class Map {
 			plateauGraph.setPeutEchangerClef(actions.peutEchanger(perso, true, tempEquipe, plateau));
 			plateauGraph.setPeutEchangerTresor(actions.peutEchanger(perso, false, tempEquipe, plateau));
 			plateauGraph.setPeutAttaquer(actions.peutAttaquer(perso, plateau));
-			plateauGraph.setDetientClef(personnnageSelectionne.getDetientClef());
-			plateauGraph.setDetientCoffre(personnnageSelectionne.getDetientTresor());
+			plateauGraph.setDetientClef(perso.getDetientClef());
+			plateauGraph.setDetientCoffre(perso.getDetientTresor());
 		} else {
 			plateauGraph.setPeutVoler(false);
 			plateauGraph.setPeutPieger(false);

@@ -25,6 +25,55 @@ public class Personnage {
 	private Position directionDeplacement;
 	private boolean estPiege;
 	private int tourNumPiege;
+	private boolean aJoue;
+	private boolean ignorerMouvement;
+	private int pointsMouvement;
+
+	/**
+	 * @return the aJoue
+	 */
+	public boolean getAJoue() {
+		return aJoue;
+	}
+
+	/**
+	 * @param aJoue the aJoue to set
+	 */
+	public void setAJoue(boolean aJoue) {
+		this.aJoue = aJoue;
+	}
+
+	/**
+	 * @return the ignorer
+	 */
+	public boolean getIgnorer() {
+		return ignorerMouvement;
+	}
+
+	public void reduirePointsMouvement(int reduction) {
+		pointsMouvement -= reduction;
+	}
+	
+	/**
+	 * @return the pointsMouvement
+	 */
+	public int getPointsMouvement() {
+		return pointsMouvement;
+	}
+
+	/**
+	 * @param pointsMouvement the pointsMouvement to set
+	 */
+	public void setPointsMouvement(int pointsMouvement) {
+		this.pointsMouvement = pointsMouvement;
+	}
+
+	/**
+	 * @param ignorer the ignorer to set
+	 */
+	public void setIgnorer(boolean ignorer) {
+		this.ignorerMouvement = ignorer;
+	}
 
 	/**
 	 * Constructeur de Personnage
@@ -34,12 +83,13 @@ public class Personnage {
 	 * @param p Sa position de base
 	 * @param type Son type selon Parcelle
 	 */
-	Personnage(String nom, boolean equipe1, int energie, Position p, int type){
+	Personnage(String nom, boolean equipe1, int energie, Position p, int type, int pointsMouvements){
 		this.nom = nom;
 		this.energie = energie;
 		this.equipe1 = equipe1;
 		this.surNavire = true;
 		this.type = type;
+		this.pointsMouvement = pointsMouvements;
 		if (type == 0) {
 			this.cheminImage = "images/1.explorateur.png";
 		} else if (type == 1) {
@@ -58,7 +108,9 @@ public class Personnage {
 			this.cheminImage = "images/2.piegeur.png";
 		}
 		
-		
+		detientClef = false;
+		aJoue = false;
+		ignorerMouvement = false;
 		this.pos = p;
 		this.dernierTag = new Position(-1, -1);
 		this.directionDeplacement = new Position(-1,-1);
@@ -252,9 +304,9 @@ public class Personnage {
 	 */
 	public String toString(){
 		if (equipe1) {
-			return nom+" de l'équipe 1 possede "+energie+" points d'energie.";
+			return nom+" de l'équipe 1 possede "+energie+" points d'energie et " + pointsMouvement + " PM" ;
 		}
-		return nom+" de l'équipe 2 possede "+energie+" points d'energie.";
+		return nom+" de l'équipe 2 possede "+energie+" points d'energiee et " + pointsMouvement + " PM";
 	}
 	
 	Object[] actionsSimples = { "haut", "bas", "gauche", "droite" };

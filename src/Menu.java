@@ -317,6 +317,7 @@ public class Menu {
 					input[i].setText("" + 1);
 					input[i].setEditable(false);
 				}
+				nbPersoSelected2 = maxPerso;
 				nomJoueur2.setText("Ordinateur");
 			} else if ("valider".equals(e.getActionCommand())) {
 				choixValides = true;

@@ -17,8 +17,8 @@ public class Voleur extends Personnage{
 	 * @param p Sa position de base
 	 * @param type Son type selon Parcelle
 	 */
-	public Voleur(String nom, boolean equipe, int energie, Position p, int type){
-		super(nom,equipe,energie,p,type);
+	public Voleur(String nom, boolean equipe, int energie, Position p, int type, int pointsMouvements){
+		super(nom,equipe,energie,p,type,pointsMouvements);
 		this.cleVolee=false;
 	}
 	/**

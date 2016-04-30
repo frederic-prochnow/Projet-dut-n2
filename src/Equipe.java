@@ -45,7 +45,7 @@ public class Equipe {
 				return temp;
 			}
 		}
-		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1);
+		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1, 0);
 	}
 	
 	public Personnage getPersoSurPosition(Position pos) {
@@ -56,7 +56,7 @@ public class Equipe {
 				return temp;
 			}
 		}
-		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1);
+		return new Personnage("existe pas", true, 0, new Position(-1, -1), 1, 0);
 	}
 	
 	public void finPiege() {
@@ -69,6 +69,29 @@ public class Equipe {
 			if (temp.getNumTourPiege() == 0) {
 				temp.setEstPiege(false);
 			}
+		}
+	}
+	/**
+	 * A la base, on considere que tous ses personnages ont joués
+	 * @return si un des personnages n'a pas joué ET n'a pas été ignoré
+	 */
+	public boolean finTour() {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (!temp.getAJoue() || (!temp.getIgnorer() && temp.getPointsMouvement() > 0) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void resetFinTour() {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			temp.setAJoue(false);
+			temp.setIgnorer(false);
 		}
 	}
 }

@@ -570,6 +570,7 @@ public class Ile {
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
 			perso.perdEnergie(1);
+			perso.reduirePointsMouvement(1);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 		} else if (estPiege(destination, perso)) {
 			plateau[perso.getPos().x][perso.getPos().y].setType(-1);

@@ -3,7 +3,9 @@
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,9 +16,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -84,6 +90,7 @@ public class Plateau {
 	private boolean peutAttaquer;
 	private boolean detientClef;
 	private boolean detientCoffre;
+	private Dimension dimIcones;
 	
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
@@ -91,6 +98,7 @@ public class Plateau {
 	private boolean confirmeFinTour;
 	private boolean attendFinTour;
 	
+	private List<JPanel> listePanels;
 	private List<JButton> listeBoutons;
 	private List<Personnage> listePersos;
 	private Personnage tempPersoSelectionne;
@@ -186,59 +194,62 @@ public class Plateau {
 		ImageIcon[] images = loadImages(gif) ;
 		graphic = new GraphicPane(images, taille) ;
 		console = null ;
-		PersoPane = new JPanel();
-		PersoPane.setLayout(new GridLayout(2,3));
-		PersoPane.setPreferredSize(new Dimension(200, 100));
-		PersoPane.addKeyListener(new Keys());
-		window.addKeyListener(new Keys());
-		peutVoler = false;
 		sable = new Color(239, 228, 176);
 
+		dimIcones = new Dimension(65, 65);
+		
 		// Instancie les composants de PersoPane
 		volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
 		voler = new JButton(volerIcone);
-		voler.setPreferredSize(new Dimension(volerIcone.getIconWidth(), volerIcone.getIconHeight()));
+		voler.setPreferredSize(dimIcones);
 		voler.setActionCommand("voler");
 		voler.addActionListener(new Action());
 		
 		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
 		pieger = new JButton(piegerIcone);
-		pieger.setPreferredSize(new Dimension(piegerIcone.getIconWidth(), piegerIcone.getIconHeight()));
+		pieger.setPreferredSize(dimIcones);
 		pieger.setActionCommand("pieger");
 		pieger.addActionListener(new Action());
 		
 		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
 		clef = new JButton(clefIcone);
-		clef.setPreferredSize(new Dimension(clefIcone.getIconWidth(), clefIcone.getIconHeight()));
+		clef.setPreferredSize(dimIcones);
 		
 		ImageIcon coffreIcone = new ImageIcon(Plateau.class.getResource("images/tresor.png"));
 		coffre = new JButton(coffreIcone);
-		coffre.setPreferredSize(new Dimension(coffreIcone.getIconWidth(), coffreIcone.getIconHeight()));
+		coffre.setPreferredSize(dimIcones);
 		
 		ImageIcon echangerClefIcone = new ImageIcon(Plateau.class.getResource("images/echanger_clef.png"));
 		echangerClef = new JButton(echangerClefIcone);
-		echangerClef.setPreferredSize(new Dimension(echangerClefIcone.getIconWidth(), echangerClefIcone.getIconHeight()));
+		echangerClef.setPreferredSize(dimIcones);
 		echangerClef.setActionCommand("echangerClef");
 		echangerClef.addActionListener(new Action());
 
 		ImageIcon echangerTresorIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
 		echangerTresor = new JButton(echangerTresorIcone);
-		echangerTresor.setPreferredSize(new Dimension(echangerTresorIcone.getIconWidth(), echangerTresorIcone.getIconHeight()));
+		echangerTresor.setPreferredSize(dimIcones);
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
 		
 		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/attaquer.png"));
 		attaquer = new JButton(attaquerIcone);
-		attaquer.setPreferredSize(new Dimension(attaquerIcone.getIconWidth(), attaquerIcone.getIconHeight()));
+		attaquer.setPreferredSize(dimIcones);
 		attaquer.setActionCommand("attaquer");
 		attaquer.addActionListener(new Action());
 		
+		ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
+		annuler = new JButton(annulerIcone);
+		annuler.setPreferredSize(dimIcones);
+		annuler.setActionCommand("annuler");
+		annuler.addActionListener(new Action());
+		
 		listeBoutons = new ArrayList<>();
+		listePanels = new ArrayList<>();
 		
 		// Caractéristiques initiales pour la fenetre.
-		window.setTitle("Plateau de jeu ("+taille+"X"+taille+")");
+		window.setTitle("Treasure Hunt ("+taille+"X"+taille+")");
 		window.setLocationRelativeTo(null);
-		window.setLayout(new BorderLayout());
+		window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
 		window.setResizable(false);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -248,10 +259,17 @@ public class Plateau {
 			console = new ConsolePane() ;
 			window.getContentPane().add(console) ;
 		}
-				
-		window.getContentPane().add(PersoPane,BorderLayout.EAST);
+
+		PersoPane = new JPanel();
+		PersoPane.setLayout(new FlowLayout());
+		PersoPane.addKeyListener(new Keys());
+		window.addKeyListener(new Keys());
+		
+		window.getContentPane().add(PersoPane);
 		resizeFromGraphic() ; // ajoute la console		
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
+		console.setPreferredSize(new Dimension(window.getWidth(), 75));
+		PersoPane.setPreferredSize(new Dimension(window.getWidth(), window.getHeight()-graphic.getHeight()-console.getHeight()-150));
 
 		// Affichage effectif 
 		window.setVisible(defaultVisibility);
@@ -443,11 +461,7 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		if (console == null) {
-			dim.height += 10 ;
-		} else {
-			dim.height += 100 ;
-		}
+		dim.height += 220 ;
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
 	}
@@ -489,6 +503,7 @@ public class Plateau {
 		
 		oldHighlight = new Position(-1,-1);
 		PersoPane.removeAll();
+		listePanels.clear();
 		for (int i=0;i<selection.size();i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			
@@ -498,12 +513,26 @@ public class Plateau {
 			listeBoutons.get(i).setActionCommand("perso_" + i);
 			listeBoutons.get(i).setName(""+ selection.get(i).getType());
 			listeBoutons.get(i).addActionListener(new Action());
-			listeBoutons.get(i).setPreferredSize(new Dimension(image.getIconWidth(),image.getIconHeight()));
-			PersoPane.add(listeBoutons.get(i));
+			listeBoutons.get(i).setPreferredSize(dimIcones);
+			
+			listePanels.add(new JPanel());
+			listePanels.get(i).setLayout(new BoxLayout(listePanels.get(i), BoxLayout.Y_AXIS));
+			listePanels.get(i).add(new JLabel(selection.get(i).getNom()));
+			listePanels.get(i).add(new JLabel("Energie : " + selection.get(i).getEnergie()));
+			listePanels.get(i).add(new JLabel("PM : " + selection.get(i).getPointsMouvement()));
+			
+			listePanels.get(i).add(listeBoutons.get(i));
+			
+			PersoPane.add(listePanels.get(i));
+		//	PersoPane.add(Box.createRigidArea(new Dimension(10, listePanels.get(i).getHeight())));
 
 			if (selection.get(i).getEstPiege()) {
 				listeBoutons.get(i).setEnabled(false);
 				listeBoutons.get(i).setBackground(Color.LIGHT_GRAY);
+			}
+			if (selection.get(i).getPointsMouvement() == 0) {
+				listeBoutons.get(i).setBackground(Color.LIGHT_GRAY);
+				listeBoutons.get(i).setEnabled(false);
 			}
 		}
 		if (listeBoutons.size() == 1) {
@@ -511,6 +540,17 @@ public class Plateau {
 			tempPersoSelectionne = selection.get(0);
 		}
 	}
+	
+	private void addPanel(JButton button) {
+		listeBoutons.add(button);
+		listePanels.add(new JPanel());
+		listePanels.get(listePanels.size()-1).setLayout(new BoxLayout(listePanels.get(listePanels.size()-1), BoxLayout.Y_AXIS));
+		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
+		listePanels.get(listePanels.size()-1).add(listeBoutons.get(listeBoutons.size()-1));
+		listeBoutons.get(listeBoutons.size()-1).setAlignmentX(Component.CENTER_ALIGNMENT);
+		PersoPane.add(listePanels.get(listePanels.size()-1));
+	}
+	
 	
 	public void setDejaFaits(boolean b) {
 		dejaAjoutAttaquer = b;
@@ -521,14 +561,10 @@ public class Plateau {
 	}
 
 	private void ajouterAnnuler() {
-		ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
-		annuler = new JButton(annulerIcone);
-		annuler.setBackground(sable);
-		annuler.setActionCommand("annuler");
-		annuler.addActionListener(new Action());
 		if (!dejaAjoutAnnuler) {
-			PersoPane.add(annuler);
-			listeBoutons.add(annuler);
+			annuler.setBackground(sable);
+			annuler.setEnabled(true);
+			addPanel(annuler);
 			dejaAjoutAnnuler = true;
 		}
 	}
@@ -572,7 +608,7 @@ public class Plateau {
 	
 	private void ajouterClef(){
 		if (!dejaAjoutClef) {
-			PersoPane.add(clef);
+			addPanel(clef);
 			dejaAjoutClef = true;
 		}
 		if (!detientClef) {
@@ -586,7 +622,7 @@ public class Plateau {
 	
 	private void ajouterCoffre(){
 		if (!dejaAjoutCoffre) {
-			PersoPane.add(coffre);
+			addPanel(coffre);
 			dejaAjoutCoffre = true;
 		}
 		if (!detientCoffre) {
@@ -600,8 +636,7 @@ public class Plateau {
 		
 	private void ajouterActionAttaquer() {
 		if (!dejaAjoutAttaquer) {
-			PersoPane.add(attaquer);
-			listeBoutons.add(attaquer);
+			addPanel(attaquer);
 			dejaAjoutAttaquer = true;
 		}
 		if (!peutAttaquer) {
@@ -618,8 +653,7 @@ public class Plateau {
 	 */
 	private void ajouterActionVoler() {
 		if (!dejaAjoutVol) {
-			PersoPane.add(voler);
-			listeBoutons.add(voler);
+			addPanel(voler);
 			dejaAjoutVol = true;
 		}
 		if (!peutVoler) {
@@ -636,8 +670,7 @@ public class Plateau {
 	
 	private void ajouterActionPieger(){
 		if (!dejaAjoutPieger) {
-			PersoPane.add(pieger);
-			listeBoutons.add(pieger);
+			addPanel(pieger);
 			dejaAjoutPieger = true;
 		}
 		if (!peutPieger) {
@@ -656,8 +689,7 @@ public class Plateau {
 		if (!dejaAjoutClef) {
 			echangerClef.setEnabled(true);
 			echangerClef.setBackground(sable);
-			PersoPane.add(echangerClef);
-			listeBoutons.add(echangerClef);
+			addPanel(echangerClef);
 			dejaAjoutClef = true;
 		}
 	}
@@ -669,8 +701,7 @@ public class Plateau {
 		echangerTresor.setEnabled(true);
 		echangerTresor.setBackground(sable);
 		if (!dejaAjoutTresor) {
-			PersoPane.add(echangerTresor);
-			listeBoutons.add(echangerTresor);
+			addPanel(echangerTresor);
 			dejaAjoutTresor = true;
 		}
 	}
@@ -724,10 +755,12 @@ public class Plateau {
 						listeBoutons.get(i).setEnabled(false);
 						listeBoutons.get(i).setBackground(Color.LIGHT_GRAY);
 					} else {
-						confirmeSelectionPane = true;
-						tempPersoSelectionne = listePersos.get(i);
-						listeBoutons.get(i).setBackground(sable);
 						persoPrecis = i;
+						if (listePersos.get(persoPrecis).getPointsMouvement() > 0) {
+							confirmeSelectionPane = true;
+							tempPersoSelectionne = listePersos.get(i);
+							listeBoutons.get(i).setBackground(sable);
+						}
 					}
 				}
 			}
@@ -909,7 +942,7 @@ public class Plateau {
 		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("annuler")) {
 			System.out.println("annule sa selection");
 			annulerChoix = true;
-		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix && !listePersos.get(persoPrecis).getEstPiege()) {
+		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix && !listePersos.get(persoPrecis).getEstPiege() && listePersos.get(persoPrecis).getPointsMouvement() > 0) {
 			setConfirmeSelection(true);
 			savePerso = persoPrecis;
 		}
@@ -1113,8 +1146,10 @@ public class Plateau {
 	 * @param message
 	 */
 	public void print(String message, boolean equipe, String message2) {
-		print(message, equipe);
-		console.print(" " + message2);
+		if (console != null) {
+			print(message, equipe);
+			console.print(" " + message2);
+		}
 	}
 	/**
 	 * Afficage de message
@@ -1123,8 +1158,10 @@ public class Plateau {
 	 * @param message
 	 */
 	public void println(String message, boolean equipe, String message2) {
-		println(message, equipe);
-		console.print(" " + message2);
+		if (console != null) {
+			println(message, equipe);
+			console.print(" " + message2);
+		}
 	}
 	/**
 	 * Afficage de message
@@ -1132,8 +1169,10 @@ public class Plateau {
 	 * @param equipe
 	 */	
 	public void print(String message, boolean equipe) {
-		console.print(message);
-		console.printEquipe(equipe);
+		if (console != null) {
+			console.print(message);
+			console.printEquipe(equipe);
+		}
 	}
 	/**
 	 * Afficage de message
@@ -1141,14 +1180,18 @@ public class Plateau {
 	 * @param equipe
 	 */
 	public void println(String message, boolean equipe) {
-		console.println(message);
-		console.printEquipe(equipe);
+		if (console != null) {
+			console.println(message);
+			console.printEquipe(equipe);
+		}
 	}
 	/**
 	 * Nettoyage de la console
 	 */
 	public void clearConsole() {
-		console.clear();
+		if (console != null) {
+			console.clear();
+		}
 	}
 	
 	/**
@@ -1252,19 +1295,25 @@ public class Plateau {
 	 * Sauvegarde
 	 */
 	public void save() {
-		console.save();
+		if (console != null) {
+			console.save();
+		}
 	}
 	/**
 	 * Restauration
 	 */
 	public void recover() {
-		console.recover();
+		if (console != null) {
+			console.recover();
+		}
 	}
 	/**
 	 * Nettoyage de sauvegarde
 	 */
 	public void clearSave() {
-		console.clearSave();
+		if (console != null) {
+			console.clearSave();
+		}
 	}
 
 	public void setDetientClef(boolean detientClef2) {
