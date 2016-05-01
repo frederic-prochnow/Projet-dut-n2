@@ -191,6 +191,8 @@ public class Map {
 			persoSelec = -1;
 			plateauGraph.setConfirmeSelection(false);
 			plateauGraph.setTempPersoSelec(null);
+			plateauGraph.setConfirmeFinTour(false);
+			plateauGraph.setPasser(false);
 			setActionsPossibles(plateauGraph.getTempPersoSelec(), tempEquipe, plateau);
 			plateauGraph.setAttendFinTour(false);
 			
@@ -198,7 +200,8 @@ public class Map {
 				
 				// ici on clique sur une case d'un de notre personnage ou le selectionne directement au clavier
 				// CAS SOURIS : on boucle tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide pour l'équipe
-				while ( !bonneSelectionEquipe ) {
+				while ( !bonneSelectionEquipe && !plateauGraph.getPasser()) {
+					System.out.println("passer = " + plateauGraph.getPasser());
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
 					if (!bonneSelectionEquipePreced) {
@@ -239,11 +242,15 @@ public class Map {
 					}
 					bonneSelectionEquipePreced = bonneSelectionEquipe;
 				}
+				if (plateauGraph.getAnnulerChoix() || plateauGraph.getPasser()) {
+					personnnageSelectionne = new Personnage("personne selectionne", true, 0, new Position(-1,-1), -1, 0);
+					bonneSelectionEquipePreced = true;
+				}
 								
 				// CAS : il y a plusieurs persos sur une case
 				// ceci ne s'éxécute que si on a cliqué sur une position sinon la selection 
 				// de personnage est deja fait si le clavier est utilisé
-				if ( presentsEquipe.size() > 1) {
+				if ( presentsEquipe.size() > 1 && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
 					Personnage temp = new Personnage("temp plusieurs", jeu.getTourEquipe1(), 100, new Position(persoSelectionPosition), 0, 0);
 					plateauGraph.clearConsole();
 					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
@@ -254,7 +261,7 @@ public class Map {
 					System.out.println("temp pos = " + temp.getPos());
 					setActionsPossibles(temp, tempEquipe, plateau);
 					
-					while (!plateauGraph.getConfirmeSelectionPane() && !plateauGraph.getAnnulerChoix()) {
+					while (!plateauGraph.getConfirmeSelectionPane() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
 						plateauGraph.waitEvent(1000,true);
 						persoSelec = plateauGraph.getPersoPrecis();
 					}
@@ -265,7 +272,7 @@ public class Map {
 						personnnageSelectionne = presentsEquipe.get(persoSelec);
 					}
 				} else {
-					if (!plateauGraph.getAnnulerChoix()) {
+					if (!plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
 						// personnageSelectionne a partir du clic sur le plateau
 						if (!persoSelectionPosition.equals(new Position(-1,-1))) {
 							personnnageSelectionne = persoSelectionPosition.getPersosSurPosition(tempEquipe.getListe()).get(0);
@@ -280,12 +287,12 @@ public class Map {
 					}
 				}
 				
-				System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
-				if (!personnnageSelectionne.getPos().getNulle()) {
+				if (!personnnageSelectionne.getPos().getNulle() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
+					System.out.println("Le perso " + personnnageSelectionne.nom + " est à " + personnnageSelectionne.getPos());
 					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 				}
 				
-				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix()) {
+				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
 				
 					while ( (!deplacementValide || !plateauGraph.getFaitAction() && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix()) {
 						plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
@@ -334,10 +341,9 @@ public class Map {
 				
 				plateauGraph.disableAnnulerEtActions();
 				bonneSelectionEquipe = false;
-				plateauGraph.setConfirmeFinTour(false);
 				plateauGraph.setAttendFinTour(true);
 				
-				while (( confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) {
+				while ( ( confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix() && plateauGraph.getPasser()) {
 					plateauGraph.clearConsole();
 					plateauGraph.recover();
 					plateauGraph.println("L'", jeu.getTourEquipe1(),"a fini son tour");
@@ -348,7 +354,7 @@ public class Map {
 				}
 				plateau.retirerMorts(tempEquipe.getListe());
 				
-				if (!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) {
+				if ( (!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) || plateauGraph.getPasser()) {
 					jeu.nextRound();
 					tempEquipe.resetFinTour();
 					changerEquipe = true;

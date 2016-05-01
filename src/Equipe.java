@@ -94,4 +94,5 @@ public class Equipe {
 			temp.setIgnorer(false);
 		}
 	}
+	
 }

@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.attribute.standard.JobHoldUntil;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -25,6 +26,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
+
+import com.sun.org.apache.bcel.internal.generic.LMUL;
 
 /**
  * La classe Plateau permet d'afficher un plateau de Jeu carré
@@ -64,10 +67,6 @@ public class Plateau {
 	private JButton voler;
 	private JButton coffre;
 	private JButton clef;
-	private ImageIcon volerIcone;
-	private ImageIcon clefIcone;
-	private ImageIcon coffreIcone;
-	private boolean dejaAjoutClefIcon;
 	private boolean dejaAjoutCoffre;
 	private JButton echangerClef;
 	private JButton echangerTresor;
@@ -80,10 +79,12 @@ public class Plateau {
 	private int selectionListe;
 	private int nbPersos;
 	
+	
+	private JButton ignorer;
+	private JButton passerTour;
 	private boolean dejaAjoutAnnuler;
 	private int savePerso;
 	private JButton attaquer;
-	private ImageIcon attaquerIcone;
 	private boolean dejaAjoutAttaquer;
 	private boolean veutAttaquer;
 	private boolean veutVoler;
@@ -92,6 +93,7 @@ public class Plateau {
 	private boolean detientCoffre;
 	private Dimension dimIcones;
 	
+	private boolean passer;
 	private boolean aSelectionnePerso;
 	private boolean confirmeSelection;
 	private boolean confirmeSelectionPane;
@@ -199,49 +201,51 @@ public class Plateau {
 		dimIcones = new Dimension(65, 65);
 		
 		// Instancie les composants de PersoPane
-		volerIcone = new ImageIcon(Plateau.class.getResource("images/voler.png"));
-		voler = new JButton(volerIcone);
+		voler = new JButton(new ImageIcon(Plateau.class.getResource("images/voler.png")));
 		voler.setPreferredSize(dimIcones);
 		voler.setActionCommand("voler");
 		voler.addActionListener(new Action());
 		
-		ImageIcon piegerIcone = new ImageIcon(Plateau.class.getResource("images/pieger.png"));
-		pieger = new JButton(piegerIcone);
+		pieger = new JButton(new ImageIcon(Plateau.class.getResource("images/pieger.png")));
 		pieger.setPreferredSize(dimIcones);
 		pieger.setActionCommand("pieger");
 		pieger.addActionListener(new Action());
 		
-		ImageIcon clefIcone = new ImageIcon(Plateau.class.getResource("images/cle.jpg"));
-		clef = new JButton(clefIcone);
+		clef = new JButton( new ImageIcon(Plateau.class.getResource("images/cle.jpg")));
 		clef.setPreferredSize(dimIcones);
 		
-		ImageIcon coffreIcone = new ImageIcon(Plateau.class.getResource("images/tresor.png"));
-		coffre = new JButton(coffreIcone);
+		coffre = new JButton(new ImageIcon(Plateau.class.getResource("images/tresor.png")));
 		coffre.setPreferredSize(dimIcones);
 		
-		ImageIcon echangerClefIcone = new ImageIcon(Plateau.class.getResource("images/echanger_clef.png"));
-		echangerClef = new JButton(echangerClefIcone);
+		echangerClef = new JButton(new ImageIcon(Plateau.class.getResource("images/echanger_clef.png")));
 		echangerClef.setPreferredSize(dimIcones);
 		echangerClef.setActionCommand("echangerClef");
 		echangerClef.addActionListener(new Action());
 
-		ImageIcon echangerTresorIcone = new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png"));
-		echangerTresor = new JButton(echangerTresorIcone);
+		echangerTresor = new JButton(new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png")));
 		echangerTresor.setPreferredSize(dimIcones);
 		echangerTresor.setActionCommand("echangerTresor");
 		echangerTresor.addActionListener(new Action());
 		
-		ImageIcon attaquerIcone = new ImageIcon(Plateau.class.getResource("images/attaquer.png"));
-		attaquer = new JButton(attaquerIcone);
+		attaquer = new JButton(new ImageIcon(Plateau.class.getResource("images/attaquer.png")));
 		attaquer.setPreferredSize(dimIcones);
 		attaquer.setActionCommand("attaquer");
 		attaquer.addActionListener(new Action());
 		
-		ImageIcon annulerIcone = new ImageIcon(Plateau.class.getResource("images/annuler.png"));
-		annuler = new JButton(annulerIcone);
+		annuler = new JButton(new ImageIcon(Plateau.class.getResource("images/annuler.png")));
 		annuler.setPreferredSize(dimIcones);
 		annuler.setActionCommand("annuler");
 		annuler.addActionListener(new Action());
+		
+		ignorer = new JButton(new ImageIcon(Plateau.class.getResource("images/ignorer.png")));
+		ignorer.setPreferredSize(dimIcones);
+		ignorer.setActionCommand("ignorer");
+		ignorer.addActionListener(new Action());
+		
+		passerTour = new JButton(new ImageIcon(Plateau.class.getResource("images/passer.png")));
+		passerTour.setPreferredSize(dimIcones);
+		passerTour.setActionCommand("passer");
+		passerTour.addActionListener(new Action());
 		
 		listeBoutons = new ArrayList<>();
 		listePanels = new ArrayList<>();
@@ -386,7 +390,7 @@ public class Plateau {
 	public void waitDeplacementOuAction(int timeout) {
 		int time = 0;
 		prepareWaitEvent(true);
-		while ( !annulerChoix && !clicAction && !veutDeplacer  && mouse == null && (time < timeout)) {
+		while ( !annulerChoix && !clicAction && !veutDeplacer && !passer  && mouse == null && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -403,7 +407,7 @@ public class Plateau {
 	public void waitSelectionPerso(int timeout) {
 		waitTime = 0;
 		prepareWaitEvent(true);
-		while ( !annulerChoix && !confirmeSelection && !confirmeSelectionPane && mouse == null && (waitTime < timeout)) {
+		while ( !annulerChoix && !confirmeSelection && !confirmeSelectionPane && !passer && mouse == null && (waitTime < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -539,6 +543,7 @@ public class Plateau {
 			listeBoutons.get(0).setBackground(sable);
 			tempPersoSelectionne = selection.get(0);
 		}
+		ajouterPasser();
 	}
 	
 	public void refreshPersoPanel(int numPersoPanel) {
@@ -553,11 +558,13 @@ public class Plateau {
 		
 	private void addPanel(JButton button) {
 		listeBoutons.add(button);
+		listeBoutons.get(listeBoutons.size()-1).setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		listePanels.add(new JPanel());
 		listePanels.get(listePanels.size()-1).setLayout(new BoxLayout(listePanels.get(listePanels.size()-1), BoxLayout.Y_AXIS));
 		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
 		listePanels.get(listePanels.size()-1).add(listeBoutons.get(listeBoutons.size()-1));
-		listeBoutons.get(listeBoutons.size()-1).setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		selectionPane.add(listePanels.get(listePanels.size()-1));
 	}
 	
@@ -570,6 +577,18 @@ public class Plateau {
 		dejaAjoutPieger = b;
 	}
 
+	private void ajouterPasser() {
+		passerTour.setBackground(sable);
+		passerTour.setEnabled(true);
+		addPanel(passerTour);
+	}
+	
+	private void ajouterIgnorer() {
+		ignorer.setBackground(sable);
+		ignorer.setEnabled(true);
+		addPanel(ignorer);
+	}
+	
 	private void ajouterAnnuler() {
 		if (!dejaAjoutAnnuler) {
 			annuler.setBackground(sable);
@@ -610,8 +629,9 @@ public class Plateau {
 		if(detientCoffre){
 			ajouterCoffre();
 		}
-		
+		ajouterIgnorer();
 		ajouterAnnuler();
+	//	ajouterPasser();
 		selectionPane.repaint();
 		window.repaint();
 	}
@@ -743,6 +763,13 @@ public class Plateau {
 			if (e.getActionCommand().equals("annuler")) {
 				System.out.println("annule sa selection");
 				annulerChoix = true;
+			} else if (e.getActionCommand().equals("ignorer")) {
+				System.out.println("ignore ses PM restants");
+				tempPersoSelectionne.setIgnorer(true);
+				annulerChoix = true;
+			} else if (e.getActionCommand().equals("passer")) {
+				System.out.println("passe la tour de l'equipe");
+				passer = true;
 			} else if (e.getActionCommand().equals("pieger")) {
 				veutPieger = true;
 				clicAction = true;
@@ -766,6 +793,9 @@ public class Plateau {
 						listeBoutons.get(i).setBackground(Color.LIGHT_GRAY);
 					} else {
 						persoPrecis = i;
+						selectionPane.remove(nbPersos);
+						listePanels.remove(nbPersos);
+						listeBoutons.remove(nbPersos);
 						if (listePersos.get(persoPrecis).getPointsMouvement() > 0) {
 							confirmeSelectionPane = true;
 							tempPersoSelectionne = listePersos.get(i);
@@ -775,6 +805,14 @@ public class Plateau {
 				}
 			}
 		}		
+	}
+	
+	public void setPasser(boolean b) {
+		passer = b;
+	}
+	
+	public boolean getPasser() {
+		return passer;
 	}
 	
 	public void setAttendFinTour(boolean set) {
@@ -933,8 +971,18 @@ public class Plateau {
 	
 	
 	private void executeEnter() {
-		// les actions		
-		if (listeBoutons.get(selectionListe).getActionCommand().equals("pieger")) {
+		// les actions
+		if (passer) {
+			confirmeFinTour = true;
+		}
+		if (listeBoutons.get(selectionListe).getActionCommand().equals("ignorer")) {
+			System.out.println("ignore ses PM restants");
+			tempPersoSelectionne.setIgnorer(true);
+			annulerChoix = true;
+		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("passer")) {
+			System.out.println("passe la tour de l'equipe");
+			passer = true;
+		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("pieger")) {
 			veutPieger = true;
 			clicAction = true;
 		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("voler")) {
@@ -952,15 +1000,16 @@ public class Plateau {
 		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("annuler")) {
 			System.out.println("annule sa selection");
 			annulerChoix = true;
-		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix && !listePersos.get(persoPrecis).getEstPiege() && listePersos.get(persoPrecis).getPointsMouvement() > 0) {
+		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix
+				&& !listePersos.get(persoPrecis).getEstPiege()
+				&& listePersos.get(persoPrecis).getPointsMouvement() > 0) {
 			setConfirmeSelection(true);
 			savePerso = persoPrecis;
-		}
-		// fin tour
-		if (confirmeSelection || confirmeSelectionPane) {
+		} else if (confirmeSelection || confirmeSelectionPane){
+			// fin tour
 			confirmeFinTour = true;
-		}		
-	}
+		}
+	}		
 	
 	/**
 	 * Class Keys
