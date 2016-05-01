@@ -53,7 +53,7 @@ public class Map {
 				"images/2.explorateur.png", "images/2.voleur.png", "images/2.navire.png", "images/rocher.png",
 				"images/coffre.png", "images/cle.jpg", "images/mer4.png", "images/1.guerrier.png", "images/1.piegeur.png" 
 				, "images/2.guerrier.png" , "images/2.piegeur.png", "images/pieger.png", "images/cle_prise.jpg",
-				"images/coffre_ouvert.png", "images/coffre_ouvert_tresor.png"};
+				"images/coffre_ouvert.png", "images/coffre_ouvert_tresor.png", "images/black.png"};
 		Menu menu = new Menu();
 		menu.affichage();
 		while (!menu.getConfirme()) {
@@ -184,13 +184,11 @@ public class Map {
 			bonneSelectionEquipe = false;
 			personnnageSelectionne = null;
 			persoSelectionPosition.setLocation(-1, -1);
-			choixDeplacementPosition.setLocation(-1, -1);
 			presentsEquipe.clear();
 			plateauGraph.ajouterSelectionPersos(new ArrayList<Personnage>());
 			deplacementValide = false;
 			confirmationFinTour.setLocation(-1, -1);
 			persoSelec = -1;
-			plateauGraph.setFaitAction(false);
 			plateauGraph.setConfirmeSelection(false);
 			plateauGraph.setTempPersoSelec(null);
 			setActionsPossibles(plateauGraph.getTempPersoSelec(), tempEquipe, plateau);
@@ -287,44 +285,55 @@ public class Map {
 					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 				}
 				
-				while ( (!deplacementValide || !plateauGraph.getFaitAction() && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix()) {
-					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
-					plateauGraph.setVeutDeplacer(false);
-					plateauGraph.clearConsole();
-					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
-					plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
-					if (!deplacementValide) {
-						plateauGraph.recover();
-					}
-					plateauGraph.waitDeplacementOuAction(5000);
-					// un clic interrompt waitEvent, ensuite, soit il a appuyé sur pieger soit un endroit pour y se deplacer
-					if (plateauGraph.getClicAction()) {
-						executerAction();
-					}
-					if (!plateauGraph.getFaitAction()) {
-						plateauGraph.println("Cliquez sur la case où vous voulez qu'il se déplace");
-						choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
-						
-						// choixDeplacementPosition est mis directment par le clic de la souris ou le clavier
-						// le deplacementValide est fait a partir de celui la
-						if (!choixDeplacementPosition.getNulle()) {
-							plateauGraph.setDirectionDeplacement(choixDeplacementPosition.differenceCoordonnees(persoSelectionPosition));
-						} else if (!plateauGraph.getDirectionDeplacementNulle()){
-							choixDeplacementPosition.setLocation(plateauGraph.getDirectionDeplacement().additionner(persoSelectionPosition));
+				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix()) {
+				
+					while ( (!deplacementValide || !plateauGraph.getFaitAction() && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix()) {
+						plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
+						plateauGraph.setVeutDeplacer(false);
+						plateauGraph.clearConsole();
+						plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
+						plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
+						if (!deplacementValide) {
+							plateauGraph.recover();
 						}
-						
-						if (!choixDeplacementPosition.getLocation().equals(new Point(-1, -1))) {
-							deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph, jeu.getTourEquipe1());
-							plateauGraph.setFaitAction(deplacementValide);
+						plateauGraph.waitDeplacementOuAction(5000);
+						// un clic interrompt waitEvent, ensuite, soit il a appuyé sur pieger soit un endroit pour y se deplacer
+						if (plateauGraph.getClicAction()) {
+							executerAction();
+						}
+						if (!plateauGraph.getFaitAction()) {
+							plateauGraph.println("Cliquez sur la case où vous voulez qu'il se déplace");
+							choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
+														
+							// choixDeplacementPosition est mis directment par le clic de la souris
+							if (!choixDeplacementPosition.getNulle()) {
+								plateauGraph.setDirectionDeplacement(choixDeplacementPosition.differenceCoordonnees(persoSelectionPosition));
+							// choixDeplacementPosition mis par la direction du clavier
+							} else if (!plateauGraph.getDirectionDeplacementNulle()){
+								choixDeplacementPosition.setLocation(plateauGraph.getDirectionDeplacement().additionner(personnnageSelectionne.getPos()));
+							}
+							// deplacement a partir de choixDeplacementPosition
+							if (!choixDeplacementPosition.getNulle()) {
+								deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph, jeu.getTourEquipe1());
+								plateauGraph.setFaitAction(deplacementValide);
+							}
 						}
 					}
-					personnnageSelectionne.setAJoue(deplacementValide);
+					if (personnnageSelectionne.getPointsMouvement() == personnnageSelectionne.getMaxPointsMouvement()-1) {
+						personnnageSelectionne.setAJoue(deplacementValide);
+					}
+					plateauGraph.refreshPersoPanel(plateauGraph.getPersoPrecis());
+					plateauGraph.setFaitAction(false);
+					deplacementValide = false;
+					choixDeplacementPosition.setLocation(-1, -1);
+					plateauGraph.setDirectionDeplacement(new Position(-1,-1));
+					plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
+					System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
+					refresh(plateau, plateauGraph,jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 				}
 				
 				plateauGraph.disableAnnulerEtActions();
-				plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
-				System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
-				refresh(plateau, plateauGraph,jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
+				bonneSelectionEquipe = false;
 				plateauGraph.setConfirmeFinTour(false);
 				plateauGraph.setAttendFinTour(true);
 				

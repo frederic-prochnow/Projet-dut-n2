@@ -321,25 +321,17 @@ public class Ile {
 	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph, List<Personnage> equipe1, List<Personnage> equipe2) {
 		int[][] tab = new int[plateau[0].length][plateau[1].length];
 
-		// reset eau
-		for (int i = 0; i < plateau.length; i++) {
-			tab[i][0] = 9 +2;
-			tab[0][i] = 9 +2;
-			tab[plateau.length - 1][i] = 9 +2;
-			tab[i][plateau.length - 1] = 9 +2;		
-		}
-		// plateau interieur
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
+		// set tout a noir
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
 				// 0 pour sable
-				tab[i][j] = 1;
-				plateauGraph.setHighlight(i, j, Color.BLACK);
+				tab[i][j] = 20;
 			}
 		}
 		// Ici on affiche les cases precedemment vus avec a reveler() et brouillardEquipe.
 		// Le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
 				if (equipeCourante && brouillardEquipe1[i][j] == 0 && !plateau[i][j].getEstpiegeE2()) {
 						tab[i][j] = tabIconesGraphiqueEquipe1[i][j];
 						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
@@ -459,8 +451,8 @@ public class Ile {
 	 * 
 	 */
 	private void copy(int[][] source, int[][] dest) {
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
 				dest[i][j] = source[i][j];
 			}
 		}

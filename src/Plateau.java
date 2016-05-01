@@ -42,7 +42,7 @@ public class Plateau {
 	private JFrame window ;
 	private GraphicPane graphic ;
 	private ConsolePane console ;
-	private JPanel PersoPane ;
+	private JPanel selectionPane ;
 	private int persoPrecis;
 	private Color sable;
 	
@@ -260,23 +260,23 @@ public class Plateau {
 			window.getContentPane().add(console) ;
 		}
 
-		PersoPane = new JPanel();
-		PersoPane.setLayout(new FlowLayout());
-		PersoPane.addKeyListener(new Keys());
+		selectionPane = new JPanel();
+		selectionPane.setLayout(new FlowLayout());
+		selectionPane.addKeyListener(new Keys());
 		window.addKeyListener(new Keys());
 		
-		window.getContentPane().add(PersoPane);
+		window.getContentPane().add(selectionPane);
 		resizeFromGraphic() ; // ajoute la console		
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
 		console.setPreferredSize(new Dimension(window.getWidth(), 75));
-		PersoPane.setPreferredSize(new Dimension(window.getWidth(), window.getHeight()-graphic.getHeight()-console.getHeight()-150));
+		selectionPane.setPreferredSize(new Dimension(window.getWidth(), window.getHeight()-graphic.getHeight()-console.getHeight()-150));
 
 		// Affichage effectif 
 		window.setVisible(defaultVisibility);
 		// Ajout des listeners.
 		graphic.addMouseListener(new Mouse());
 		window.addKeyListener(new Key()) ;
-		PersoPane.addMouseListener(new Mouse());
+		selectionPane.addMouseListener(new Mouse());
 		currentEvent = null ;
 	}
 	/**
@@ -337,7 +337,7 @@ public class Plateau {
 		clicAction = false;
 		affichage() ;	// Remet à jour l'affichage (peut être optimisé)
 		if (paneSelectionPrecis) {
-			PersoPane.requestFocusInWindow();
+			selectionPane.requestFocusInWindow();
 		} else {
 			window.requestFocusInWindow();
 		}
@@ -502,7 +502,7 @@ public class Plateau {
 		nbPersos = selection.size();
 		
 		oldHighlight = new Position(-1,-1);
-		PersoPane.removeAll();
+		selectionPane.removeAll();
 		listePanels.clear();
 		for (int i=0;i<selection.size();i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
@@ -523,7 +523,7 @@ public class Plateau {
 			
 			listePanels.get(i).add(listeBoutons.get(i));
 			
-			PersoPane.add(listePanels.get(i));
+			selectionPane.add(listePanels.get(i));
 		//	PersoPane.add(Box.createRigidArea(new Dimension(10, listePanels.get(i).getHeight())));
 
 			if (selection.get(i).getEstPiege()) {
@@ -541,6 +541,16 @@ public class Plateau {
 		}
 	}
 	
+	public void refreshPersoPanel(int numPersoPanel) {
+		listePanels.get(numPersoPanel).removeAll();
+		listePanels.get(numPersoPanel).add(new JLabel(listePersos.get(numPersoPanel).getNom()));
+		listePanels.get(numPersoPanel).add(new JLabel("Energie : " + listePersos.get(numPersoPanel).getEnergie()));
+		listePanels.get(numPersoPanel).add(new JLabel("PM : " + listePersos.get(numPersoPanel).getPointsMouvement()));
+		
+		listePanels.get(numPersoPanel).add(listeBoutons.get(numPersoPanel));
+	}
+	
+		
 	private void addPanel(JButton button) {
 		listeBoutons.add(button);
 		listePanels.add(new JPanel());
@@ -548,7 +558,7 @@ public class Plateau {
 		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
 		listePanels.get(listePanels.size()-1).add(listeBoutons.get(listeBoutons.size()-1));
 		listeBoutons.get(listeBoutons.size()-1).setAlignmentX(Component.CENTER_ALIGNMENT);
-		PersoPane.add(listePanels.get(listePanels.size()-1));
+		selectionPane.add(listePanels.get(listePanels.size()-1));
 	}
 	
 	
@@ -602,7 +612,7 @@ public class Plateau {
 		}
 		
 		ajouterAnnuler();
-		PersoPane.repaint();
+		selectionPane.repaint();
 		window.repaint();
 	}
 	

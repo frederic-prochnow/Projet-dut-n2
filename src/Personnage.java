@@ -27,8 +27,13 @@ public class Personnage {
 	private int tourNumPiege;
 	private boolean aJoue;
 	private boolean ignorerMouvement;
+	private int maxPointsMouvement;
 	private int pointsMouvement;
 
+	public boolean finMouvement() {
+		return pointsMouvement == 0 || (pointsMouvement > 0 && ignorerMouvement);
+	}
+	
 	/**
 	 * @return the aJoue
 	 */
@@ -89,7 +94,6 @@ public class Personnage {
 		this.equipe1 = equipe1;
 		this.surNavire = true;
 		this.type = type;
-		this.pointsMouvement = pointsMouvements;
 		if (type == 0) {
 			this.cheminImage = "images/1.explorateur.png";
 		} else if (type == 1) {
@@ -111,6 +115,8 @@ public class Personnage {
 		detientClef = false;
 		aJoue = false;
 		ignorerMouvement = false;
+		this.maxPointsMouvement = pointsMouvements;
+		this.pointsMouvement = pointsMouvements;
 		this.pos = p;
 		this.dernierTag = new Position(-1, -1);
 		this.directionDeplacement = new Position(-1,-1);
@@ -122,6 +128,20 @@ public class Personnage {
 		}
 	}
 	
+	/**
+	 * @return the maxPointsMouvement
+	 */
+	public int getMaxPointsMouvement() {
+		return maxPointsMouvement;
+	}
+
+	/**
+	 * @param maxPointsMouvement the maxPointsMouvement to set
+	 */
+	public void setMaxPointsMouvement(int maxPointsMouvement) {
+		this.maxPointsMouvement = maxPointsMouvement;
+	}
+
 	/**
 	 * Retourne le type de personnage
 	 * @return type
