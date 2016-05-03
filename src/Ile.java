@@ -2,14 +2,10 @@
  * Importation
  */
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.swing.JOptionPane;
 /**
  * Classe Ile Cette classe permet la creation d'une cle
  * @author Team J3

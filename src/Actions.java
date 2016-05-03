@@ -154,7 +154,6 @@ public class Actions {
 	}
 
 	public void attaquer(Personnage personnageSelectionne, Plateau plateaugraph, Equipe equipe1, Equipe equipe2) {
-		// TODO Auto-generated method stub
 		Position choixTransfert =new Position(-1, -1);
 		boolean bonChoix = false;
 		boolean bonChoixEquipe = false;
@@ -184,7 +183,6 @@ public class Actions {
 	}
 
 	public void voler(Personnage personnageSelectionne, Plateau plateaugraph, Equipe equipe1, Equipe equipe2) {
-		// TODO Auto-generated method stub
 		Position choixTransfert =new Position(-1, -1);
 		boolean bonChoix = false;
 		boolean bonChoixEquipe = false;

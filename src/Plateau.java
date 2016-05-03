@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -17,7 +16,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.standard.JobHoldUntil;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -26,8 +24,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
-
-import com.sun.org.apache.bcel.internal.generic.LMUL;
 
 /**
  * La classe Plateau permet d'afficher un plateau de Jeu carré
@@ -1030,10 +1026,14 @@ public class Plateau {
 				}
 				break;
 			case KeyEvent.VK_ENTER:
-				executeEnter();
+				if (selectionListe != -1) {
+					executeEnter();
+				}
 				break;
 			case KeyEvent.VK_SPACE:
-				executeEnter();
+				if (selectionListe != -1) {
+					executeEnter();
+				}
 				break;
 			case KeyEvent.VK_X:
 				annulerChoix = true;
@@ -1376,12 +1376,10 @@ public class Plateau {
 	}
 
 	public void setDetientClef(boolean detientClef2) {
-		// TODO Auto-generated method stub
 		detientClef = detientClef2;
 	}
 
 	public void setDetientCoffre(boolean detientTresor) {
-		// TODO Auto-generated method stub
 		detientCoffre = detientTresor;
 	}
 
