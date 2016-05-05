@@ -1,6 +1,7 @@
 /**
  * Importation
  */
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -270,6 +271,8 @@ public class Menu {
 		boutonPlacement =new JButton("Placement manuel");
 		boutonPlacement.setActionCommand("manuel");
 		boutonPlacement.addActionListener(new buttonAction());
+		boutonPlacement.setBackground(Color.LIGHT_GRAY);
+		choixManuel = false;
 		confirmeManuel.add(boutonPlacement);
 	}
 	/**
@@ -318,6 +321,13 @@ public class Menu {
 				}
 				nbPersoSelected2 = maxPerso;
 				nomJoueur2.setText("Ordinateur");
+			} else if ("manuel".equals(e.getActionCommand())) {
+				if (choixManuel) {
+					boutonPlacement.setBackground(Color.LIGHT_GRAY);
+				} else {
+					boutonPlacement.setBackground(Color.GREEN);
+				}
+				choixManuel = !choixManuel;
 			} else if ("valider".equals(e.getActionCommand())) {
 				choixValides = true;
 				taille = tailleField.getText();

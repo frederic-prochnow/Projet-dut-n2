@@ -95,4 +95,15 @@ public class Equipe {
 		}
 	}
 	
+	public boolean finPlacement() {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (!temp.getFinPlacement()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 }

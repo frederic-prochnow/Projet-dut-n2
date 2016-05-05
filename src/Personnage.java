@@ -29,6 +29,15 @@ public class Personnage {
 	private boolean ignorerMouvement;
 	private int maxPointsMouvement;
 	private int pointsMouvement;
+	private boolean finPlacement;
+
+	public boolean getFinPlacement() {
+		return finPlacement;
+	}
+
+	public void setFinPlacement(boolean finPlacement) {
+		this.finPlacement = finPlacement;
+	}
 
 	public boolean finMouvement() {
 		return pointsMouvement == 0 || (pointsMouvement > 0 && ignorerMouvement);

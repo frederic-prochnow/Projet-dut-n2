@@ -302,6 +302,18 @@ public class Ile {
 		}
 		return res;
 	}
+	
+	public int[][] getPlacementManuel(List<Personnage> tempEquipe) {
+		int[][] tab = new int[plateau[0].length][plateau[1].length];
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
+				tab[i][j] = plateau[i][j].getType() + 2;
+			}
+		}
+		return tab;
+	}
+	
+	
 	/**
 	 * Traduit les types de Parcelle[][] vers un int[][] intermédiaire.
 	 * Ceci permet de travailler sur une variable au lieu de 2.
@@ -481,6 +493,27 @@ public class Ile {
 		return null;
 	}
 
+	public boolean placer(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
+		if (estVide(destination)) {
+			if (perso.getSurNavire()) { // Est sur navire
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
+				perso.setSurNavire(false);
+				getNavire(perso.getEquipe1()).retirePerso();
+			} else { // Sur sol
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+				}
+			}
+
+			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
+			perso.setPos(destination.getLocation());
+			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Cette méthode permet de vérifier que le deplacement se fait bien dans une des directions
 	 * possibles selon le Personnage et que c'est dans ses alentours immédiats (x-1/x+1, y-1/y+1)
