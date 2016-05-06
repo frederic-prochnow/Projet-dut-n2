@@ -179,7 +179,7 @@ public class Map {
 				// CAS SOURIS : on boucle tant que le point selectionne est -1,-1 (defaut) et que c'est un point invalide pour l'équipe
 				while (!bonneSelectionEquipe && !plateauGraph.getPasser()) {
 					plateauGraph.clearConsole();
-					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
+					plateauGraph.print("C'est au tour de l'", placementE1);
 
 					if (plateauGraph.getTempPersoSelec() != null) {
 						plateauGraph.resetHighlight(plateauGraph.getTempPersoSelec().getPos());
@@ -262,35 +262,31 @@ public class Map {
 					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 				}
 
-				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
+				while (!plateauGraph.getConfirmeFinTour() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
 
-					while ((!deplacementValide && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix()) {
+					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
+					plateauGraph.setVeutDeplacer(false);
+					plateauGraph.clearConsole();
+					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
+					plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
+					if (!deplacementValide) {
+						plateauGraph.recover();
+					}
+					plateauGraph.waitDeplacementOuAction(5000);
 
-						plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
-						plateauGraph.setVeutDeplacer(false);
-						plateauGraph.clearConsole();
-						plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
-						plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
-						if (!deplacementValide) {
-							plateauGraph.recover();
-						}
-						plateauGraph.waitDeplacementOuAction(5000);
+					plateauGraph.println("Cliquez sur la case où vous voulez qu'il se déplace");
+					choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
 
-						plateauGraph.println("Cliquez sur la case où vous voulez qu'il se déplace");
-						choixDeplacementPosition.setLocation(plateauGraph.getX(), plateauGraph.getY());
-
-						// choixDeplacementPosition est mis directment par le clic de la souris
-						if (!choixDeplacementPosition.getNulle()) {
-							plateauGraph.setDirectionDeplacement(choixDeplacementPosition.differenceCoordonnees(persoSelectionPosition));
-							// choixDeplacementPosition mis par la direction du clavier
-						} else if (!plateauGraph.getDirectionDeplacementNulle()) {
-							choixDeplacementPosition.setLocation(plateauGraph.getDirectionDeplacement().additionner(personnnageSelectionne.getPos()));
-						}
-						// deplacement a partir de choixDeplacementPosition
-						if (!choixDeplacementPosition.getNulle()) {
-							deplacementValide = plateau.placer(choixDeplacementPosition, personnnageSelectionne, plateauGraph, true);
-							plateauGraph.setFaitAction(deplacementValide);
-						}
+					// choixDeplacementPosition est mis directment par le clic de la souris
+					if (!choixDeplacementPosition.getNulle()) {
+						plateauGraph.setDirectionDeplacement(choixDeplacementPosition.differenceCoordonnees(persoSelectionPosition));
+						// choixDeplacementPosition mis par la direction du clavier
+					} else if (!plateauGraph.getDirectionDeplacementNulle()) {
+						choixDeplacementPosition.setLocation(plateauGraph.getDirectionDeplacement().additionner(personnnageSelectionne.getPos()));
+					}
+					// deplacement a partir de choixDeplacementPosition
+					if (!choixDeplacementPosition.getNulle()) {
+						deplacementValide = plateau.placer(choixDeplacementPosition, personnnageSelectionne, plateauGraph, true);
 					}
 
 					plateauGraph.refreshPersoPanel(plateauGraph.getPersoPrecis());
@@ -313,8 +309,9 @@ public class Map {
 					plateauGraph.waitEvent(5000, false);
 					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
 				}
-
+				
 				if ((!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) || plateauGraph.getPasser()) {
+					System.out.println("changing team for manual placement");
 					placementE1 = !placementE1;
 				}
 			}
@@ -452,9 +449,9 @@ public class Map {
 					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 				}
 
-				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
+				while (!personnnageSelectionne.finMouvement() && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser() && !plateauGraph.getConfirmeFinTour()) {
 
-					while ((!deplacementValide || !plateauGraph.getFaitAction() && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix()) {
+					while ((!deplacementValide || !plateauGraph.getFaitAction() && plateauGraph.getDirectionDeplacementNulle()) && !plateauGraph.getAnnulerChoix() && !plateauGraph.getConfirmeFinTour()) {
 						plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 						plateauGraph.setVeutDeplacer(false);
 						plateauGraph.clearConsole();

@@ -386,7 +386,7 @@ public class Plateau {
 	public void waitDeplacementOuAction(int timeout) {
 		int time = 0;
 		prepareWaitEvent(true);
-		while ( !annulerChoix && !clicAction && !veutDeplacer && !passer  && mouse == null && (time < timeout)) {
+		while ( !annulerChoix && !clicAction && !veutDeplacer && !passer && !confirmeFinTour  && mouse == null && (time < timeout)) {
 			try {
 				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
 			} catch (InterruptedException e) {
@@ -395,6 +395,20 @@ public class Plateau {
 			time += 100 ;
 		}
 	}
+	
+	public void waitDeplacementOuEntree(int timeout) {
+		int time = 0;
+		prepareWaitEvent(true);
+		while ( !annulerChoix && !clicAction && !veutDeplacer && !confirmeFinTour && !passer  && mouse == null && (time < timeout)) {
+			try {
+				Thread.sleep(100) ;	// Cette instruction - en plus du délai induit - permet à Swing de traiter les événements GUI 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			time += 100 ;
+		}
+	}
+	
 	/**
 	 * Wait tant qu'on a pas selectionne de personnage par le biais d'un clic  n'importe où OU qu'on a pas confirmé
 	 * sa séléction en appuyant sur entree une fois qu'on a selectionne un perso en appuyant sur 'A'
@@ -813,6 +827,7 @@ public class Plateau {
 	
 	public void setAttendFinTour(boolean set) {
 		attendFinTour = set;
+		confirmeFinTour = false;
 	}
 	
 	public boolean getAttendFinTour() {
@@ -996,9 +1011,7 @@ public class Plateau {
 		} else if (listeBoutons.get(selectionListe).getActionCommand().equals("annuler")) {
 			System.out.println("annule sa selection");
 			annulerChoix = true;
-		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix
-				&& !listePersos.get(persoPrecis).getEstPiege()
-				&& listePersos.get(persoPrecis).getPointsMouvement() > 0) {
+		} else if (persoPrecis != -1 && !confirmeSelection && !confirmeSelectionPane && !annulerChoix && !listePersos.get(persoPrecis).getEstPiege() && listePersos.get(persoPrecis).getPointsMouvement() > 0) {
 			setConfirmeSelection(true);
 			savePerso = persoPrecis;
 		} else if (confirmeSelection || confirmeSelectionPane){

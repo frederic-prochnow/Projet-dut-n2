@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -66,7 +67,7 @@ public class Menu {
 	private int maxPerso; // Nombre perso max par equipe
 	private int nbPersoSelected1; // Equipe 1
 	private int nbPersoSelected2; // Equipe 2
-	private JButton boutonPlacement;
+	private JCheckBox placementManuel;
 	private boolean choixManuel;
 	
 	/**
@@ -271,12 +272,11 @@ public class Menu {
 		confirme = false;
 		choixValides = true;
 		
-		boutonPlacement =new JButton("Placement manuel");
-		boutonPlacement.setActionCommand("manuel");
-		boutonPlacement.addActionListener(new buttonAction());
-		boutonPlacement.setBackground(Color.LIGHT_GRAY);
+		placementManuel =new JCheckBox("Placement Manuel");
+		placementManuel.setActionCommand("manuel");
+		placementManuel.addActionListener(new buttonAction());
 		choixManuel = false;
-		confirmeManuel.add(boutonPlacement);
+		confirmeManuel.add(placementManuel);
 		
 		jeuRapide = new JButton("Jeu rapide");
 		jeuRapide.setActionCommand("rapide");
@@ -331,9 +331,9 @@ public class Menu {
 				nomJoueur2.setText("Ordinateur");
 			} else if ("manuel".equals(e.getActionCommand())) {
 				if (choixManuel) {
-					boutonPlacement.setBackground(Color.LIGHT_GRAY);
+					placementManuel.setBackground(null);
 				} else {
-					boutonPlacement.setBackground(Color.GREEN);
+					placementManuel.setBackground(Color.GREEN);
 				}
 				choixManuel = !choixManuel;
 			} else if ("valider".equals(e.getActionCommand())) {
