@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import jdk.nashorn.internal.scripts.JS;
 /**
  * Class Menu
  * Gestion du menu de demarrage du jeu
@@ -42,6 +44,7 @@ public class Menu {
 	private String taille;
 	private String rochers;
 	private JButton validerButton;
+	private JButton jeuRapide;
 	private boolean confirme;
 	private boolean choixValides;
 	private JPanel messagePane;
@@ -274,6 +277,11 @@ public class Menu {
 		boutonPlacement.setBackground(Color.LIGHT_GRAY);
 		choixManuel = false;
 		confirmeManuel.add(boutonPlacement);
+		
+		jeuRapide = new JButton("Jeu rapide");
+		jeuRapide.setActionCommand("rapide");
+		jeuRapide.addActionListener(new buttonAction());
+		confirmeManuel.add(jeuRapide);
 	}
 	/**
 	 * Remet en place le menu et le rend visible
@@ -329,41 +337,18 @@ public class Menu {
 				}
 				choixManuel = !choixManuel;
 			} else if ("valider".equals(e.getActionCommand())) {
-				choixValides = true;
-				taille = tailleField.getText();
-				rochers = rochersField.getText();
-				if (getTaille() < 10) {
-					JOptionPane.showMessageDialog(null, "L'île est trop petite");
-					tailleField.setText("");
-					choixValides = false;
-				} else if (getTaille() > maxHeight) {
-					JOptionPane.showMessageDialog(null, "L'île est trop grande pour jouer sur votre écran");
-					tailleField.setText("");
-					choixValides = false;
-				} 
-				if (getRochers() < 0) {
-					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers voulue est impossible");
-					rochersField.setText("");
-					choixValides = false;
-				} else if (getRochers() > 40) {
-					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers est trop grand pour pouvoir jouer");
-					rochersField.setText("");
-					choixValides = false;
+				valider();
+			} else if ("rapide".equals(e.getActionCommand())){
+				tailleField.setText("15");
+				rochersField.setText("15");
+				for (int i = 0; i<input.length;i++) {
+					input[i].setText("1");
 				}
-				
-				if(nbPersoSelected1 != maxPerso || nbPersoSelected2 != maxPerso){
-					JOptionPane.showMessageDialog(null, "Il doit y avoir " + maxPerso +  " personnages dans chaques équipes");
-					choixValides = false;
-				}
-				
-				if (choixValides) {
-					// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
-					// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
-					confirme = true;
-					masquer();
-				}
-			} else if ("manuel".equals(e.getActionCommand())){			
-				choixManuel=true;
+				nbPersoSelected1 = maxPerso;
+				nbPersoSelected2 = maxPerso;
+				ordi.setEnabled(false);
+				versusOrdi = false;
+				valider();
 			} else if (e.getActionCommand().startsWith("moins_")) {
 				for (int i=0;i<boutonMoins.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
@@ -399,6 +384,44 @@ public class Menu {
 			}
 		}
 	}
+	
+	private void valider() {
+		choixValides = true;
+		taille = tailleField.getText();
+		rochers = rochersField.getText();
+		if (getTaille() < 10) {
+			JOptionPane.showMessageDialog(null, "L'île est trop petite");
+			tailleField.setText("");
+			choixValides = false;
+		} else if (getTaille() > maxHeight) {
+			JOptionPane.showMessageDialog(null, "L'île est trop grande pour jouer sur votre écran");
+			tailleField.setText("");
+			choixValides = false;
+		} 
+		if (getRochers() < 0) {
+			JOptionPane.showMessageDialog(null, "Le pourcentage de rochers voulue est impossible");
+			rochersField.setText("");
+			choixValides = false;
+		} else if (getRochers() > 40) {
+			JOptionPane.showMessageDialog(null, "Le pourcentage de rochers est trop grand pour pouvoir jouer");
+			rochersField.setText("");
+			choixValides = false;
+		}
+		
+		if(nbPersoSelected1 != maxPerso || nbPersoSelected2 != maxPerso){
+			JOptionPane.showMessageDialog(null, "Il doit y avoir " + maxPerso +  " personnages dans chaques équipes");
+			choixValides = false;
+		}
+		
+		if (choixValides) {
+			// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
+			// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
+			confirme = true;
+			masquer();
+		}
+	}
+	
+	
 	/**
 	 * {@link ActionListener} propre aux actions faites aux JTextField
 	 * @author Christopher Caroni
