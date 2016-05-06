@@ -270,7 +270,6 @@ public class Plateau {
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
 		console.setPreferredSize(new Dimension(window.getWidth(), 75));
 		selectionPane.setPreferredSize(new Dimension(window.getWidth(), 100));
-		System.out.println("selection height = " + selectionPane.getHeight());
 
 		// Affichage effectif 
 		window.setVisible(defaultVisibility);

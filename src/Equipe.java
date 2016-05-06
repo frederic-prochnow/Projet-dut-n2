@@ -91,6 +91,7 @@ public class Equipe {
 		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
 			temp = perso.next();
 			temp.setAJoue(false);
+			temp.setPointsMouvement(temp.getMaxPointsMouvement());
 			temp.setIgnorer(false);
 		}
 	}
@@ -105,5 +106,5 @@ public class Equipe {
 		}
 		return true;
 	}
-	
+		
 }

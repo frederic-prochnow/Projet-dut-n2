@@ -159,7 +159,6 @@ public class Map {
 					tempEquipe = equipe2;
 				}
 				
-				
 				plateauGraph.setJeu(plateau.getPlacementManuel(tempEquipe.getListe()), true);
 				changerEquipe = false;
 				bonneSelectionEquipe = false;
