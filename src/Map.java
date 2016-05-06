@@ -151,7 +151,7 @@ public class Map {
 			
 			boolean placementE1 = true;
 
-			while (!equipe1.finPlacement() && !equipe2.finPlacement()) {
+			while (!equipe1.finPlacement() || !equipe2.finPlacement()) {
 				
 				if (placementE1) {
 					tempEquipe = equipe1;
@@ -287,6 +287,9 @@ public class Map {
 					// deplacement a partir de choixDeplacementPosition
 					if (!choixDeplacementPosition.getNulle()) {
 						deplacementValide = plateau.placer(choixDeplacementPosition, personnnageSelectionne, plateauGraph, true);
+					}
+					if (deplacementValide) {
+						personnnageSelectionne.setFinPlacement(true);
 					}
 
 					plateauGraph.refreshPersoPanel(plateauGraph.getPersoPrecis());
