@@ -269,7 +269,8 @@ public class Plateau {
 		resizeFromGraphic() ; // ajoute la console		
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
 		console.setPreferredSize(new Dimension(window.getWidth(), 75));
-		selectionPane.setPreferredSize(new Dimension(window.getWidth(), window.getHeight()-graphic.getHeight()-console.getHeight()-150));
+		selectionPane.setPreferredSize(new Dimension(window.getWidth(), 100));
+		System.out.println("selection height = " + selectionPane.getHeight());
 
 		// Affichage effectif 
 		window.setVisible(defaultVisibility);
@@ -461,7 +462,7 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		dim.height += 220 ;
+		dim.height += 175;
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
 	}

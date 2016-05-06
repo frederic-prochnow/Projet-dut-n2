@@ -122,7 +122,7 @@ public class Menu {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
 		// 50 par case, -3 car la console prend la hauteur de 3 cases
-		maxHeight = (int) (screenSize.getHeight()/50) -2;
+		maxHeight = (int) (screenSize.getHeight()/32) -6;
 		
 		tailleLabel = new JLabel("Taile de l'île ? (max: " + maxHeight + ") ");
 		tailleField = new JTextField();
