@@ -19,9 +19,9 @@ public class Nourriture {
 		this.energie = energie;
 	}
 
-	Personnage perso;
-	int energie;
-	Position p;
+	private Personnage perso;
+	private int energie;
+	private Position p;
 	
 	public Nourriture(Personnage perso,int energie) {
 		this.energie = energie;

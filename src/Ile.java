@@ -163,6 +163,13 @@ public class Ile {
 		if(plateau[xNourriture][yNourriture].getType() == -1) {
 			plateau[xNourriture][yNourriture].setType(18);
 		}
+		// SERPENT
+		// on ajoute une nourriture random
+		int xS = r.nextInt(plateau.length - 2) + 1;
+		int yS =  r.nextInt(plateau.length - 2) + 1;
+		if(plateau[xS][yS].getType() == -1) {
+			plateau[xS][yS].setType(18);
+		}
 		
 	}
 
