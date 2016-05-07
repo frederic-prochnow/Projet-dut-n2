@@ -163,6 +163,7 @@ public class Parcelle {
 		else if (type == 15) {return "D";}  // cle prise
 		else if (type == 16) {return "Co";} // coffre ouvert
 		else if (type == 17) {return "Ct";} // cofrre ouvert avec tresor
+		else if (type == 18) {return "Nt";} // nourriture
 		else  { return "";}
 	} 
 	

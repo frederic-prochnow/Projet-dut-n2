@@ -26,6 +26,7 @@ public class Ile {
 	private Clef clef;
 	private Navire navireEquipe1;
 	private Navire navireEquipe2;
+	private Nourriture nourriture;
 
 	/**
 	 * Constructeur de la classe sans parametres
@@ -155,6 +156,14 @@ public class Ile {
 				}
 			}
 		}
+		// NOURRITURE
+		// on ajoute une nourriture random
+		int xNourriture = r.nextInt(plateau.length - 2) + 1;
+		int yNourriture =  r.nextInt(plateau.length - 2) + 1;
+		if(plateau[xNourriture][yNourriture].getType() == -1) {
+			plateau[xNourriture][yNourriture].setType(18);
+		}
+		
 	}
 
 	/**
