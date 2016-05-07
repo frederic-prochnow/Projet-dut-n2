@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import jdk.nashorn.internal.scripts.JS;
+//import jdk.nashorn.internal.scripts.JS;
 /**
  * Class Menu
  * Gestion du menu de demarrage du jeu
