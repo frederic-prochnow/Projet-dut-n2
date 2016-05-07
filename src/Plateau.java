@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -97,6 +99,7 @@ public class Plateau {
 	private boolean attendFinTour;
 	
 	private List<JPanel> listePanels;
+	private List<JPanel> descPerso;
 	private List<JButton> listeBoutons;
 	private List<Personnage> listePersos;
 	private Personnage tempPersoSelectionne;
@@ -188,6 +191,7 @@ public class Plateau {
 	 */
 	public Plateau(String[] gif,int taille, boolean withTextArea){
 		// Instancie la fenetre principale et et les deux composants.
+
 		window = new JFrame() ;
 		ImageIcon[] images = loadImages(gif) ;
 		graphic = new GraphicPane(images, taille) ;
@@ -200,11 +204,13 @@ public class Plateau {
 		voler = new JButton(new ImageIcon(Plateau.class.getResource("images/voler.png")));
 		voler.setPreferredSize(dimIcones);
 		voler.setActionCommand("voler");
+		voler.setName("Voler");
 		voler.addActionListener(new Action());
 		
 		pieger = new JButton(new ImageIcon(Plateau.class.getResource("images/pieger.png")));
 		pieger.setPreferredSize(dimIcones);
 		pieger.setActionCommand("pieger");
+		pieger.setName("Pieger");
 		pieger.addActionListener(new Action());
 		
 		clef = new JButton( new ImageIcon(Plateau.class.getResource("images/cle.jpg")));
@@ -216,60 +222,65 @@ public class Plateau {
 		echangerClef = new JButton(new ImageIcon(Plateau.class.getResource("images/echanger_clef.png")));
 		echangerClef.setPreferredSize(dimIcones);
 		echangerClef.setActionCommand("echangerClef");
+		echangerClef.setName("Echanger la clé");
 		echangerClef.addActionListener(new Action());
 
 		echangerTresor = new JButton(new ImageIcon(Plateau.class.getResource("images/echanger_tresor2.png")));
 		echangerTresor.setPreferredSize(dimIcones);
 		echangerTresor.setActionCommand("echangerTresor");
+		echangerTresor.setName("Echanger le trésor");
 		echangerTresor.addActionListener(new Action());
 		
 		attaquer = new JButton(new ImageIcon(Plateau.class.getResource("images/attaquer.png")));
 		attaquer.setPreferredSize(dimIcones);
 		attaquer.setActionCommand("attaquer");
+		attaquer.setName("Attaquer");
 		attaquer.addActionListener(new Action());
 		
 		annuler = new JButton(new ImageIcon(Plateau.class.getResource("images/annuler.png")));
 		annuler.setPreferredSize(dimIcones);
 		annuler.setActionCommand("annuler");
+		annuler.setName("Annuler");
 		annuler.addActionListener(new Action());
 		
 		ignorer = new JButton(new ImageIcon(Plateau.class.getResource("images/ignorer.png")));
 		ignorer.setPreferredSize(dimIcones);
 		ignorer.setActionCommand("ignorer");
+		ignorer.setName("Ignorer le personnage");
 		ignorer.addActionListener(new Action());
 		
 		passerTour = new JButton(new ImageIcon(Plateau.class.getResource("images/passer.png")));
 		passerTour.setPreferredSize(dimIcones);
 		passerTour.setActionCommand("passer");
+		passerTour.setName("Passer son tour");
 		passerTour.addActionListener(new Action());
 		
 		listeBoutons = new ArrayList<>();
+		descPerso = new ArrayList<>();
 		listePanels = new ArrayList<>();
 		
 		// Caractéristiques initiales pour la fenetre.
 		window.setTitle("Treasure Hunt ("+taille+"X"+taille+")");
-		window.setLocationRelativeTo(null);
-		window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.Y_AXIS));
+		window.setLayout(new BorderLayout(15,0));
 		window.setResizable(false);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 		// Ajout des deux composants à la fenetre
-		window.getContentPane().add(graphic, BorderLayout.NORTH);
+		window.add(graphic, BorderLayout.LINE_START);
 		if (withTextArea) {
 			console = new ConsolePane() ;
-			window.getContentPane().add(console) ;
+			console.setPreferredSize(new Dimension(window.getWidth()+300, 75));
+			window.add(console, BorderLayout.PAGE_END) ;
 		}
 
 		selectionPane = new JPanel();
-		selectionPane.setLayout(new FlowLayout());
+		selectionPane.setLayout(new BoxLayout(selectionPane, BoxLayout.Y_AXIS));
 		selectionPane.addKeyListener(new Keys());
 		window.addKeyListener(new Keys());
-		
-		window.getContentPane().add(selectionPane);
-		resizeFromGraphic() ; // ajoute la console		
-		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
-		console.setPreferredSize(new Dimension(window.getWidth(), 75));
-		selectionPane.setPreferredSize(new Dimension(window.getWidth(), 100));
+
+		selectionPane.setPreferredSize(new Dimension(300, window.getHeight()));
+		window.add(selectionPane, BorderLayout.LINE_END);		
+		resizeFromGraphic() ; // ajoute l'espace console
 
 		// Affichage effectif 
 		window.setVisible(defaultVisibility);
@@ -278,6 +289,7 @@ public class Plateau {
 		window.addKeyListener(new Key()) ;
 		selectionPane.addMouseListener(new Mouse());
 		currentEvent = null ;
+		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
 	}
 	/**
 	 * Méthode permettant de placer les éléments sur le plateau. Le tableau doit être  
@@ -475,7 +487,8 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		dim.height += 175;
+		dim.width += 250;
+		dim.height += 75;
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
 	}
@@ -518,6 +531,7 @@ public class Plateau {
 		oldHighlight = new Position(-1,-1);
 		selectionPane.removeAll();
 		listePanels.clear();
+		descPerso.clear();
 		for (int i=0;i<selection.size();i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			
@@ -530,15 +544,19 @@ public class Plateau {
 			listeBoutons.get(i).setPreferredSize(dimIcones);
 			
 			listePanels.add(new JPanel());
-			listePanels.get(i).setLayout(new BoxLayout(listePanels.get(i), BoxLayout.Y_AXIS));
-			listePanels.get(i).add(new JLabel(selection.get(i).getNom()));
-			listePanels.get(i).add(new JLabel("Energie : " + selection.get(i).getEnergie()));
-			listePanels.get(i).add(new JLabel("PM : " + selection.get(i).getPointsMouvement()));
-			
+			listePanels.get(i).setLayout(new BoxLayout(listePanels.get(i), BoxLayout.X_AXIS));
 			listePanels.get(i).add(listeBoutons.get(i));
 			
+			descPerso.add(new JPanel());
+			descPerso.get(i).setLayout(new BoxLayout(descPerso.get(i), BoxLayout.Y_AXIS));
+			descPerso.get(i).add(new JLabel(selection.get(i).getNom()));
+			descPerso.get(i).add(new JLabel("Energie : " + selection.get(i).getEnergie()));
+			descPerso.get(i).add(new JLabel("PM : " + selection.get(i).getPointsMouvement()));
+			listePanels.get(i).add(Box.createRigidArea(new Dimension(20, listePanels.get(i).getHeight())));
+			listePanels.get(i).add(descPerso.get(i));
+			listePanels.get(i).setAlignmentX(Component.LEFT_ALIGNMENT);
+			
 			selectionPane.add(listePanels.get(i));
-		//	PersoPane.add(Box.createRigidArea(new Dimension(10, listePanels.get(i).getHeight())));
 
 			if (selection.get(i).getEstPiege()) {
 				listeBoutons.get(i).setEnabled(false);
@@ -558,23 +576,29 @@ public class Plateau {
 	
 	public void refreshPersoPanel(int numPersoPanel) {
 		listePanels.get(numPersoPanel).removeAll();
-		listePanels.get(numPersoPanel).add(new JLabel(listePersos.get(numPersoPanel).getNom()));
-		listePanels.get(numPersoPanel).add(new JLabel("Energie : " + listePersos.get(numPersoPanel).getEnergie()));
-		listePanels.get(numPersoPanel).add(new JLabel("PM : " + listePersos.get(numPersoPanel).getPointsMouvement()));
-		
+		descPerso.get(numPersoPanel).removeAll();
+
 		listePanels.get(numPersoPanel).add(listeBoutons.get(numPersoPanel));
+		listePanels.get(numPersoPanel).add(Box.createRigidArea(new Dimension(20, listePanels.get(numPersoPanel).getHeight())));
+		
+		descPerso.get(numPersoPanel).add(new JLabel(listePersos.get(numPersoPanel).getNom()));
+		descPerso.get(numPersoPanel).add(new JLabel("Energie : " + listePersos.get(numPersoPanel).getEnergie()));
+		descPerso.get(numPersoPanel).add(new JLabel("PM : " + listePersos.get(numPersoPanel).getPointsMouvement()));
+		listePanels.get(numPersoPanel).add(descPerso.get(numPersoPanel));
+		listePanels.get(numPersoPanel).setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 	}
 	
 		
 	private void addPanel(JButton button) {
 		listeBoutons.add(button);
-		listeBoutons.get(listeBoutons.size()-1).setAlignmentX(Component.CENTER_ALIGNMENT);
+		listeBoutons.get(listeBoutons.size()-1).setPreferredSize(dimIcones);
 		
 		listePanels.add(new JPanel());
-		listePanels.get(listePanels.size()-1).setLayout(new BoxLayout(listePanels.get(listePanels.size()-1), BoxLayout.Y_AXIS));
-		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
+		listePanels.get(listePanels.size()-1).setLayout(new FlowLayout());
+	//	listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
 		listePanels.get(listePanels.size()-1).add(listeBoutons.get(listeBoutons.size()-1));
-		
+		listePanels.get(listePanels.size()-1).add(new JLabel(listeBoutons.get(listeBoutons.size()-1).getName()));
 		selectionPane.add(listePanels.get(listePanels.size()-1));
 	}
 	
