@@ -1,5 +1,12 @@
-
+/**
+ * Class Navire
+ * Classe de gestion des Navires
+ * @author Team J3
+ */
 public class Navire {
+	/**
+	 * Attribut
+	 */
 	private Position pos;
 	private int type;
 	private int contient;
@@ -21,9 +28,17 @@ public class Navire {
 		}
 	}
 	
+	/**
+	 * Retourne le type de l element
+	 * @return int type
+	 */
 	public int getType(){
 		return this.type;
 	}
+	/**
+	 * Retourne la position du navire
+	 * @return position
+	 */
 	public Position getPos(){
 		return this.pos;
 	}
@@ -35,11 +50,17 @@ public class Navire {
 		this.contient =+ nombre;
 		this.contientMax += nombre;
 	}
-	
+	/**
+	 * Retire le personnage du navire
+	 */
 	public void retirePerso() {
 		this.contient --;
 	}
 	
+	/**
+	 * Retourne ce que le navire contient
+	 * @return contenu
+	 */
 	public int getContient() {
 		return this.contient;
 	}

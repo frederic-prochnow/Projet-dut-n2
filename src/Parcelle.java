@@ -1,22 +1,25 @@
 /**
  * Class Parcelle
  * Gestion de parcelle de l'Ile
- * 
  * @author TeamJ3
  *
  */
 public class Parcelle {
 
+	/**
+	 * Attribut
+	 */
 	private int type;
 	//private boolean cleEquipe1 = false;
 	//private boolean cleEquipe2 = false;
 	private boolean estCompte = false;
+	private boolean estPiegeE1;
+	private boolean estPiegeE2;
 	
 
 	/**
 	 * Constructeur avec paramétre de Parcelle
 	 * Ce paramétre permet de créer une parcelle type choisit
-	 *
 	 * @param type
 	 */
 	Parcelle (int type) {
@@ -25,6 +28,8 @@ public class Parcelle {
 		} else {
 			this.type = -1;
 		}
+		estPiegeE1 = false;
+		estPiegeE2 = false;
 	}
 	
 	/**
@@ -35,31 +40,93 @@ public class Parcelle {
 		return this.type;
 	}
 	
+	/**
+	 * Configuration piege equipe 1
+	 * @param booleen
+	 */
+	public void setEstpiegeE1(boolean b) {
+		estPiegeE1 = b;
+	}
+	/**
+	 * Configuration piege equipe 2
+	 * @param booleen
+	 */
+	public void setEstpiegeE2(boolean b) {
+		estPiegeE2 = b;
+	}
+	/**
+	 * Verification piege equipe 1
+	 * @return booleen
+	 */
+	public boolean getEstpiegeE1() {
+		return estPiegeE1;
+	}
+	/**
+	 * Verification piege equipe 2
+	 * @return booleen
+	 */
+	public boolean getEstpiegeE2() {
+		return estPiegeE2;
+	}
+	/**
+	 * Verification de parcelle vide
+	 * @return resultat
+	 */
+	public boolean getEstVide() {
+		return this.type == -1 && !estPiegeE1 && !estPiegeE2 && !estNavire();
+	}
+	/**
+	 * Retourne le type de l' element
+	 * @param int type
+	 */
 	public void setType(int x){
 		this.type = x;
 	}
 	
+	/**
+	 * Verification de compte
+	 * @return booleen
+	 */
 	public boolean getEstCompte(){
 		return estCompte;
 	}
 	
+	/**
+	 * Configuration de compte
+	 * @return booleen
+	 */
 	public void setEstCompte(boolean b){
 		this.estCompte = b;
 	}
 	
-	// permet de connaitre a quelle equipe est sur la position
+	/**
+	 * Permet de connaitre a quelle equipe est sur la position
+	 * @return vari ou faux
+	 */
 	public boolean getEquipe1() {
-		if (this.type == 0 || this.type == 1 || this.type == 2) {
+		if (this.type == 0 || this.type == 1 || this.type == 2 || this.type == 10 || this.type == 11) {
 			return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Permet de connaitre a quelle equipe est sur la position
+	 * @return vrai ou faux
+	 */
 	public boolean getEquipe2() {
-		if (this.type == 3 || this.type == 4 || this.type == 5) {
+		if (this.type == 3 || this.type == 4 || this.type == 5 || this.type == 12 || this.type == 13) {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Verification parcelle est navire
+	 * @return booleen
+	 */
+	public boolean estNavire() {
+		return this.type == 1 || this.type == 4;
 	}
 	
 	/**
@@ -88,6 +155,14 @@ public class Parcelle {
 		else if(type == 7) {return "C";} // coffre
 		else if(type == 8) {return "K";} // cle
 		else if(type == 9) {return "~";} // eau
+		else if(type == 10) {return "g";} // guerrier1
+		else if(type == 11) {return "p";} // piegeur1
+		else if(type == 12) {return "G";} // guerrier2
+		else if(type == 13) {return "P";} // piegeur2
+		else if (type == 14) {return "T";} // trap
+		else if (type == 15) {return "D";}  // cle prise
+		else if (type == 16) {return "Co";} // coffre ouvert
+		else if (type == 17) {return "Ct";} // cofrre ouvert avec tresor
 		else  { return "";}
 	} 
 	

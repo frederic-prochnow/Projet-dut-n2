@@ -1,4 +1,7 @@
-import java.awt.Component;
+/**
+ * Importation
+ */
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -7,10 +10,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,45 +22,53 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import jdk.nashorn.internal.scripts.JS;
+/**
+ * Class Menu
+ * Gestion du menu de demarrage du jeu
+ */
 public class Menu {
-
+	/**
+	 * Attribut du jeu
+	 */
 	private JFrame frame;
 	private JPanel typeJeuPanel;
 	private JPanel choix;
-	
+	private JPanel confirmeManuel;
 	private JButton humain;
 	private JButton ordi;
 	private boolean versusOrdi;
-	
 	private JLabel tailleLabel;
 	private JTextField tailleField;
 	private JLabel rochersLabel;
 	private JTextField rochersField;
 	private String taille;
 	private String rochers;
-	
-	private JPanel confirmation;
 	private JButton validerButton;
+	private JButton jeuRapide;
 	private boolean confirme;
 	private boolean choixValides;
-	
 	private JPanel messagePane;
 	private JLabel messages;
-	
 	private Dimension screenSize;
 	private int maxHeight;
-
-	private JPanel texteJouer1;
-	private JPanel texteJouer2;
+	private JPanel texteJoueur1;
+	private JLabel nomJoueur1;
+	private JPanel texteJoueur2;
+	private JLabel nomJoueur2;
 	private JPanel descJoueur1;
 	private JPanel nbPersos1;
 	private JPanel descJoueur2;
 	private JPanel nbPersos2;
-	
 	private JPanel[] inputPersos;
 	private JButton[] boutonMoins;
 	private JButton[] boutonPlus;
 	private JTextField[] input;	
+	private int maxPerso; // Nombre perso max par equipe
+	private int nbPersoSelected1; // Equipe 1
+	private int nbPersoSelected2; // Equipe 2
+	private JCheckBox placementManuel;
+	private boolean choixManuel;
 	
 	/**
 	 * Constructeur du menu. Crée tout le JFrame et tous les JPanels, JButtons...
@@ -74,7 +85,6 @@ public class Menu {
 		choix.setLayout(new FlowLayout(FlowLayout.CENTER));
 		messagePane = new JPanel();
 		messagePane.setPreferredSize(new Dimension(frame.getWidth(), 20));
-		confirmation = new JPanel();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -91,6 +101,10 @@ public class Menu {
 		c.gridy = 2;
 		c.insets = new Insets(5, 0, 5, 0);
 		frame.add(messagePane,c);
+		
+		nbPersoSelected1 = 1;
+		nbPersoSelected2 = 1;
+		maxPerso = 4;
 		
 		// Choix type de jeu
 		humain = new JButton("1 v 1");
@@ -109,7 +123,7 @@ public class Menu {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
 		// 50 par case, -3 car la console prend la hauteur de 3 cases
-		maxHeight = (int) (screenSize.getHeight()/50) -2;
+		maxHeight = (int) (screenSize.getHeight()/32) -6;
 		
 		tailleLabel = new JLabel("Taile de l'île ? (max: " + maxHeight + ") ");
 		tailleField = new JTextField();
@@ -131,21 +145,23 @@ public class Menu {
 		choix.add(rochersLabel);
 		choix.add(rochersField);
 		
-		texteJouer1 = new JPanel();
-		texteJouer1.add(new JLabel("Joueur 1"));
-		texteJouer2 = new JPanel();
-		texteJouer2.add(new JLabel("Joueur 2"));
+		texteJoueur1 = new JPanel();
+		nomJoueur1 = new JLabel("Joueur 1");
+		texteJoueur1.add(nomJoueur1);
+		texteJoueur2 = new JPanel();
+		nomJoueur2 = new JLabel("Joueur 2");
+		texteJoueur2.add(nomJoueur2);
 		
 		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 2;
 		c.insets = new Insets(5, 10, 0, 0);
-		frame.add(texteJouer1,c);
+		frame.add(texteJoueur1,c);
 		c.gridx = 2;
 		c.gridy = 3;
 		c.gridwidth = 2;
 		c.insets = new Insets(5, 0, 0, 5);
-		frame.add(texteJouer2,c);
+		frame.add(texteJoueur2,c);
 		
 		// JButton et JTextField des types de persos
 
@@ -175,7 +191,12 @@ public class Menu {
 			boutonPlus[i].addActionListener(new buttonAction());
 			input[i] = new JTextField();
 			input[i].setHorizontalAlignment(JTextField.CENTER);
-			input[i].setText("" + 0);
+			
+			if(i == 0 || i == 4){
+				input[i].setText("" + 1);
+			}else{
+				input[i].setText("" + 0);
+			}
 			input[i].setPreferredSize(new Dimension(30, 25));
 		}
 		for (int i=0; i<boutonMoins.length/2;i++) {
@@ -229,11 +250,15 @@ public class Menu {
 		c.gridwidth = 1;
 		c.insets = new Insets(5, 0, 5, 10);
 		frame.add(nbPersos2,c);
+		
+		confirmeManuel = new JPanel();
+		confirmeManuel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
 		c.gridx = 0;
 		c.gridy = 5;
 		c.gridwidth = 4;
 		c.insets = new Insets(5, 0, 0, 0);
-		frame.add(confirmation,c);
+		frame.add(confirmeManuel,c);
 		
 		// messages
 		messages = new JLabel();
@@ -243,9 +268,20 @@ public class Menu {
 		validerButton = new JButton("Validation");
 		validerButton.setActionCommand("valider");
 		validerButton.addActionListener(new buttonAction());
-		confirmation.add(validerButton);
+		confirmeManuel.add(validerButton);
 		confirme = false;
 		choixValides = true;
+		
+		placementManuel =new JCheckBox("Placement Manuel");
+		placementManuel.setActionCommand("manuel");
+		placementManuel.addActionListener(new buttonAction());
+		choixManuel = false;
+		confirmeManuel.add(placementManuel);
+		
+		jeuRapide = new JButton("Jeu rapide");
+		jeuRapide.setActionCommand("rapide");
+		jeuRapide.addActionListener(new buttonAction());
+		confirmeManuel.add(jeuRapide);
 	}
 	/**
 	 * Remet en place le menu et le rend visible
@@ -273,56 +309,119 @@ public class Menu {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if ("1v1".equals(e.getActionCommand()) ) {
-				humain.setEnabled(false);
+				versusOrdi = false;
+				for (int i=boutonMoins.length/2;i<boutonMoins.length;i++) {
+					boutonMoins[i].setEnabled(true);
+					boutonPlus[i].setEnabled(true);
+					input[i].setText("" + 0);
+					input[i].setEditable(true);
+				}
+				nomJoueur2.setText("Joueur 2");
+				input[0].setText("" + 1);
+				input[4].setText("" + 1);
+			} else if ("ordi".equals(e.getActionCommand())) {
+				versusOrdi = true;
+				for (int i=boutonMoins.length/2;i<boutonMoins.length;i++) {
+					boutonMoins[i].setEnabled(false);
+					boutonPlus[i].setEnabled(false);
+					input[i].setText("" + 1);
+					input[i].setEditable(false);
+				}
+				nbPersoSelected2 = maxPerso;
+				nomJoueur2.setText("Ordinateur");
+			} else if ("manuel".equals(e.getActionCommand())) {
+				if (choixManuel) {
+					placementManuel.setBackground(null);
+				} else {
+					placementManuel.setBackground(Color.GREEN);
+				}
+				choixManuel = !choixManuel;
+			} else if ("valider".equals(e.getActionCommand())) {
+				valider();
+			} else if ("rapide".equals(e.getActionCommand())){
+				tailleField.setText("15");
+				rochersField.setText("15");
+				for (int i = 0; i<input.length;i++) {
+					input[i].setText("1");
+				}
+				nbPersoSelected1 = maxPerso;
+				nbPersoSelected2 = maxPerso;
 				ordi.setEnabled(false);
 				versusOrdi = false;
-			} else if ("ordi".equals(e.getActionCommand())) {
-				humain.setEnabled(false);
-				ordi.setEnabled(false);
-				versusOrdi = true;
-			} else if ("valider".equals(e.getActionCommand())) {
-				choixValides = true;
-				taille = tailleField.getText();
-				rochers = rochersField.getText();
-				if (getTaille() < 10) {
-					JOptionPane.showMessageDialog(null, "L'île est trop petite");
-					tailleField.setText("");
-					choixValides = false;
-				} else if (getTaille() > maxHeight) {
-					JOptionPane.showMessageDialog(null, "L'île est trop grande pour jouer sur votre écran");
-					tailleField.setText("");
-					choixValides = false;
-				} 
-				if (getRochers() < 0) {
-					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers voulue est impossible");
-					rochersField.setText("");
-					choixValides = false;
-				} else if (getRochers() > 40) {
-					JOptionPane.showMessageDialog(null, "Le pourcentage de rochers est trop grand pour pouvoir jouer");
-					rochersField.setText("");
-					choixValides = false;
-				}
-				if (choixValides) {
-					// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
-					// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
-					confirme = true;
-					masquer();
-				}
+				valider();
 			} else if (e.getActionCommand().startsWith("moins_")) {
 				for (int i=0;i<boutonMoins.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i) && Integer.valueOf(input[i].getText()) > 0) {
-						input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+						
+						// On decremente le nombre de la bonne equipe
+						if(i >= 4){
+							if((i == 4 && Integer.valueOf(input[i].getText()) > 1) || i > 4){ // Un explorateur au moins
+								input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+								nbPersoSelected2--;
+							}			
+						}else{
+							if((i == 0 && Integer.valueOf(input[i].getText()) > 1) || (i > 0 && i < 4)){ // Un explorateur au moins
+								input[i].setText(""+ (Integer.valueOf(input[i].getText()) -1) );
+								nbPersoSelected1--;
+							}
+						}
 					}
 				}
 			} else if (e.getActionCommand().startsWith("plus_")) {
 				for (int i=0;i<boutonPlus.length;i++) {
 					if (e.getActionCommand().endsWith("_"+i)) {
-						input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+						
+						// On incremente le nombre de la bonne equipe
+						if(i >= 4 && nbPersoSelected2 < maxPerso){
+							input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+							nbPersoSelected2++;
+						}else if(i < 4 && nbPersoSelected1 < maxPerso){
+							input[i].setText(""+ (Integer.valueOf(input[i].getText()) +1) );
+							nbPersoSelected1++;
+						}
 					}
 				}
 			}
 		}
 	}
+	
+	private void valider() {
+		choixValides = true;
+		taille = tailleField.getText();
+		rochers = rochersField.getText();
+		if (getTaille() < 10) {
+			JOptionPane.showMessageDialog(null, "L'île est trop petite");
+			tailleField.setText("");
+			choixValides = false;
+		} else if (getTaille() > maxHeight) {
+			JOptionPane.showMessageDialog(null, "L'île est trop grande pour jouer sur votre écran");
+			tailleField.setText("");
+			choixValides = false;
+		} 
+		if (getRochers() < 0) {
+			JOptionPane.showMessageDialog(null, "Le pourcentage de rochers voulue est impossible");
+			rochersField.setText("");
+			choixValides = false;
+		} else if (getRochers() > 40) {
+			JOptionPane.showMessageDialog(null, "Le pourcentage de rochers est trop grand pour pouvoir jouer");
+			rochersField.setText("");
+			choixValides = false;
+		}
+		
+		if(nbPersoSelected1 != maxPerso || nbPersoSelected2 != maxPerso){
+			JOptionPane.showMessageDialog(null, "Il doit y avoir " + maxPerso +  " personnages dans chaques équipes");
+			choixValides = false;
+		}
+		
+		if (choixValides) {
+			// on a besoin d'un boolean confirme car dans map, on boucle while tant que !confirme
+			// choixValides est vrai par defaut donc elle ne fonctionnerait pas dans la boucle
+			confirme = true;
+			masquer();
+		}
+	}
+	
+	
 	/**
 	 * {@link ActionListener} propre aux actions faites aux JTextField
 	 * @author Christopher Caroni
@@ -417,13 +516,16 @@ public class Menu {
 		return versusOrdi;
 	}
 	/**
-	 * 
+	 * Confirmation
 	 * @return si le joueur a confirme ses choix de jeu
 	 */
 	public boolean getConfirme() {
 		return confirme;
 	}
-	
+	/**
+	 * Temps de verification
+	 * @param time out
+	 */
 	public void waitValidation(int timeout) {
 		frame.requestFocusInWindow();
 		int time = 0;
@@ -436,6 +538,7 @@ public class Menu {
 			time += 100 ;
 		}
 	}
+	
 	/**
 	 * Les numéros des personnages vont de 0 à 7 pour les deux joueurs
 	 * ex pour joueur 1 : 0 = explorateur, 1 = voleur, 2 = guerrier, 3 = piégeur
@@ -445,4 +548,12 @@ public class Menu {
 	public int getNbPersos(int i) {
 		return Integer.valueOf(input[i].getText());
 	}
+	
+	/**
+	 * Gestion du choix manuel
+	 */
+	public boolean getChoixManuel() {
+		return this.choixManuel;
+	}
+
 }

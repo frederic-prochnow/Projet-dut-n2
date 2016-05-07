@@ -1,6 +1,9 @@
+/**
+ * Class Explorateur
+ * Classe de gestion des Explorateur
+ * @author Team J3
+ */
 public class Explorateur extends Personnage {
-	
-	
 	/**
 	 * Constructeur de Explorateur
 	 * @param nom Son nom
@@ -9,11 +12,7 @@ public class Explorateur extends Personnage {
 	 * @param p Sa position de base
 	 * @param type Son type selon Parcelle
 	 */
-	public Explorateur(String nom, boolean equipe, int energie, Position p, int type){
-		super(nom,equipe,energie,p,type);
+	public Explorateur(String nom, boolean equipe, int energie, Position p, int type, int pointsMouvements){
+		super(nom,equipe,energie,p,type,pointsMouvements);
 	}
-	
-	
-	
-
 }

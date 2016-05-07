@@ -1,18 +1,14 @@
+/**
+ * Importation
+ */
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import javax.swing.JOptionPane;
-
 /**
- * Classe Ile Cette classe permet la creation d'une ele
- * 
+ * Classe Ile Cette classe permet la creation d'une cle
  * @author Team J3
- * 
  */
 public class Ile {
 
@@ -121,7 +117,7 @@ public class Ile {
 		coffre = new Coffre(new Position(x, y));
 		plateau[x][y].setType(6);
 		plateau[x][y].setEstCompte(true);// COFFRE
-		System.out.println(x + " " + y);
+		System.out.println("coffre " + x + " " + y);
 
 		// CLE
 		int xCle, yCle;
@@ -134,7 +130,7 @@ public class Ile {
 		clef = new Clef(new Position(xCle, yCle));
 		plateau[xCle][yCle].setType(6);
 		plateau[xCle][yCle].setEstCompte(true);
-		System.out.println(xCle + " " + yCle);
+		System.out.println("cle " + xCle + " " + yCle);
 
 		// ROCHERS
 		int xR, yR;
@@ -306,6 +302,18 @@ public class Ile {
 		}
 		return res;
 	}
+	
+	public int[][] getPlacementManuel(List<Personnage> tempEquipe) {
+		int[][] tab = new int[plateau[0].length][plateau[1].length];
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
+				tab[i][j] = plateau[i][j].getType() + 2;
+			}
+		}
+		return tab;
+	}
+	
+	
 	/**
 	 * Traduit les types de Parcelle[][] vers un int[][] intermédiaire.
 	 * Ceci permet de travailler sur une variable au lieu de 2.
@@ -321,29 +329,21 @@ public class Ile {
 	public int[][] getImagesCorrespondants(boolean equipeCourante, Plateau plateauGraph, List<Personnage> equipe1, List<Personnage> equipe2) {
 		int[][] tab = new int[plateau[0].length][plateau[1].length];
 
-		// reset eau
-		for (int i = 0; i < plateau.length; i++) {
-			tab[i][0] = 9 +2;
-			tab[0][i] = 9 +2;
-			tab[plateau.length - 1][i] = 9 +2;
-			tab[i][plateau.length - 1] = 9 +2;		
-		}
-		// plateau interieur
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
+		// set tout a noir
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
 				// 0 pour sable
-				tab[i][j] = 1;
-				plateauGraph.setHighlight(i, j, Color.BLACK);
+				tab[i][j] = 20;
 			}
 		}
 		// Ici on affiche les cases precedemment vus avec a reveler() et brouillardEquipe.
 		// Le tableau qu'on affiche prend les valeurs des cases LORSQU'ELLES ont ete dernierment vus
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
-				if (equipeCourante && brouillardEquipe1[i][j] == 0) {
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
+				if (equipeCourante && brouillardEquipe1[i][j] == 0 && !plateau[i][j].getEstpiegeE2()) {
 						tab[i][j] = tabIconesGraphiqueEquipe1[i][j];
 						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
-				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0) {
+				} else if (!equipeCourante && brouillardEquipe2[i][j] == 0 && !plateau[i][j].getEstpiegeE1()) {
 						tab[i][j] = tabIconesGraphiqueEquipe2[i][j];
 						plateauGraph.setHighlight(i, j, Color.LIGHT_GRAY);
 				}
@@ -362,7 +362,7 @@ public class Ile {
 			}
 		}
 		// affecte la valeur pour le navire de l'equipe courante
-		tab[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y] = plateau[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y].getType() + 2;
+		tab[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y] = (plateau[getPositionNavire(equipeCourante).x][getPositionNavire(equipeCourante).y].getType() + 2);
 		plateauGraph.resetHighlight(getPositionNavire(equipeCourante).x, getPositionNavire(equipeCourante).y);
 		
 		// sauvegarde du tableau dans un tab dedié a l'équipe
@@ -371,8 +371,23 @@ public class Ile {
 		} else {
 			copy(tab, tabIconesGraphiqueEquipe2);
 		}
+		hideAllTraps(tab, equipeCourante);
 		return tab;
 	}
+	
+	public void hideAllTraps(int[][] tab, boolean equipeCourante) {
+		for (int i=1;i<tab[0].length-2;i++) {
+			for (int j=1;j<tab[0].length-2;j++) {
+				 if (equipeCourante && plateau[i][j].getEstpiegeE2() && plateau[i][j].getType() == 14){
+					 tab[i][j] = 1;
+				 }
+				 if (!equipeCourante &&  plateau[i][j].getEstpiegeE1() && plateau[i][j].getType() == 14) {
+					 tab[i][j] = 1;
+				 }
+			} 
+		}
+	}
+	
 	/**
 	 * Affecte les vrais valeurs a tabIconesGraphiques de x-1 à x+1 pour y-1 à y+1.
 	 * Clear le highlight de ces cases
@@ -390,7 +405,14 @@ public class Ile {
 		for (int h = (x-1);h<=(x+1);h++) {
 			for (int k = (y-1);k<=(y+1);k++) {
 				// +2 necessaire pour demarrer le tableau d'img a 0 et non a -1
-				tab[h][k] = ((plateau[h][k].getType())+2);
+				if (equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE2()) {
+					tab[h][k] = 1;
+				} else if (!equipeCourante && plateau[h][k].getType() == 14 && plateau[h][k].getEstpiegeE1()) {
+					tab[h][k] = 1;
+				} else {
+					tab[h][k] = ((plateau[h][k].getType())+2);
+				}
+				
 				plateauGraph.resetHighlight(h, k);
 			
 				if (equipeCourante) {
@@ -437,8 +459,8 @@ public class Ile {
 	 * 
 	 */
 	private void copy(int[][] source, int[][] dest) {
-		for (int i = 1; i < plateau[0].length-1; i++) {
-			for (int j = 1; j < plateau[1].length-1; j++) {
+		for (int i = 0; i < plateau[0].length; i++) {
+			for (int j = 0; j < plateau[1].length; j++) {
 				dest[i][j] = source[i][j];
 			}
 		}
@@ -471,6 +493,27 @@ public class Ile {
 		return null;
 	}
 
+	public boolean placer(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
+		if (estVide(destination)) {
+			if (perso.getSurNavire()) { // Est sur navire
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
+				perso.setSurNavire(false);
+				getNavire(perso.getEquipe1()).retirePerso();
+			} else { // Sur sol
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+				}
+			}
+
+			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
+			perso.setPos(destination.getLocation());
+			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Cette méthode permet de vérifier que le deplacement se fait bien dans une des directions
 	 * possibles selon le Personnage et que c'est dans ses alentours immédiats (x-1/x+1, y-1/y+1)
@@ -482,32 +525,32 @@ public class Ile {
 	 * 
 	 * @return boolean
 	 */
-	public boolean deplacerV2Amorce(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
+	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
 		// Cas thoeriquement valides
-		if (destination.x == posActuel.x+1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		if (destination.x == perso.getPos().x+1 && destination.y == perso.getPos().y) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
-		else if (destination.x == posActuel.x-1 && destination.y == posActuel.y) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.x == perso.getPos().x-1 && destination.y == perso.getPos().y) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
-		else if (destination.y == posActuel.y+1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.y == perso.getPos().y+1 && destination.x == perso.getPos().x) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
-		else if (destination.y == posActuel.y-1 && destination.x == posActuel.x) {
-			return deplacerV2(destination, posActuel, perso, plateauGraph);
+		else if (destination.y == perso.getPos().y-1 && destination.x == perso.getPos().x) {
+			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 		}
 		if (perso instanceof Voleur) {
-			if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y+1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
-			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y+1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y+1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
-			else if ((destination.x == (posActuel.x+1)) && (destination.y == (posActuel.y-1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y-1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
-			else if ((destination.x == (posActuel.x-1)) && (destination.y == (posActuel.y-1))) {
-				return deplacerV2(destination, posActuel, perso, plateauGraph);
+			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y-1))) {
+				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
 			}
 		}
 		return false;
@@ -524,7 +567,7 @@ public class Ile {
 	 * @param perso L'instance du personnage, sert a verifier s'il peut soulever les rochers
 	 * @return boolean si le deplacement est bien valide selon le personnage
 	 */
-	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph) {
+	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
 		plateauGraph.clearConsole();
 		plateauGraph.clearSave();
 		if (estVide(destination)) {
@@ -534,10 +577,32 @@ public class Ile {
 				getNavire(perso.getEquipe1()).retirePerso();
 			} else { // Sur sol
 				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+				}
 			}
+			// il quite apres avoir ete piege (regler si cest lui qui a posé le piege)
+			if ( (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() && perso.getEquipe2() ) 
+					|| (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() && perso.getEquipe1()) ) {
+				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+			}
+			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
 			perso.perdEnergie(1);
+			perso.reduirePointsMouvement(1);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+		} else if (estPiege(destination, perso)) {
+			plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+			perso.perdEnergie(5);
+			System.out.println("il s'est fait piégé");
+			plateauGraph.println("Il s'est fait piégé !");
+			plateauGraph.save();
+			plateau[destination.x][destination.y].setType(perso.getType());
+			perso.setPos(destination);
+			perso.setEstPiege(true);
+			perso.setNumTourPiege(2);
 		} else if (estRocher(destination)) {
 			if (perso instanceof Explorateur) {
 				if (estCoffre(destination)) {
@@ -547,6 +612,11 @@ public class Ile {
 					plateau[destination.x][destination.y].setType(7); // on revele le coffre
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
+						plateauGraph.refreshCase(destination, 7);
+						plateauGraph.waitEvent(600, false);
+						plateauGraph.refreshCase(destination, 17);
+						plateauGraph.waitEvent(600, false);
+						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.save();
@@ -555,9 +625,12 @@ public class Ile {
 					}
 				} else if (estCle(destination)) {
 					System.out.println("Peut soulever le rocher et il y a la cle en dessous");
-					plateauGraph.println("Peut soulever le rocher et il y a la cle en dessous");
+					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
 					plateauGraph.save();
-					plateau[destination.x][destination.y].setType(8);
+					plateauGraph.refreshCase(destination, 8);
+					plateauGraph.waitEvent(750, false);
+					plateau[destination.x][destination.y].setType(15);
+					clef.setPosition(new Position(-1,-1));
 					perso.setDetientClef(true);
 				} else {
 					System.out.println("Souleve le rocher et il n'a rien");
@@ -602,8 +675,16 @@ public class Ile {
 				perso.setPos(destination.getLocation());
 				perso.perdEnergie(1);
 				perso.setSurNavire(true);
+				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+				}
 			}
 		} else {
+			System.out.println("le type est " + plateau[destination.x][destination.y].getType());
+			System.out.println("piege e1 = " + plateau[destination.x][destination.y].getEstpiegeE1());
+			System.out.println("piege e2 = " + plateau[destination.x][destination.y].getEstpiegeE2());
 			System.out.println("Ne peut pas se deplacer ici");
 			plateauGraph.println("Ne peut pas se deplacer ici");
 			plateauGraph.save();
@@ -613,29 +694,25 @@ public class Ile {
 	}
 	/**
 	 * Met à jour l'affichage de l'énergie sur le Plateau
+	 * et prévient de la mort imminente d'un personnage
 	 * 
 	 * @param tourEquipe permet de savoir pour quels équipe afficher les énergies
 	 * @param equipe1 liste des personnages de l'équipe 1
 	 * @param equipe2 liste des personnages de l'équipe 2
 	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
 	 */
-	public void updateEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
+	public void updateEnergie(List<Personnage> tempEquipe, Plateau plateauGraph) {
 		Personnage temp;
 		plateauGraph.clearText();
 		for (int x=1;x<plateau[0].length-1;x++) {
 			for (int y=1;y<plateau[1].length-1;y++) {
-				if (tourEquipe) {
-					for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
-						temp = perso.next();
-						if (temp.getPos().equals(new Point(x,y))) {
-							plateauGraph.setText(x, y, "" + temp.getEnergie());
-						}
-					}
-				} else {
-					for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
-						temp = perso.next();
-						if (temp.getPos().equals(new Point(x,y))) {
-							plateauGraph.setText(x, y, "" + temp.getEnergie());
+				for (Iterator<Personnage> perso = tempEquipe.iterator();perso.hasNext();) {
+					temp = perso.next();
+					if (temp.getPos().equals(new Point(x,y))) {
+						plateauGraph.setText(x, y, "" + temp.getEnergie());
+						if (temp.getEnergie() <= 0) {
+							plateauGraph.println("Le personnage n'a plus d'énergie. Il va mourir");
+							plateauGraph.save();
 						}
 					}
 				}
@@ -651,54 +728,52 @@ public class Ile {
 	 * @param equipe2 liste des personnages de l'équipe 2
 	 * @param plateauGraph le Plateau sur lequelle on travaille, affiche
 	 */
-	public void bonusEnergie(boolean tourEquipe, List<Personnage> equipe1, List<Personnage> equipe2, Plateau plateauGraph) {
+	public void bonusEnergie(List<Personnage> tempEquipe, Plateau plateauGraph) {
 		Personnage temp;
-		if (tourEquipe) {
-			for (Iterator<Personnage> perso = equipe1.iterator();perso.hasNext();) {
-				temp = perso.next();
-				if (temp.getSurNavire()) {
-					if (temp.getEnergie()<90) {
-						temp.setEnergie(temp.getEnergie() + 10);
-					} else {
-						temp.setEnergie(100);
-					}
+		for (Iterator<Personnage> perso = tempEquipe.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (temp.getSurNavire()) {
+				if (temp.getEnergie()<90) {
+					temp.setEnergie(temp.getEnergie() + 10);
+				} else {
+					temp.setEnergie(100);
 				}
 			}
-		} else {
-			for (Iterator<Personnage> perso = equipe2.iterator();perso.hasNext();) {
-				temp = perso.next();
-				if (temp.getSurNavire()) {
-					if (temp.getEnergie()<90) {
-						temp.setEnergie(temp.getEnergie() + 10);
-					} else {
-						temp.setEnergie(100);
-					}
+		}
+	}
+	/**
+	 * On retire les personnages n'ayant plus d'énergie
+	 * @param tourEquipe si c'est au tour de l'équipe 1
+	 * @param equipe1 la liste des personnages de l'équipe 1
+	 * @param equipe2 la liste des personnages de l'équipe 2
+	 */
+	public void retirerMorts(List<Personnage> tempEquipe) {
+		Personnage tempPerso;
+		for (int i=0; i<tempEquipe.size();i++) {
+			tempPerso = tempEquipe.get(i);
+			if (tempPerso.getEnergie() <= 0) {
+				System.out.println(tempPerso.getNom() + " est mort");
+				if (tempPerso.getDetientClef() && !tempPerso.getDetientTresor()) {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(8);
+				} else if (tempPerso.getDetientTresor()) {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
+				} else {
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(-1);
 				}
+				tempEquipe.remove(i);
 			}
 		}
 	}
 	
-	/**
-	 * On balaie l'entourage du voleur. Si il y a une personnage de l'éequipe adverse
-	 * on peut faire une tentative de vol.
-	 * @param perso pour connaitre sa position
-	 * @return si tentative possible
-	 */
-	public boolean tenterVol(Personnage perso) {
-		if (perso.getType() == 1 || perso.getType() == 4) {
-			for (int i=perso.getPos().x-1;i<=perso.getPos().x+1;i++) {
-				for (int j=perso.getPos().y-1;j<=perso.getPos().y+1;j++) {
-					if ( (plateau[i][j].getEquipe1() && perso.getEquipe2()) || (plateau[i][j].getEquipe2() && perso.getEquipe1()) ) {
-						System.out.println("alentour equipe 1 " + plateau[i][j].getEquipe1());
-						System.out.println("voleur equipe 1 " + perso.getEquipe1());
-						return true;
-					}
-				}
-			}
+	
+	public boolean estPiege(Position dest, Personnage perso) {
+		if (perso.getEquipe1()) {
+			return  plateau[dest.x][dest.y].getEstpiegeE2();
+		} else {
+			return  plateau[dest.x][dest.y].getEstpiegeE1();
 		}
-		System.out.println("il peut PAS voler");
-		return false;
 	}
+	
 	
 	/**
 	 * Permet de savoir si la position est inoccupé
@@ -753,8 +828,11 @@ public class Ile {
 		return navireEquipe2;
 	}
 	
-
-
-	
-
+	/**
+	 * Retourne le plateau
+	 * @return plateau
+	 */
+	public Parcelle[][] getPlateau() {
+		return this.plateau;
+	}
 }
