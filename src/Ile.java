@@ -156,6 +156,7 @@ public class Ile {
 				}
 			}
 		}
+		/*
 		// NOURRITURE
 		// on ajoute une nourriture random
 		int xNourriture = r.nextInt(plateau.length - 2) + 1;
@@ -170,7 +171,7 @@ public class Ile {
 		if(plateau[xS][yS].getType() == -1) {
 			plateau[xS][yS].setType(20);
 		}
-		
+		*/
 	}
 
 	/**
