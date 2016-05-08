@@ -495,11 +495,12 @@ public class Map {
 						personnnageSelectionne.setAJoue(deplacementValide);
 					}
 					plateauGraph.refreshPersoPanel(plateauGraph.getPersoPrecis());
+					plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
+					plateau.retirerMorts(tempEquipe.getListe());
 					plateauGraph.setFaitAction(false);
 					deplacementValide = false;
 					choixDeplacementPosition.setLocation(-1, -1);
 					plateauGraph.setDirectionDeplacement(new Position(-1, -1));
-					plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
 					System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 					refresh(plateau, plateauGraph, jeu.getTourEquipe1(), jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 				}
@@ -519,7 +520,7 @@ public class Map {
 						tempEquipe.finPiege();
 					}
 				}
-				plateau.actualiserMort(tempEquipe.getListe());
+				plateau.retirerMorts(tempEquipe.getListe());
 
 				if (!plateauGraph.getAnnulerChoix() && (tempEquipe.finTour() || plateauGraph.getPasser())) {
 					jeu.nextRound();
@@ -656,10 +657,9 @@ public class Map {
 				}
 			}
 			System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
-			plateau.actualiserMort(tempEquipe.getListe());
+			plateau.retirerMorts(tempEquipe.getListe());
 			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
 			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 250, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
-			plateau.retirerMorts(tempEquipe.getListe());
 		}
 	}
 

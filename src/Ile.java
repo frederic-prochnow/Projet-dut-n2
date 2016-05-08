@@ -721,7 +721,7 @@ public class Ile {
 				}
 				perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 				perso.setPos(destination.getLocation());
-				perso.perdEnergie(25);
+				perso.perdEnergie(1);
 				perso.reduirePointsMouvement(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			} else if (estPiege(destination, perso)) {
@@ -844,6 +844,14 @@ public class Ile {
 						if (temp.getEnergie() <= 0) {
 							plateauGraph.println("Le personnage n'a plus d'énergie. Il va mourir");
 							plateauGraph.save();
+							temp.setPointsMouvement(0);
+							if (temp.getDetientClef() && !temp.getDetientTresor()) {
+								plateau[temp.getPos().x][temp.getPos().y].setType(8);
+							} else if (temp.getDetientTresor()) {
+								plateau[temp.getPos().x][temp.getPos().y].setType(7);
+							} else {
+								plateau[temp.getPos().x][temp.getPos().y].setType(21);
+							}
 						}
 					}
 				}
@@ -878,28 +886,12 @@ public class Ile {
 	 * @param equipe1 la liste des personnages de l'équipe 1
 	 * @param equipe2 la liste des personnages de l'équipe 2
 	 */
-	public void actualiserMort(List<Personnage> tempEquipe) {
-		Personnage tempPerso;
-		for (int i=0; i<tempEquipe.size();i++) {
-			tempPerso = tempEquipe.get(i);
-			if (tempPerso.getEnergie() <= 0) {
-				System.out.println(tempPerso.getNom() + " est mort");
-				if (tempPerso.getDetientClef() && !tempPerso.getDetientTresor()) {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(8);
-				} else if (tempPerso.getDetientTresor()) {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
-				} else {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(21);
-				}
-			}
-		}
-	}
-	
 	public void retirerMorts(List<Personnage> tempEquipe) {
 		Personnage tempPerso;
 		for (int i=0; i<tempEquipe.size();i++) {
 			tempPerso = tempEquipe.get(i);
 			if (tempPerso.getEnergie() <= 0) {
+				System.out.println(tempPerso.getNom() + " est mort");
 				tempEquipe.remove(i);
 			}
 		}

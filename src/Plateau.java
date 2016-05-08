@@ -963,29 +963,31 @@ public class Plateau {
 		listeBoutons.get(listeBoutons.size()-1).setBackground(sable);
 		
 		// si on peut encore selectionner des persos
-		if (selectionListe < nbPersos-1) {
-			persoPrecis++;
-			selectionListe++;
-			listeBoutons.get(selectionListe).setBackground(Color.GREEN);
-
-		// si on est au dernier bouton de persos ou plus que le dernier bouton de persos et qu'il reste encore des boutos
-		} else if (selectionListe >= nbPersos-1 && selectionListe < listeBoutons.size()-1) {
-			selectionListe++;
-			listeBoutons.get(selectionListe).setBackground(Color.GREEN);
-		// si on est au dernier = annuler
-		} else if (selectionListe == listeBoutons.size()-1){
-			selectionListe = 0;
-			persoPrecis = 0;
-			listeBoutons.get(selectionListe).setBackground(Color.GREEN);
-		// cas de secours : on remet a zéro
-		} else {
-			persoPrecis = 0;
-			selectionListe = 0;
-			listeBoutons.get(selectionListe).setBackground(Color.GREEN);
-		}
-		if (!confirmeSelection && !confirmeSelectionPane) {
-			tempPersoSelectionne = listePersos.get(persoPrecis);
-			refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
+		if (nbPersos>0) {
+			if (selectionListe < nbPersos-1) {
+				persoPrecis++;
+				selectionListe++;
+				listeBoutons.get(selectionListe).setBackground(Color.GREEN);
+	
+			// si on est au dernier bouton de persos ou plus que le dernier bouton de persos et qu'il reste encore des boutos
+			} else if (selectionListe >= nbPersos-1 && selectionListe < listeBoutons.size()-1) {
+				selectionListe++;
+				listeBoutons.get(selectionListe).setBackground(Color.GREEN);
+			// si on est au dernier = annuler
+			} else if (selectionListe == listeBoutons.size()-1){
+				selectionListe = 0;
+				persoPrecis = 0;
+				listeBoutons.get(selectionListe).setBackground(Color.GREEN);
+			// cas de secours : on remet a zéro
+			} else {
+				persoPrecis = 0;
+				selectionListe = 0;
+				listeBoutons.get(selectionListe).setBackground(Color.GREEN);
+			}
+			if (!confirmeSelection && !confirmeSelectionPane) {
+				tempPersoSelectionne = listePersos.get(persoPrecis);
+				refreshCaseHighlight(tempPersoSelectionne.getPos(), Color.CYAN);
+			}
 		}
 	}
 	
