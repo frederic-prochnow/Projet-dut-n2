@@ -596,19 +596,19 @@ public class Ile {
 		boolean gauche, droite, haut, bas;
 		gauche = droite = haut = bas = false;
 
-		gauche = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y), perso, plateauGraph, true);
-		droite = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y), perso, plateauGraph, true);
-		haut = deplacerV2(new Position(perso.getPos().x, perso.getPos().y-1), perso, plateauGraph, true);
-		bas = deplacerV2(new Position(perso.getPos().x, perso.getPos().y+1), perso, plateauGraph, true);
+		gauche = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y)), perso, plateauGraph, true);
+		droite = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y)), perso, plateauGraph, true);
+		haut = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y-1)), perso, plateauGraph, true);
+		bas = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y+1)), perso, plateauGraph, true);
 		
 		if (perso instanceof Voleur) {
 			boolean ne, nw, se, sw;
 			ne = nw = se = sw = false;
 			
-			ne = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y-1), perso, plateauGraph, true);
-			nw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y-1), perso, plateauGraph, true);
-			se = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y+1), perso, plateauGraph, true);
-			sw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y+1), perso, plateauGraph, true);
+			ne = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y-1)), perso, plateauGraph, true);
+			nw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y-1)), perso, plateauGraph, true);
+			se = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y+1)), perso, plateauGraph, true);
+			sw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y+1)), perso, plateauGraph, true);
 			
 			return gauche || droite || haut || bas || ne || nw || se || sw;
 		}
@@ -626,39 +626,47 @@ public class Ile {
 		boolean gauche, droite, haut, bas;
 		gauche = droite = haut = bas = false;
 
-		gauche = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y), perso, plateauGraph, true);
-		droite = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y), perso, plateauGraph, true);
-		haut = deplacerV2(new Position(perso.getPos().x, perso.getPos().y-1), perso, plateauGraph, true);
-		bas = deplacerV2(new Position(perso.getPos().x, perso.getPos().y+1), perso, plateauGraph, true);
+		gauche = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y)), perso, plateauGraph, true);
+		droite = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y)), perso, plateauGraph, true);
+		haut = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y-1)), perso, plateauGraph, true);
+		bas = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y+1)), perso, plateauGraph, true);
 		
 		if (perso instanceof Voleur) {
 			boolean ne, nw, se, sw;
 			ne = nw = se = sw = false;
 			
-			ne = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y-1), perso, plateauGraph, true);
-			nw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y-1), perso, plateauGraph, true);
-			se = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y+1), perso, plateauGraph, true);
-			sw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y+1), perso, plateauGraph, true);
+			ne = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y-1)), perso, plateauGraph, true);
+			nw = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y-1)), perso, plateauGraph, true);
+			se = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y+1)), perso, plateauGraph, true);
+			sw = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y+1)), perso, plateauGraph, true);
 			
-			if (ne) {
-				return new Position(perso.getPos().x-1, perso.getPos().y-1);
+			if (gauche) {
+				return new Position((perso.getPos().x-1), (perso.getPos().y));
+			} else if (droite) {
+				return new Position((perso.getPos().x+1), (perso.getPos().y));
+			} else if (haut) {
+				return new Position((perso.getPos().x), (perso.getPos().y-1));
+			} else if (bas) {
+				return new Position((perso.getPos().x), (perso.getPos().y+1));
+			} else if (ne) {
+				return new Position((perso.getPos().x+1), (perso.getPos().y-1));
 			} else if (nw) {
-				return new Position(perso.getPos().x+1, perso.getPos().y-1);
+				return new Position((perso.getPos().x-1), (perso.getPos().y-1));
 			} else if (se) {
-				return new Position(perso.getPos().x-1, perso.getPos().y+1);
+				return new Position((perso.getPos().x+1), (perso.getPos().y+1));
 			} else if (sw) {
-				return new Position(perso.getPos().x+1, perso.getPos().y+1);
+				return new Position((perso.getPos().x-1), (perso.getPos().y+1));
 			}
 		}
 		
 		if (gauche) {
-			return new Position(perso.getPos().x-1, perso.getPos().y);
+			return new Position((perso.getPos().x-1), (perso.getPos().y));
 		} else if (droite) {
-			return new Position(perso.getPos().x-1, perso.getPos().y);
+			return new Position((perso.getPos().x+1), (perso.getPos().y));
 		} else if (haut) {
-			return new Position(perso.getPos().x-1, perso.getPos().y);
+			return new Position((perso.getPos().x), (perso.getPos().y-1));
 		} else if (bas) {
-			return new Position(perso.getPos().x-1, perso.getPos().y);
+			return new Position((perso.getPos().x), (perso.getPos().y+1));
 		}
 		
 		return new Position(-1, -1);
@@ -681,19 +689,14 @@ public class Ile {
 		
 		if (testDeplacement) {
 			if (estVide(destination)) {
-				System.out.println("empty");
 				return true;
 			} else if (estRocher(destination) && perso instanceof Explorateur) {
-				System.out.println("rock");
 				return true;
 			} else if (plateau[destination.x][destination.y].getType() == 7 && !coffre.getEstOuvert() && perso.getDetientClef()) {
-				System.out.println("rock");
 				return true;
 			} else if (plateau[destination.x][destination.y].getType() == 7 && coffre.getEstOuvert() && !coffre.getEstVide()) {
-				System.out.println("rock");
 				return true;
 			} else if (estSonNavire(destination, perso.getEquipe1()) && !getNavire(perso.getEquipe1()).getPlateauVide()) {
-				System.out.println("rock");
 				return true;
 			} else {
 				return false;
@@ -819,7 +822,7 @@ public class Ile {
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 	/**
 	 * Met à jour l'affichage de l'énergie sur le Plateau

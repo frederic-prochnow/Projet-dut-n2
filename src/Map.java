@@ -606,6 +606,7 @@ public class Map {
 
 			deplacementValide = false;
 			theorique.setLocation(-1, -1);
+			essaisDeplacements = 0;
 			
 			do {
 				nSelection = r.nextInt(equipe2.getListe().size());
@@ -639,17 +640,19 @@ public class Map {
 				essaisDeplacements++;
 				// Si le personnage a tenté de se déplacer 4 fois sans succès on choisit un autre personnage
 				if (essaisDeplacements > 3 && !deplacementValide) {
-					theorique = plateau.deplacementTheorique(persoChoisi, plateauGraph);
+					theorique.setLocation(plateau.deplacementTheorique(persoChoisi, plateauGraph));
 					if (!theorique.getNulle()) {
-						System.out.println("4 essais au hasard echoués, deplacement théorique effectué " + theorique);
 						deplacementValide = plateau.deplacerV2Amorce(theorique, persoChoisi, plateauGraph, false);
+					} else {
+						// le deplacemnt de l'équipe est possiblemais pour ce personnage ce ne l'est pas
+						deplacementValide = true;
 					}
 				}
 			}
 			System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
 			plateau.retirerMorts(tempEquipe.getListe());
 			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
-			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 2000, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
+			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 1000, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 		}
 	}
 
