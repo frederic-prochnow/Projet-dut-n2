@@ -161,14 +161,14 @@ public class Ile {
 		int xNourriture = r.nextInt(plateau.length - 2) + 1;
 		int yNourriture =  r.nextInt(plateau.length - 2) + 1;
 		if(plateau[xNourriture][yNourriture].getType() == -1) {
-			plateau[xNourriture][yNourriture].setType(18);
+			plateau[xNourriture][yNourriture].setType(19);
 		}
 		// SERPENT
 		// on ajoute une nourriture random
 		int xS = r.nextInt(plateau.length - 2) + 1;
 		int yS =  r.nextInt(plateau.length - 2) + 1;
 		if(plateau[xS][yS].getType() == -1) {
-			plateau[xS][yS].setType(18);
+			plateau[xS][yS].setType(20);
 		}
 		
 	}
@@ -777,7 +777,7 @@ public class Ile {
 				} else if (tempPerso.getDetientTresor()) {
 					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
 				} else {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(20);
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(21);
 				}
 				tempEquipe.remove(i);
 			}

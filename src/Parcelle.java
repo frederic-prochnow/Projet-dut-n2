@@ -163,9 +163,10 @@ public class Parcelle {
 		else if (type == 15) {return "D";}  // cle prise
 		else if (type == 16) {return "Co";} // coffre ouvert
 		else if (type == 17) {return "Ct";} // cofrre ouvert avec tresor
-		else if (type == 18) {return "Nt";} // nourriture
-		else if (type == 19) {return "S";} // serpent
-		else if (type == 20) {return "Tm";} // tombe
+		else if (type == 18) {return "b";} //black
+		else if (type == 19) {return "Nt";} // nourriture
+		else if (type == 20) {return "S";} // serpent
+		else if (type == 21) {return "Tm";} // tombe
 		else  { return "";}
 	} 
 	
