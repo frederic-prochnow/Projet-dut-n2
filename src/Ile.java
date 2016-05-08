@@ -26,6 +26,7 @@ public class Ile {
 	private Clef clef;
 	private Navire navireEquipe1;
 	private Navire navireEquipe2;
+	private Nourriture nourriture;
 
 	/**
 	 * Constructeur de la classe sans parametres
@@ -155,6 +156,21 @@ public class Ile {
 				}
 			}
 		}
+		// NOURRITURE
+		// on ajoute une nourriture random
+		int xNourriture = r.nextInt(plateau.length - 2) + 1;
+		int yNourriture =  r.nextInt(plateau.length - 2) + 1;
+		if(plateau[xNourriture][yNourriture].getType() == -1) {
+			plateau[xNourriture][yNourriture].setType(18);
+		}
+		// SERPENT
+		// on ajoute une nourriture random
+		int xS = r.nextInt(plateau.length - 2) + 1;
+		int yS =  r.nextInt(plateau.length - 2) + 1;
+		if(plateau[xS][yS].getType() == -1) {
+			plateau[xS][yS].setType(18);
+		}
+		
 	}
 
 	/**
@@ -439,6 +455,8 @@ public class Ile {
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
 	 * Le "tag" est la position ancienne d'un des personnages vu par l'autre equipe
 	 * par l'intermédiaire du type dans Parcelle[][]
 	 * Retire le vieux tag dans le tab
@@ -467,6 +485,7 @@ public class Ile {
 	}
 	
 	/**
+>>>>>>> d22f2fdd2e2093bf9de577311179c6431fa60d37
 	 * Fonction de recuperation de la taille du plateau
 	 * 
 	 * @return int
@@ -758,7 +777,7 @@ public class Ile {
 				} else if (tempPerso.getDetientTresor()) {
 					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
 				} else {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(19);
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(20);
 				}
 				tempEquipe.remove(i);
 			}

@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,8 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import jdk.nashorn.internal.scripts.JS;
 /**
  * Class Menu
  * Gestion du menu de demarrage du jeu
@@ -123,7 +123,7 @@ public class Menu {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// tout le plateau doit etre visible à l'écran, on limite alors sa taille
 		// 50 par case, -3 car la console prend la hauteur de 3 cases
-		maxHeight = (int) (screenSize.getHeight()/32) -6;
+		maxHeight = (int) (screenSize.getHeight()/32) -3;
 		
 		tailleLabel = new JLabel("Taile de l'île ? (max: " + maxHeight + ") ");
 		tailleField = new JTextField();
@@ -339,8 +339,9 @@ public class Menu {
 			} else if ("valider".equals(e.getActionCommand())) {
 				valider();
 			} else if ("rapide".equals(e.getActionCommand())){
-				tailleField.setText("15");
-				rochersField.setText("15");
+				Random r = new Random();
+				tailleField.setText("" +(r.nextInt(maxHeight-10)+10));
+				rochersField.setText("" + (r.nextInt(40)+1));
 				for (int i = 0; i<input.length;i++) {
 					input[i].setText("1");
 				}

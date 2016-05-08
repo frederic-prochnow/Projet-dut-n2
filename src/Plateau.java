@@ -6,8 +6,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -532,6 +530,7 @@ public class Plateau {
 		selectionPane.removeAll();
 		listePanels.clear();
 		descPerso.clear();
+
 		for (int i=0;i<selection.size();i++) {
 			ImageIcon image = new ImageIcon(Plateau.class.getResource(selection.get(i).getCheminImage()));
 			
@@ -590,7 +589,6 @@ public class Plateau {
 		listePanels.get(numPersoPanel).add(Box.createRigidArea(new Dimension(20, listePanels.get(numPersoPanel).getHeight())));
 		listePanels.get(numPersoPanel).add(descPerso.get(numPersoPanel));
 		listePanels.get(numPersoPanel).setAlignmentX(Component.LEFT_ALIGNMENT);
-		
 	}
 	
 		

@@ -1,6 +1,7 @@
 # Treasure Hunt
 
 ### Version avec la souris
+<<<<<<< HEAD
 
  * #### (2/3) Jeu avec le clavier :
    ###### Déja fait :
@@ -33,11 +34,19 @@
  
 
  * #### Contrôle des niveaux d'énergie.
+=======
+ 
+ * Choix du nombre de personnages dans le menu. Chaque personnage est associé à un élément dans
+ un tableau (ex: JButton[])
+ 
+ * Contrôle des niveaux d'énergie.
+>>>>>>> d22f2fdd2e2093bf9de577311179c6431fa60d37
  * * Visualisation de l'énergie sur le plateau
  * * Mise à jour de l'énergie lorsqu'un personnage est resté sur son navire
  * * Séléction du personnage impossible lorsque son énergie == 0
 
 
+<<<<<<< HEAD
  * #### (3/3) Brouillard de guerre :
  * * sauvegarde les positions deja vus et visualisation des positions pas encore decouverts.
 
@@ -46,3 +55,12 @@
    Attenion : s'il se déplace pendant son tour, alors quand cela revient
  a notre tour, on n'aura pas un tag car on peut actuellement voir où il était. C'est au joueur de retenir
  s'il quelqu'un a disparu entre temps.
+=======
+ * (3/3) Brouillard de guerre, sauvegarde les positions deja vus et visualisation
+ des positions pas encore decouverts.
+
+ * (2/2) mise à jour de la case du plateau où on a dernierement vu un personnage si on le rencontre
+ de nouveau sur une autre case. Attenion : s'il se déplace pendant son tour, alors quand cela revient
+ a notre tour, on n'aura pas un tag car on peut actuellement voir où il était. C'est au joueur de retenir
+ s'il quelqu'un a disparu entre temps.
+>>>>>>> d22f2fdd2e2093bf9de577311179c6431fa60d37
