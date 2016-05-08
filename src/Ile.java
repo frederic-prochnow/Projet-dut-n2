@@ -590,7 +590,7 @@ public class Ile {
 			}
 			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 			perso.setPos(destination.getLocation());
-			perso.perdEnergie(1);
+			perso.perdEnergie(100);
 			perso.reduirePointsMouvement(1);
 			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 		} else if (estPiege(destination, perso)) {
@@ -758,7 +758,7 @@ public class Ile {
 				} else if (tempPerso.getDetientTresor()) {
 					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(7);
 				} else {
-					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(-1);
+					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(19);
 				}
 				tempEquipe.remove(i);
 			}
