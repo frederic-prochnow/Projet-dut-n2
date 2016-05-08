@@ -391,4 +391,15 @@ public class Personnage {
 		this.directionDeplacement.setLocation(p);
 	}
 	
+	public boolean dejaVuRocher(Position rocher) {
+		Position temp;
+		for (Iterator<Position> pos = rochersVus.iterator();pos.hasNext();) {
+			temp = pos.next();
+			if (rocher.equals(temp)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

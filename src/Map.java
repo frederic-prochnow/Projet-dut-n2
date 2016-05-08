@@ -519,7 +519,7 @@ public class Map {
 						tempEquipe.finPiege();
 					}
 				}
-				plateau.retirerMorts(tempEquipe.getListe());
+				plateau.actualiserMort(tempEquipe.getListe());
 
 				if (!plateauGraph.getAnnulerChoix() && (tempEquipe.finTour() || plateauGraph.getPasser())) {
 					jeu.nextRound();
@@ -600,19 +600,19 @@ public class Map {
 		int xOuY = -1;
 		int deplacement = -1;
 		int essaisDeplacements = 0;
-		Position theorique = new Position(-1,-1);
+		Position theorique = new Position(-1, -1);
 
-		while (!equipe2.finTour() && equipe2.mouvementPossible(plateau, plateauGraph)) {			
+		while (!equipe2.finTour() && equipe2.mouvementPossible(plateau, plateauGraph)) {
 
 			deplacementValide = false;
 			theorique.setLocation(-1, -1);
 			essaisDeplacements = 0;
-			
+
 			do {
 				nSelection = r.nextInt(equipe2.getListe().size());
 				persoChoisi = equipe2.getListe().get(nSelection);
-			} while (persoChoisi.finMouvement() && plateau.deplacementPossible(persoChoisi, plateauGraph));
-			
+			} while (persoChoisi.finMouvement() || !plateau.deplacementPossible(persoChoisi, plateauGraph));
+
 			System.out.println(persoChoisi);
 			deplacementPos = new Position(persoChoisi.getPos());
 
@@ -623,16 +623,22 @@ public class Map {
 					deplacement = (r.nextInt(2) * 2) - 1; // Soit -1 ou 1
 					if (xOuY == 0) {
 						deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(deplacement, 0)));
-						deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+						if (!persoChoisi.dejaVuRocher(deplacementPos)) {
+							deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+						}
 					} else {
 						deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(0, deplacement)));
-						deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+						if (!persoChoisi.dejaVuRocher(deplacementPos)) {
+							deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+						}
 					}
 					if (!deplacementValide) {
 						deplacementPos.setLocation(persoChoisi.getPos());
 					}
 				} else {
-					deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()), persoChoisi, plateauGraph, false);
+					if (!persoChoisi.dejaVuRocher(deplacementPos)) {
+						deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()), persoChoisi, plateauGraph, false);
+					}
 					if (deplacementValide) {
 						System.out.println("s'est deplace dans la mm direction : " + persoChoisi.getDirectionDeplacement());
 					}
@@ -641,7 +647,7 @@ public class Map {
 				// Si le personnage a tenté de se déplacer 4 fois sans succès on choisit un autre personnage
 				if (essaisDeplacements > 3 && !deplacementValide) {
 					theorique.setLocation(plateau.deplacementTheorique(persoChoisi, plateauGraph));
-					if (!theorique.getNulle()) {
+					if (!theorique.getNulle() && !persoChoisi.dejaVuRocher(deplacementPos)) {
 						deplacementValide = plateau.deplacerV2Amorce(theorique, persoChoisi, plateauGraph, false);
 					} else {
 						// le deplacemnt de l'équipe est possiblemais pour ce personnage ce ne l'est pas
@@ -650,9 +656,10 @@ public class Map {
 				}
 			}
 			System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
-			plateau.retirerMorts(tempEquipe.getListe());
+			plateau.actualiserMort(tempEquipe.getListe());
 			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
-			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 1000, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
+			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 250, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
+			plateau.retirerMorts(tempEquipe.getListe());
 		}
 	}
 

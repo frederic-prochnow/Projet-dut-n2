@@ -488,7 +488,6 @@ public class Ile {
 	}
 	
 	/**
->>>>>>> d22f2fdd2e2093bf9de577311179c6431fa60d37
 	 * Fonction de recuperation de la taille du plateau
 	 * 
 	 * @return int
@@ -596,19 +595,19 @@ public class Ile {
 		boolean gauche, droite, haut, bas;
 		gauche = droite = haut = bas = false;
 
-		gauche = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y)), perso, plateauGraph, true);
-		droite = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y)), perso, plateauGraph, true);
-		haut = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y-1)), perso, plateauGraph, true);
-		bas = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y+1)), perso, plateauGraph, true);
+		gauche = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x-1), (perso.getPos().y)));
+		droite = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x+1), (perso.getPos().y)));
+		haut = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y-1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x), (perso.getPos().y-1)));
+		bas = deplacerV2(new Position((perso.getPos().x), (perso.getPos().y+1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x), (perso.getPos().y+1)));
 		
 		if (perso instanceof Voleur) {
 			boolean ne, nw, se, sw;
 			ne = nw = se = sw = false;
 			
-			ne = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y-1)), perso, plateauGraph, true);
-			nw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y-1)), perso, plateauGraph, true);
-			se = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y+1)), perso, plateauGraph, true);
-			sw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y+1)), perso, plateauGraph, true);
+			ne = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y-1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x-1), (perso.getPos().y-1)));
+			nw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y-1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x+1), (perso.getPos().y-1)));
+			se = deplacerV2(new Position((perso.getPos().x-1), (perso.getPos().y+1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x-1), (perso.getPos().y+1)));
+			sw = deplacerV2(new Position((perso.getPos().x+1), (perso.getPos().y+1)), perso, plateauGraph, true) && !perso.getRochersVus().contains(new Position((perso.getPos().x+1), (perso.getPos().y+1)));
 			
 			return gauche || droite || haut || bas || ne || nw || se || sw;
 		}
@@ -722,7 +721,7 @@ public class Ile {
 				}
 				perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
 				perso.setPos(destination.getLocation());
-				perso.perdEnergie(1);
+				perso.perdEnergie(25);
 				perso.reduirePointsMouvement(1);
 				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
 			} else if (estPiege(destination, perso)) {
@@ -879,7 +878,7 @@ public class Ile {
 	 * @param equipe1 la liste des personnages de l'équipe 1
 	 * @param equipe2 la liste des personnages de l'équipe 2
 	 */
-	public void retirerMorts(List<Personnage> tempEquipe) {
+	public void actualiserMort(List<Personnage> tempEquipe) {
 		Personnage tempPerso;
 		for (int i=0; i<tempEquipe.size();i++) {
 			tempPerso = tempEquipe.get(i);
@@ -892,6 +891,15 @@ public class Ile {
 				} else {
 					plateau[tempPerso.getPos().x][tempPerso.getPos().y].setType(21);
 				}
+			}
+		}
+	}
+	
+	public void retirerMorts(List<Personnage> tempEquipe) {
+		Personnage tempPerso;
+		for (int i=0; i<tempEquipe.size();i++) {
+			tempPerso = tempEquipe.get(i);
+			if (tempPerso.getEnergie() <= 0) {
 				tempEquipe.remove(i);
 			}
 		}
