@@ -2,6 +2,10 @@
  * Importation
  */
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Class Personnage
  * Gestion des personnages
@@ -30,6 +34,7 @@ public class Personnage {
 	private int maxPointsMouvement;
 	private int pointsMouvement;
 	private boolean finPlacement;
+	private List<Position> rochersVus;
 
 	public boolean getFinPlacement() {
 		return finPlacement;
@@ -129,6 +134,7 @@ public class Personnage {
 		this.pos = p;
 		this.dernierTag = new Position(-1, -1);
 		this.directionDeplacement = new Position(-1,-1);
+		rochersVus = new ArrayList<>();
 		
 		if(equipe1){
 			this.symboleNom = nom.charAt(0);
@@ -137,6 +143,10 @@ public class Personnage {
 		}
 	}
 	
+	public List<Position> getRochersVus() {
+		return rochersVus;
+	}
+
 	/**
 	 * @return the maxPointsMouvement
 	 */
@@ -333,9 +343,9 @@ public class Personnage {
 	 */
 	public String toString(){
 		if (equipe1) {
-			return nom+" de l'équipe 1 possede "+energie+" points d'energie et " + pointsMouvement + " PM" ;
+			return nom+" : Equipe 1 Pts Energie : "+energie+ " PM : " + pointsMouvement + " Position : " + pos ;
 		}
-		return nom+" de l'équipe 2 possede "+energie+" points d'energiee et " + pointsMouvement + " PM";
+		return nom+" : Equipe 2 Pts Energie : "+energie+ " PM : " + pointsMouvement + " Position : " + pos ;
 	}
 	
 	Object[] actionsSimples = { "haut", "bas", "gauche", "droite" };
@@ -380,5 +390,5 @@ public class Personnage {
 	public void setDirectionDeplacement(Position p) {
 		this.directionDeplacement.setLocation(p);
 	}
-
+	
 }

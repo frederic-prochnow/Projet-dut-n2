@@ -486,7 +486,7 @@ public class Map {
 							}
 							// deplacement a partir de choixDeplacementPosition
 							if (!choixDeplacementPosition.getNulle()) {
-								deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph, jeu.getTourEquipe1());
+								deplacementValide = plateau.deplacerV2Amorce(choixDeplacementPosition, personnnageSelectionne, plateauGraph, false);
 								plateauGraph.setFaitAction(deplacementValide);
 							}
 						}
@@ -529,9 +529,8 @@ public class Map {
 
 			} else {
 				tourOrdinateur();
-				plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
-				refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 2000, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 				jeu.nextRound();
+				equipe2.resetFinTour();
 			}
 		}
 		plateauGraph.clearConsole();
@@ -592,49 +591,66 @@ public class Map {
 	 */
 	private void tourOrdinateur() {
 		Random r = new Random();
-		int nSelection = r.nextInt(equipe2.getListe().size());
-		Personnage persoChoisi = equipe2.getListe().get(nSelection);
-		System.out.println("Le perso " + persoChoisi.nom + " est à " + persoChoisi.getPos());
-		Position deplacementPos = new Position(persoChoisi.getPos());
+		int nSelection = -1;
+		Personnage persoChoisi;
+		System.out.println("fin tour ordi = " + equipe2.finTour());
+		Position deplacementPos = new Position(-1, -1);
 		boolean deplacementValide = false;
-
-		int xOuY;
-		int deplacement;
+		
+		int xOuY = -1;
+		int deplacement = -1;
 		int essaisDeplacements = 0;
-		int nSelection2 = nSelection;
+		Position theorique = new Position(-1,-1);
 
-		while (!deplacementValide) {
-			// Si le personnage a tenté de se déplacer 4 fois sans succès on choisit un autre personnage
-			if (essaisDeplacements > 3) {
-				while (nSelection2 == nSelection) {
-					nSelection2 = r.nextInt(equipe2.getListe().size());
-				}
-				persoChoisi = equipe2.getListe().get(r.nextInt(equipe2.getListe().size()));
-			}
-			// Si le personnage ne s'est pas encore déplacé ou avec 50% des chances il se deplace selon 50% des chances selon les x ou les y
-			if (persoChoisi.getDirectionDeplacement().equals(new Position(-1, -1)) || r.nextInt(2) == 0) {
-				xOuY = r.nextInt(2);
-				deplacement = (r.nextInt(2) * 2) - 1; // Soit -1 ou 1
-				if (xOuY == 0) {
-					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(deplacement, 0)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, jeu.getTourEquipe1());
+		while (!equipe2.finTour() && equipe2.mouvementPossible(plateau, plateauGraph)) {			
+
+			deplacementValide = false;
+			theorique.setLocation(-1, -1);
+			
+			do {
+				nSelection = r.nextInt(equipe2.getListe().size());
+				persoChoisi = equipe2.getListe().get(nSelection);
+			} while (persoChoisi.finMouvement() && plateau.deplacementPossible(persoChoisi, plateauGraph));
+			
+			System.out.println(persoChoisi);
+			deplacementPos = new Position(persoChoisi.getPos());
+
+			while (!deplacementValide) {
+				// Si le personnage ne s'est pas encore déplacé ou avec 50% des chances il se deplace selon 50% des chances selon les x ou les y
+				if (persoChoisi.getDirectionDeplacement().equals(new Position(-1, -1)) || r.nextInt(2) == 0) {
+					xOuY = r.nextInt(2);
+					deplacement = (r.nextInt(2) * 2) - 1; // Soit -1 ou 1
+					if (xOuY == 0) {
+						deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(deplacement, 0)));
+						deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+					} else {
+						deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(0, deplacement)));
+						deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, false);
+					}
+					if (!deplacementValide) {
+						deplacementPos.setLocation(persoChoisi.getPos());
+					}
 				} else {
-					deplacementPos.setLocation(persoChoisi.getPos().additionner(new Position(0, deplacement)));
-					deplacementValide = plateau.deplacerV2Amorce(deplacementPos, persoChoisi, plateauGraph, jeu.getTourEquipe1());
+					deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()), persoChoisi, plateauGraph, false);
+					if (deplacementValide) {
+						System.out.println("s'est deplace dans la mm direction : " + persoChoisi.getDirectionDeplacement());
+					}
 				}
-				if (!deplacementValide) {
-					deplacementPos.setLocation(persoChoisi.getPos());
-				}
-			} else {
-				deplacementValide = plateau.deplacerV2Amorce(persoChoisi.getPos().additionner(persoChoisi.getDirectionDeplacement()), persoChoisi, plateauGraph, jeu.getTourEquipe1());
-				if (deplacementValide) {
-					System.out.println("s'est deplace dans la mm direction : " + persoChoisi.getDirectionDeplacement());
+				essaisDeplacements++;
+				// Si le personnage a tenté de se déplacer 4 fois sans succès on choisit un autre personnage
+				if (essaisDeplacements > 3 && !deplacementValide) {
+					theorique = plateau.deplacementTheorique(persoChoisi, plateauGraph);
+					if (!theorique.getNulle()) {
+						System.out.println("4 essais au hasard echoués, deplacement théorique effectué " + theorique);
+						deplacementValide = plateau.deplacerV2Amorce(theorique, persoChoisi, plateauGraph, false);
+					}
 				}
 			}
-			essaisDeplacements++;
+			System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
+			plateau.retirerMorts(tempEquipe.getListe());
+			plateau.updateEnergie(tempEquipe.getListe(), plateauGraph);
+			refresh(plateau, plateauGraph, jeu.getTourEquipe1(), 2000, jeu.getDebutJeu(), equipe1.getListe(), equipe2.getListe());
 		}
-		System.out.println("Le perso " + persoChoisi.nom + " est maintenant à " + persoChoisi.getPos());
-		plateau.retirerMorts(tempEquipe.getListe());
 	}
 
 	/**

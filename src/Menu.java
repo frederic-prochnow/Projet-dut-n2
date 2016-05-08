@@ -347,8 +347,6 @@ public class Menu {
 				}
 				nbPersoSelected1 = maxPerso;
 				nbPersoSelected2 = maxPerso;
-				ordi.setEnabled(false);
-				versusOrdi = false;
 				valider();
 			} else if (e.getActionCommand().startsWith("moins_")) {
 				for (int i=0;i<boutonMoins.length;i++) {

@@ -112,5 +112,25 @@ public class Equipe {
 	public void passerPlacement() {
 		passerPlacement = true;
 	}
+	
+	public boolean mouvementPossible(Ile ile, Plateau plateauGraph) {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			if (ile.deplacementPossible(temp, plateauGraph) && !temp.finMouvement()) {
+				System.out.println("deplacement possible avec " + temp);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void clearRochersVus() {
+		Personnage temp;
+		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
+			temp = perso.next();
+			temp.getRochersVus().clear();
+		}
+	}
 		
 }

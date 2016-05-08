@@ -515,6 +515,14 @@ public class Ile {
 		return null;
 	}
 
+	/**
+	 * Methode de deplacement du personnage avec un placement manuel donc sans actions
+	 * @param destination
+	 * @param perso
+	 * @param plateauGraph
+	 * @param equipeCourante
+	 * @return
+	 */
 	public boolean placer(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
 		if (estVide(destination)) {
 			if (perso.getSurNavire()) { // Est sur navire
@@ -547,35 +555,113 @@ public class Ile {
 	 * 
 	 * @return boolean
 	 */
-	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
+	public boolean deplacerV2Amorce(Position destination, Personnage perso, Plateau plateauGraph, boolean testDeplacement) {
 		// Cas thoeriquement valides
 		if (destination.x == perso.getPos().x+1 && destination.y == perso.getPos().y) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+			return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 		}
 		else if (destination.x == perso.getPos().x-1 && destination.y == perso.getPos().y) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+			return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 		}
 		else if (destination.y == perso.getPos().y+1 && destination.x == perso.getPos().x) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+			return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 		}
 		else if (destination.y == perso.getPos().y-1 && destination.x == perso.getPos().x) {
-			return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+			return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 		}
 		if (perso instanceof Voleur) {
 			if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y+1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+				return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 			}
 			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y+1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+				return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 			}
 			else if ((destination.x == (perso.getPos().x+1)) && (destination.y == (perso.getPos().y-1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+				return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 			}
 			else if ((destination.x == (perso.getPos().x-1)) && (destination.y == (perso.getPos().y-1))) {
-				return deplacerV2(destination, perso.getPos(), perso, plateauGraph, equipeCourante);
+				return deplacerV2(destination, perso, plateauGraph, testDeplacement);
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Vérifie si le deplacement d'un personnage est théoriquement possible d'apres les positions
+	 * @param perso
+	 * @param plateauGraph
+	 * @return
+	 */
+	public boolean deplacementPossible(Personnage perso, Plateau plateauGraph) {
+		boolean gauche, droite, haut, bas;
+		gauche = droite = haut = bas = false;
+
+		gauche = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y), perso, plateauGraph, true);
+		droite = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y), perso, plateauGraph, true);
+		haut = deplacerV2(new Position(perso.getPos().x, perso.getPos().y-1), perso, plateauGraph, true);
+		bas = deplacerV2(new Position(perso.getPos().x, perso.getPos().y+1), perso, plateauGraph, true);
+		
+		if (perso instanceof Voleur) {
+			boolean ne, nw, se, sw;
+			ne = nw = se = sw = false;
+			
+			ne = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y-1), perso, plateauGraph, true);
+			nw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y-1), perso, plateauGraph, true);
+			se = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y+1), perso, plateauGraph, true);
+			sw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y+1), perso, plateauGraph, true);
+			
+			return gauche || droite || haut || bas || ne || nw || se || sw;
+		}
+				
+		return gauche || droite || haut || bas;
+	}
+	
+	/**
+	 * Retourne une position theoriquement possible pour un déplacement
+	 * @param perso
+	 * @param plateauGraph
+	 * @return
+	 */
+	public Position deplacementTheorique(Personnage perso,  Plateau plateauGraph) {
+		boolean gauche, droite, haut, bas;
+		gauche = droite = haut = bas = false;
+
+		gauche = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y), perso, plateauGraph, true);
+		droite = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y), perso, plateauGraph, true);
+		haut = deplacerV2(new Position(perso.getPos().x, perso.getPos().y-1), perso, plateauGraph, true);
+		bas = deplacerV2(new Position(perso.getPos().x, perso.getPos().y+1), perso, plateauGraph, true);
+		
+		if (perso instanceof Voleur) {
+			boolean ne, nw, se, sw;
+			ne = nw = se = sw = false;
+			
+			ne = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y-1), perso, plateauGraph, true);
+			nw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y-1), perso, plateauGraph, true);
+			se = deplacerV2(new Position(perso.getPos().x-1, perso.getPos().y+1), perso, plateauGraph, true);
+			sw = deplacerV2(new Position(perso.getPos().x+1, perso.getPos().y+1), perso, plateauGraph, true);
+			
+			if (ne) {
+				return new Position(perso.getPos().x-1, perso.getPos().y-1);
+			} else if (nw) {
+				return new Position(perso.getPos().x+1, perso.getPos().y-1);
+			} else if (se) {
+				return new Position(perso.getPos().x-1, perso.getPos().y+1);
+			} else if (sw) {
+				return new Position(perso.getPos().x+1, perso.getPos().y+1);
+			}
+		}
+		
+		if (gauche) {
+			return new Position(perso.getPos().x-1, perso.getPos().y);
+		} else if (droite) {
+			return new Position(perso.getPos().x-1, perso.getPos().y);
+		} else if (haut) {
+			return new Position(perso.getPos().x-1, perso.getPos().y);
+		} else if (bas) {
+			return new Position(perso.getPos().x-1, perso.getPos().y);
+		}
+		
+		return new Position(-1, -1);
 	}
 	
 	
@@ -589,130 +675,151 @@ public class Ile {
 	 * @param perso L'instance du personnage, sert a verifier s'il peut soulever les rochers
 	 * @return boolean si le deplacement est bien valide selon le personnage
 	 */
-	private boolean deplacerV2(Position destination, Point posActuel, Personnage perso, Plateau plateauGraph, boolean equipeCourante) {
+	private boolean deplacerV2(Position destination, Personnage perso, Plateau plateauGraph, boolean testDeplacement) {
 		plateauGraph.clearConsole();
 		plateauGraph.clearSave();
-		if (estVide(destination)) {
-			if (perso.getSurNavire()) { // Est sur navire
-				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
-				perso.setSurNavire(false);
-				getNavire(perso.getEquipe1()).retirePerso();
-			} else { // Sur sol
-				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
-					plateau[perso.getPos().x][perso.getPos().y].setType(14);
+		
+		if (testDeplacement) {
+			if (estVide(destination)) {
+				System.out.println("empty");
+				return true;
+			} else if (estRocher(destination) && perso instanceof Explorateur) {
+				System.out.println("rock");
+				return true;
+			} else if (plateau[destination.x][destination.y].getType() == 7 && !coffre.getEstOuvert() && perso.getDetientClef()) {
+				System.out.println("rock");
+				return true;
+			} else if (plateau[destination.x][destination.y].getType() == 7 && coffre.getEstOuvert() && !coffre.getEstVide()) {
+				System.out.println("rock");
+				return true;
+			} else if (estSonNavire(destination, perso.getEquipe1()) && !getNavire(perso.getEquipe1()).getPlateauVide()) {
+				System.out.println("rock");
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if (estVide(destination)) {
+				if (perso.getSurNavire()) { // Est sur navire
+					plateau[perso.getPos().x][perso.getPos().y].setType(perso.getNavireType());
+					perso.setSurNavire(false);
+					getNavire(perso.getEquipe1()).retirePerso();
+				} else { // Sur sol
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+					if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+						plateau[perso.getPos().x][perso.getPos().y].setType(14);
+					}
 				}
-			}
-			// il quite apres avoir ete piege (regler si cest lui qui a posé le piege)
-			if ( (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() && perso.getEquipe2() ) 
-					|| (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() && perso.getEquipe1()) ) {
-				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
-				plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+				// il quite apres avoir ete piege (regler si cest lui qui a posé le piege)
+				if ( (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() && perso.getEquipe2() ) 
+						|| (plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() && perso.getEquipe1()) ) {
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+				}
+				perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
+				perso.setPos(destination.getLocation());
+				perso.perdEnergie(1);
+				perso.reduirePointsMouvement(1);
+				plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
+			} else if (estPiege(destination, perso)) {
 				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-			}
-			perso.setDirectionDeplacement(destination.differenceCoordonnees(perso.getPos()));
-			perso.setPos(destination.getLocation());
-			perso.perdEnergie(1);
-			perso.reduirePointsMouvement(1);
-			plateau[perso.getPos().x][perso.getPos().y].setType(perso.getType());
-		} else if (estPiege(destination, perso)) {
-			plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-			perso.perdEnergie(5);
-			System.out.println("il s'est fait piégé");
-			plateauGraph.println("Il s'est fait piégé !");
-			plateauGraph.save();
-			plateau[destination.x][destination.y].setType(perso.getType());
-			perso.setPos(destination);
-			perso.setEstPiege(true);
-			perso.setNumTourPiege(2);
-		} else if (estRocher(destination)) {
-			if (perso instanceof Explorateur) {
-				if (estCoffre(destination)) {
-					System.out.println("Peut soulever le rocher et il y a le coffre en dessous");
-					plateauGraph.println("Peut soulever le rocher et il y a le coffre en dessous");
+				perso.perdEnergie(5);
+				System.out.println("il s'est fait piégé");
+				plateauGraph.println("Il s'est fait piégé !");
+				plateauGraph.save();
+				plateau[destination.x][destination.y].setType(perso.getType());
+				perso.setPos(destination);
+				perso.setEstPiege(true);
+				perso.setNumTourPiege(2);
+			} else if (estRocher(destination)) {
+				if (perso instanceof Explorateur) {
+					if (estCoffre(destination)) {
+						System.out.println("Peut soulever le rocher et il y a le coffre en dessous");
+						plateauGraph.println("Peut soulever le rocher et il y a le coffre en dessous");
+						plateauGraph.save();
+						plateau[destination.x][destination.y].setType(7); // on revele le coffre
+						if (perso.getDetientClef()) {
+							coffre.setEstOuvert(true); // on ouvre le coffre
+							plateauGraph.refreshCase(destination, 7);
+							plateauGraph.waitEvent(600, false);
+							plateauGraph.refreshCase(destination, 17);
+							plateauGraph.waitEvent(600, false);
+							plateau[destination.x][destination.y].setType(16);
+							System.out.println("Il a la cle donc il a pris le tresor");
+							plateauGraph.println("Il a la cle donc il a pris le tresor");
+							plateauGraph.save();
+							perso.setDetientTresor(true);
+							coffre.setEstVide(true);
+						}
+					} else if (estCle(destination)) {
+						System.out.println("Peut soulever le rocher et il y a la cle en dessous");
+						plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
+						plateauGraph.save();
+						plateauGraph.refreshCase(destination, 8);
+						plateauGraph.waitEvent(750, false);
+						plateau[destination.x][destination.y].setType(15);
+						clef.setPosition(new Position(-1,-1));
+						perso.setDetientClef(true);
+					} else {
+						System.out.println("Souleve le rocher et il n'a rien");
+						plateauGraph.println("Souleve le rocher et il n'a rien");
+						plateauGraph.save();
+					}
+					perso.perdEnergie(5);
+				} else {
+					System.out.println("Que les explorateurs peuvent soulever les rochers");
+					plateauGraph.println("Que les explorateurs peuvent soulever les rochers");
 					plateauGraph.save();
-					plateau[destination.x][destination.y].setType(7); // on revele le coffre
+					return false;
+				}
+				perso.getRochersVus().add(destination);
+			// le coffre est deja revele par une autre joueur
+			} else if (plateau[destination.x][destination.y].getType() == 7) {
+				if (coffre.getEstOuvert()) {
+					perso.setDetientTresor(true);
+					coffre.setEstVide(true);
+				} else { // pas ouvert
 					if (perso.getDetientClef()) {
 						coffre.setEstOuvert(true); // on ouvre le coffre
-						plateauGraph.refreshCase(destination, 7);
-						plateauGraph.waitEvent(600, false);
-						plateauGraph.refreshCase(destination, 17);
-						plateauGraph.waitEvent(600, false);
-						plateau[destination.x][destination.y].setType(16);
 						System.out.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.println("Il a la cle donc il a pris le tresor");
 						plateauGraph.save();
 						perso.setDetientTresor(true);
 						coffre.setEstVide(true);
+					} else { // pas ouvert, detient pas cle
+						System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
+						plateauGraph.println("Le personnage n'a pas la cle pour ouvrir le coffre");
+						plateauGraph.save();
 					}
-				} else if (estCle(destination)) {
-					System.out.println("Peut soulever le rocher et il y a la cle en dessous");
-					plateauGraph.println("Peut soulever le rocher et prend la cle en dessous");
+				}
+			// Verifie si c'est le navire allie
+			} else if (estSonNavire(destination, perso.getEquipe1())) {
+				if (getNavire(perso.getEquipe1()).getPlateauVide()) {
+					System.out.println("Vous devez avoir au moins un personnage sur le plateau");
+					plateauGraph.println("Vous devez avoir au moins un personnage sur le plateau");
 					plateauGraph.save();
-					plateauGraph.refreshCase(destination, 8);
-					plateauGraph.waitEvent(750, false);
-					plateau[destination.x][destination.y].setType(15);
-					clef.setPosition(new Position(-1,-1));
-					perso.setDetientClef(true);
+					return false;
 				} else {
-					System.out.println("Souleve le rocher et il n'a rien");
-					plateauGraph.println("Souleve le rocher et il n'a rien");
-					plateauGraph.save();
-				}
-				perso.perdEnergie(5);
-			} else {
-				System.out.println("Que les explorateurs peuvent soulever les rochers");
-				plateauGraph.println("Que les explorateurs peuvent soulever les rochers");
-				plateauGraph.save();
-				return false;
-			}
-		// le coffre est deja revele par une autre joueur
-		} else if (plateau[destination.x][destination.y].getType() == 7) {
-			if (coffre.getEstOuvert()) {
-				perso.setDetientTresor(true);
-				coffre.setEstVide(true);
-			} else { // pas ouvert
-				if (perso.getDetientClef()) {
-					coffre.setEstOuvert(true); // on ouvre le coffre
-					System.out.println("Il a la cle donc il a pris le tresor");
-					plateauGraph.println("Il a la cle donc il a pris le tresor");
-					plateauGraph.save();
-					perso.setDetientTresor(true);
-					coffre.setEstVide(true);
-				} else { // pas ouvert, detient pas cle
-					System.out.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					plateauGraph.println("Le personnage n'a pas la cle pour ouvrir le coffre");
-					plateauGraph.save();
-				}
-			}
-		// Verifie si c'est le navire allie
-		} else if (estSonNavire(destination, perso.getEquipe1())) {
-			if (getNavire(perso.getEquipe1()).getPlateauVide()) {
-				System.out.println("Vous devez avoir au moins un personnage sur le plateau");
-				plateauGraph.println("Vous devez avoir au moins un personnage sur le plateau");
-				plateauGraph.save();
-				return false;
-			} else {
-				plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-				perso.setPos(destination.getLocation());
-				perso.perdEnergie(1);
-				perso.setSurNavire(true);
-				if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
 					plateau[perso.getPos().x][perso.getPos().y].setType(-1);
-					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
-					plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+					perso.setPos(destination.getLocation());
+					perso.perdEnergie(1);
+					perso.setSurNavire(true);
+					if ( plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE1() || plateau[perso.getPos().x][perso.getPos().y].getEstpiegeE2() ) {
+						plateau[perso.getPos().x][perso.getPos().y].setType(-1);
+						plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE1(false);
+						plateau[perso.getPos().x][perso.getPos().y].setEstpiegeE2(false);
+					}
 				}
+			} else {
+				System.out.println("refused pos = " + destination + " et type = " + plateau[destination.x][destination.y].getType());
+				System.out.println("Ne peut pas se deplacer ici");
+				plateauGraph.println("Ne peut pas se deplacer ici");
+				plateauGraph.save();
+				return false;
 			}
-		} else {
-			System.out.println("le type est " + plateau[destination.x][destination.y].getType());
-			System.out.println("piege e1 = " + plateau[destination.x][destination.y].getEstpiegeE1());
-			System.out.println("piege e2 = " + plateau[destination.x][destination.y].getEstpiegeE2());
-			System.out.println("Ne peut pas se deplacer ici");
-			plateauGraph.println("Ne peut pas se deplacer ici");
-			plateauGraph.save();
-			return false;
 		}
-		return true;
+		return false;
 	}
 	/**
 	 * Met à jour l'affichage de l'énergie sur le Plateau
