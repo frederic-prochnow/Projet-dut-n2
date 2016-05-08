@@ -15,12 +15,14 @@ public class Equipe {
 	 * Attribut
 	 */
 	private List<Personnage> liste;
+	private boolean passerPlacement;
 	
 	/**
 	 * Constructeur de classe
 	 */
 	public Equipe() {
 		liste = new ArrayList<Personnage>();
+		passerPlacement = false;
 	}
 	
 	/**
@@ -101,10 +103,14 @@ public class Equipe {
 		for (Iterator<Personnage> perso = liste.iterator();perso.hasNext();) {
 			temp = perso.next();
 			if (!temp.getFinPlacement()) {
-				return false;
+				return false || passerPlacement;
 			}
 		}
 		return true;
+	}
+	
+	public void passerPlacement() {
+		passerPlacement = true;
 	}
 		
 }

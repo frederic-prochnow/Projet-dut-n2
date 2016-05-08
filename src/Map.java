@@ -223,9 +223,9 @@ public class Map {
 				// ceci ne s'éxécute que si on a cliqué sur une position sinon la selection
 				// de personnage est deja fait si le clavier est utilisé
 				if (presentsEquipe.size() > 1 && !plateauGraph.getAnnulerChoix() && !plateauGraph.getPasser()) {
-					Personnage temp = new Personnage("temp plusieurs", jeu.getTourEquipe1(), 100, new Position(persoSelectionPosition), 0, 0);
+					Personnage temp = new Personnage("temp plusieurs", placementE1, 100, new Position(persoSelectionPosition), 0, 0);
 					plateauGraph.clearConsole();
-					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
+					plateauGraph.print("C'est au tour de l'", placementE1);
 					plateauGraph.println("Plusieurs personnages de votre equipe sont presents sur cette case");
 					plateauGraph.println("Veuillez selectionner une de ceux-cis");
 					plateauGraph.ajouterSelectionPersos(presentsEquipe);
@@ -267,7 +267,7 @@ public class Map {
 					plateauGraph.setHighlight(personnnageSelectionne.getPos().x, personnnageSelectionne.getPos().y, Color.CYAN);
 					plateauGraph.setVeutDeplacer(false);
 					plateauGraph.clearConsole();
-					plateauGraph.print("C'est au tour de l'", jeu.getTourEquipe1());
+					plateauGraph.print("C'est au tour de l'", placementE1);
 					plateauGraph.println("Vous avez selectionnée : " + personnnageSelectionne.getNom());
 					if (!deplacementValide) {
 						plateauGraph.recover();
@@ -292,29 +292,34 @@ public class Map {
 						personnnageSelectionne.setFinPlacement(true);
 					}
 
+					if (deplacementValide) {
+						System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
+					}
 					plateauGraph.refreshPersoPanel(plateauGraph.getPersoPrecis());
 					deplacementValide = false;
 					choixDeplacementPosition.setLocation(-1, -1);
 					plateauGraph.setDirectionDeplacement(new Position(-1, -1));
-					System.out.println("Le perso " + personnnageSelectionne.nom + " est maintenant à " + personnnageSelectionne.getPos());
 					plateauGraph.setJeu(plateau.getPlacementManuel(tempEquipe.getListe()), true);
 				}
 
 				plateauGraph.disableAnnulerEtActions();
 				bonneSelectionEquipe = false;
 				plateauGraph.setAttendFinTour(true);
-
-				while ((confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix() && plateauGraph.getPasser()) {
-					plateauGraph.clearConsole();
-					plateauGraph.recover();
-					plateauGraph.println("L'", jeu.getTourEquipe1(), "a fini son tour");
-					plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
-					plateauGraph.waitEvent(5000, false);
-					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
+				
+				if (plateauGraph.getPasser()) {
+					while (confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) {
+						plateauGraph.clearConsole();
+						plateauGraph.recover();
+						plateauGraph.println("L'", jeu.getTourEquipe1(), "a fini son tour");
+						plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
+						plateauGraph.waitEvent(5000, false);
+						confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
+					}
 				}
 				
 				if ((!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) || plateauGraph.getPasser()) {
 					System.out.println("changing team for manual placement");
+					tempEquipe.passerPlacement();
 					placementE1 = !placementE1;
 				}
 			}
@@ -502,19 +507,21 @@ public class Map {
 				plateauGraph.disableAnnulerEtActions();
 				bonneSelectionEquipe = false;
 				plateauGraph.setAttendFinTour(true);
-
-				while ((confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) && !jeu.getEstFini() && !plateauGraph.getAnnulerChoix() && plateauGraph.getPasser()) {
-					plateauGraph.clearConsole();
-					plateauGraph.recover();
-					plateauGraph.println("L'", jeu.getTourEquipe1(), "a fini son tour");
-					plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
-					plateauGraph.waitEvent(5000, false);
-					confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
-					tempEquipe.finPiege();
+				
+				if (tempEquipe.finTour() || plateauGraph.getPasser()) {
+					while (confirmationFinTour.equals(new Position(-1, -1)) && !plateauGraph.getConfirmeFinTour()) {
+						plateauGraph.clearConsole();
+						plateauGraph.recover();
+						plateauGraph.println("L'", jeu.getTourEquipe1(), "a fini son tour");
+						plateauGraph.println("Veuillez cliquez sur la fenetre pour passer a l'equipe suivante");
+						plateauGraph.waitEvent(5000, false);
+						confirmationFinTour.setLocation(plateauGraph.getX(), plateauGraph.getY());
+						tempEquipe.finPiege();
+					}
 				}
 				plateau.retirerMorts(tempEquipe.getListe());
 
-				if ((!plateauGraph.getAnnulerChoix() && tempEquipe.finTour()) || plateauGraph.getPasser()) {
+				if (!plateauGraph.getAnnulerChoix() && (tempEquipe.finTour() || plateauGraph.getPasser())) {
 					jeu.nextRound();
 					tempEquipe.resetFinTour();
 					changerEquipe = true;

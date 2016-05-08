@@ -284,7 +284,6 @@ public class Plateau {
 		window.setVisible(defaultVisibility);
 		// Ajout des listeners.
 		graphic.addMouseListener(new Mouse());
-		window.addKeyListener(new Key()) ;
 		selectionPane.addMouseListener(new Mouse());
 		currentEvent = null ;
 		window.setLocationRelativeTo(null); // a la fin sinon pas appliquée
@@ -1070,11 +1069,15 @@ public class Plateau {
 			case KeyEvent.VK_ENTER:
 				if (selectionListe != -1) {
 					executeEnter();
+				} else if (passer) {
+					confirmeFinTour = true;
 				}
 				break;
 			case KeyEvent.VK_SPACE:
 				if (selectionListe != -1) {
 					executeEnter();
+				} else if (passer) {
+					confirmeFinTour = true;
 				}
 				break;
 			case KeyEvent.VK_X:

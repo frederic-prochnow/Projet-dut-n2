@@ -172,6 +172,7 @@ public class Ile {
 			plateau[xS][yS].setType(20);
 		}
 		*/
+		
 	}
 
 	/**
