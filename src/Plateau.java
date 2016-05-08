@@ -240,7 +240,7 @@ public class Plateau {
 		annuler = new JButton(new ImageIcon(Plateau.class.getResource("images/annuler.png")));
 		annuler.setPreferredSize(dimIcones);
 		annuler.setActionCommand("annuler");
-		annuler.setName("Annuler");
+		annuler.setName("Retour Séléction");
 		annuler.addActionListener(new Action());
 		
 		ignorer = new JButton(new ImageIcon(Plateau.class.getResource("images/ignorer.png")));
@@ -487,7 +487,7 @@ public class Plateau {
 	// Note la taille initiale est calculée d'après la taille du graphique.
 	private void resizeFromGraphic() {
 		Dimension dim = graphic.getGraphicSize() ;
-		dim.width += 250;
+		dim.width += 300;
 		dim.height += 75;
 		window.getContentPane().setPreferredSize(dim) ;
 		window.pack() ;
@@ -545,6 +545,7 @@ public class Plateau {
 			
 			listePanels.add(new JPanel());
 			listePanels.get(i).setLayout(new BoxLayout(listePanels.get(i), BoxLayout.X_AXIS));
+			listePanels.get(i).add(Box.createRigidArea(new Dimension(20, listePanels.get(i).getHeight())));
 			listePanels.get(i).add(listeBoutons.get(i));
 			
 			descPerso.add(new JPanel());
@@ -578,12 +579,15 @@ public class Plateau {
 		listePanels.get(numPersoPanel).removeAll();
 		descPerso.get(numPersoPanel).removeAll();
 
+		listePanels.get(numPersoPanel).add(Box.createRigidArea(new Dimension(20, listePanels.get(numPersoPanel).getHeight())));
 		listePanels.get(numPersoPanel).add(listeBoutons.get(numPersoPanel));
 		listePanels.get(numPersoPanel).add(Box.createRigidArea(new Dimension(20, listePanels.get(numPersoPanel).getHeight())));
 		
+		descPerso.get(numPersoPanel).setLayout(new BoxLayout(descPerso.get(numPersoPanel), BoxLayout.Y_AXIS));
 		descPerso.get(numPersoPanel).add(new JLabel(listePersos.get(numPersoPanel).getNom()));
 		descPerso.get(numPersoPanel).add(new JLabel("Energie : " + listePersos.get(numPersoPanel).getEnergie()));
 		descPerso.get(numPersoPanel).add(new JLabel("PM : " + listePersos.get(numPersoPanel).getPointsMouvement()));
+		listePanels.get(numPersoPanel).add(Box.createRigidArea(new Dimension(20, listePanels.get(numPersoPanel).getHeight())));
 		listePanels.get(numPersoPanel).add(descPerso.get(numPersoPanel));
 		listePanels.get(numPersoPanel).setAlignmentX(Component.LEFT_ALIGNMENT);
 		
@@ -595,11 +599,14 @@ public class Plateau {
 		listeBoutons.get(listeBoutons.size()-1).setPreferredSize(dimIcones);
 		
 		listePanels.add(new JPanel());
-		listePanels.get(listePanels.size()-1).setLayout(new FlowLayout());
-	//	listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(button.getWidth(), 48)));
+		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(20, listePanels.get(listePanels.size()-1).getHeight())));
+		listePanels.get(listePanels.size()-1).setLayout(new BoxLayout(listePanels.get(listePanels.size()-1), BoxLayout.X_AXIS));
 		listePanels.get(listePanels.size()-1).add(listeBoutons.get(listeBoutons.size()-1));
+		listePanels.get(listePanels.size()-1).add(Box.createRigidArea(new Dimension(20, listePanels.get(listePanels.size()-1).getHeight())));
 		listePanels.get(listePanels.size()-1).add(new JLabel(listeBoutons.get(listeBoutons.size()-1).getName()));
+		listePanels.get(listePanels.size()-1).setAlignmentX(Component.LEFT_ALIGNMENT);
 		selectionPane.add(listePanels.get(listePanels.size()-1));
+		selectionPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 	}
 	
 	
@@ -663,7 +670,7 @@ public class Plateau {
 		if(detientCoffre){
 			ajouterCoffre();
 		}
-		ajouterIgnorer();
+	//	ajouterIgnorer();
 		ajouterAnnuler();
 	//	ajouterPasser();
 		selectionPane.repaint();
