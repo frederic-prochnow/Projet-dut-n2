@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class Position extends Point{
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6707217225810275342L;
+	/**
 	 * Attribut
 	 */
 	private List<Personnage> persosPresents;

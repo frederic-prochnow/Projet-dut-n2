@@ -26,7 +26,8 @@ public class Ile {
 	private Clef clef;
 	private Navire navireEquipe1;
 	private Navire navireEquipe2;
-	private Nourriture nourriture;
+	//private Nourriture nourriture;
+	//private Serpent serpent;
 
 	/**
 	 * Constructeur de la classe sans parametres

@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -37,7 +36,6 @@ public class Plateau {
 	 * Attribut
 	 */
 	private static boolean defaultVisibility = true ;
-	private static final long serialVersionUID = 1L;
 	private JFrame window ;
 	private GraphicPane graphic ;
 	private ConsolePane console ;
@@ -134,24 +132,6 @@ public class Plateau {
 		public void mousePressed(MouseEvent arg0) { }
 		@Override
 		public void mouseReleased(MouseEvent arg0) { }
-	}
-	/**
-	 * Classe interne keyListener. Quand instanciée et associée à une JFrame, elle
-	 * répond à un événement clavier en le stockant dans la variable {@link #currentEvent}.
-	 * @author place
-	 *
-	 */
-	private class Key implements KeyListener {
-		@Override
-		public void keyPressed(KeyEvent event) {
-			currentEvent = event ;
-		}
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
 	}
 	
 	/**
@@ -620,12 +600,13 @@ public class Plateau {
 		passerTour.setEnabled(true);
 		addPanel(passerTour);
 	}
-	
+	/*
 	private void ajouterIgnorer() {
 		ignorer.setBackground(sable);
 		ignorer.setEnabled(true);
 		addPanel(ignorer);
 	}
+	*/
 	
 	private void ajouterAnnuler() {
 		if (!dejaAjoutAnnuler) {
