@@ -1069,6 +1069,9 @@ public class Plateau {
 			case KeyEvent.VK_ESCAPE:
 				annulerChoix = true;
 				break;
+			case KeyEvent.VK_BACK_SPACE:
+				annulerChoix = true;
+				break;
 				
 			default:
 				break;
@@ -1089,6 +1092,54 @@ public class Plateau {
 					break;
 				case KeyEvent.VK_Q:
 					directionDeplacement.setLocation(-1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_UP:
+					directionDeplacement.setLocation(0, -1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_DOWN:
+					directionDeplacement.setLocation(0, +1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_LEFT:
+					directionDeplacement.setLocation(-1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_RIGHT:
+					directionDeplacement.setLocation(+1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD7:
+					directionDeplacement.setLocation(-1, -1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD8:
+					directionDeplacement.setLocation(0, -1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD9:
+					directionDeplacement.setLocation(-1, -1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD4:
+					directionDeplacement.setLocation(-1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD6:
+					directionDeplacement.setLocation(+1, 0);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD1:
+					directionDeplacement.setLocation(-1, +1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD2:
+					directionDeplacement.setLocation(0, +1);
+					veutDeplacer = true;
+					break;
+				case KeyEvent.VK_NUMPAD3:
+					directionDeplacement.setLocation(+1, +1);
 					veutDeplacer = true;
 					break;
 	
